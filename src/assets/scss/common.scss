@@ -1,0 +1,33 @@
+.vh-100 {
+    height: 100vh;
+}
+
+.fr {
+    float: right;
+}
+
+.text-overflow {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+span.keyboard {
+    display: inline-block;
+    border: 1px solid hsla(0, 0%, 80%, .4);
+    border-bottom-color: hsla(0, 0%, 73%, .4);
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 hsla(0, 0%, 73%, .4);
+    background-color: hsla(0, 0%, 87%, .4);
+    vertical-align: middle;
+    color: #555;
+    font-size: 11px;
+    padding: 3px 5px;
+    margin: 0 2px;
+}
+span.keyboard-join {
+    display: inline-block;
+    font-size: 14px;
+    color: #555;
+}

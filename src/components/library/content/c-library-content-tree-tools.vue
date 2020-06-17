@@ -1,0 +1,67 @@
+<template>
+    <div class="c-library-content-tree-tools">
+        <el-tooltip class="item" effect="dark" content="文档库中心" placement="top-start">
+            <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
+            <i class="item el-icon-refresh" @click="onGoLibraryCenter"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
+            <i class="item el-icon-share" @click="shareItemsReady"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="新建文档" placement="top-start">
+            <i class="item el-icon-document-add" @click="onDocWillCreate"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="新建分组" placement="top-start">
+            <i class="item el-icon-folder-add" @click="onDocGroupWillCreate"></i>
+        </el-tooltip>
+    </div>
+</template>
+
+<script>
+    import LibraryContent from '@/extends/mixins/library-content';
+
+    export default {
+        name: 'c-library-content-tree-tools',
+        mixins: [LibraryContent],
+        methods: {
+            // 事件： 新增文档分组
+            onDocGroupWillCreate() {
+                this.libraryContentEventBus.$emit('doc-group-will-create');
+            },
+            // 事件： 新增文档
+            onDocWillCreate() {
+                this.libraryContentEventBus.$emit('doc-will-create');
+            },
+            // 事件： 前往文档库中心
+            onGoLibraryCenter() {
+                this.$link.home();
+            },
+            shareItemsReady() {
+
+            }
+        }
+    };
+</script>
+
+<style lang="scss" scoped>
+    .c-library-content-tree-tools {
+        font-size: 17px;
+        padding: 0;
+        transition: margin 0.2s;
+        display: flex;
+        flex-wrap: wrap-reverse;
+
+        i.item {
+            transition: background 0.2s;
+            color: $--color-primary-light-3;
+            margin-right: 9px;
+            padding: 4px;
+            border-radius: 5px;
+            cursor: pointer;
+            &:hover {
+                color: $--color-primary-light-1;
+            }
+        }
+    }
+</style>

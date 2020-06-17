@@ -1,0 +1,41 @@
+body {
+    .el-scrollbar__wrap:not(.el-select-dropdown__wrap, .el-autocomplete-suggestion__wrap) {
+        overflow-x: auto;
+    }
+}
+
+.el-input--small .el-input__icon {
+    height: 29px;
+    line-height: 29px;
+}
+
+.el-input--mini .el-input__icon {
+    height: 26px;
+    line-height: 26px;
+}
+
+.el-select .el-input--small .el-input__icon {
+    height: 100%;
+    line-height: 31px;
+}
+
+.el-col {
+    min-height: 1px;
+}
+
+.el-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.el-alert {
+    margin-bottom: 10px !important;
+}
+
+.el-dialog {
+    border-radius: 5px !important;
+}
+
+.el-popconfirm__main {
+    font-size: 13px;
+}
