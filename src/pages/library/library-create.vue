@@ -74,7 +74,7 @@
             // 初始化文档库分组
             async initLibraryGroups() {
                 let libraryGroups = [];
-                await this.$api.LibraryGroupAll().then(({ resData }) => {
+                await this.$api.v1.LibraryGroupCollection().then(({ resData }) => {
                     libraryGroups = resData;
                 });
                 this.libraryGroups = libraryGroups;
@@ -82,7 +82,7 @@
             // 提交创建文档库
             async submitCreateLibrary() {
                 await this.checkValidate('library');
-                await this.$api.LibraryCreate(this.library, {
+                await this.$api.v1.LibraryCreate(this.library, {
                     loading: status => { this.submitLoading = status; }
                 }).then(({ resMsg }) => {
                     this.$tip.success(resMsg);

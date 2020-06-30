@@ -59,7 +59,9 @@
                     case 'doc-info':
                         this.libraryContentEventBus.$emit('editor-doc-info', docInfo);
                         break;
-
+                    case 'use-template':
+                        this.libraryContentEventBus.$emit('will-use-template');
+                        break;
                     default:
                         break;
                 }

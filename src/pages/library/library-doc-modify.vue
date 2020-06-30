@@ -88,7 +88,7 @@
             },
             async saveDoc() {
                 const reqData = this.doc;
-                const axiosLibraryDocUpsert = reqData.id > 0 ? this.$api.LibraryDocModify : this.$api.LibraryDocCreate;
+                const axiosLibraryDocUpsert = reqData.id > 0 ? this.$api.v1.LibraryDocModify : this.$api.v1.LibraryDocCreate;
                 reqData.doc_id = reqData.id;
                 await axiosLibraryDocUpsert(reqData).then(({ resMsg }) => {
                     this.$tip.success(resMsg);
@@ -97,14 +97,14 @@
             // 获取文档分组树
             async getDocGroupTree() {
                 const reqData = { library_id: this.doc.library_id };
-                await this.$api.LibraryDocGroupTree(reqData).then(({ resData }) => {
+                await this.$api.v1.LibraryDocGroupTree(reqData).then(({ resData }) => {
                     this.groupTree = resData;
                 });
             },
             // 获取文档信息
             async getDocInfo() {
                 const reqData = { library_id: this.doc.library_id, doc_id: this.doc.id };
-                await this.$api.LibraryDocInfo(reqData).then(({ resData }) => {
+                await this.$api.v1.LibraryDocInfo(reqData).then(({ resData }) => {
                     this.doc = { ...this.doc, ...resData };
                 });
             },

@@ -5,7 +5,7 @@
  * @Author: yesc (yes.ccx@gmail.com)
  */
 import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
-import ApiCollect from '@/common/collector/api-collect';
+import ApiCollection from '@/common/collector/api-collection';
 
 const state = {
     uid: 0,
@@ -67,7 +67,7 @@ const actions = {
     // 初始化用户信息
     async initUserInfo() {
         let userInfo = false;
-        await ApiCollect.UserInfo({}, { ignore_auth: true, report: true }).then(({ resData }) => {
+        await ApiCollection.v1.UserInfo({}, { ignore_auth: true, report: true }).then(({ resData }) => {
             resData.uid = resData.id || 0;
             userInfo = resData;
         }).catch(() => { });
@@ -76,7 +76,7 @@ const actions = {
     // 退出登录
     async logout({ commit }) {
         let res = false;
-        await ApiCollect.UserLogout().then(() => {
+        await ApiCollection.v1.UserLogout().then(() => {
             commit('setSession', {});
             commit('setInited', { status: false });
             res = true;

@@ -20,9 +20,9 @@
                     el.dataset.keyboard = el.innerText;
                 },
                 inserted(el) {
-                    const keyboardCollect = el.dataset.keyboard.split(/\s*\+\s*/);
+                    const keyboardCollection = el.dataset.keyboard.split(/\s*\+\s*/);
                     const hArr = [];
-                    keyboardCollect.forEach((keyboard) => {
+                    keyboardCollection.forEach((keyboard) => {
                         hArr.push(`<span class="keyboard">${keyboard}</span>`);
                     });
 

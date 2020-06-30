@@ -6,8 +6,8 @@
                 <el-button class="library-group-manager" @click="onLibraryGroupManager" type="text" icon="el-icon-setting">
                     管理分组
                 </el-button>
-                <el-option-group v-for="collect in libraryGroupsCollect" :key="collect.label" :label="collect.label">
-                    <el-option v-for="libraryGroup in collect.libraryGroups" :key="libraryGroup.id" :label="libraryGroup.name"
+                <el-option-group v-for="collection in libraryGroupsCollection" :key="collection.label" :label="collection.label">
+                    <el-option v-for="libraryGroup in collection.libraryGroups" :key="libraryGroup.id" :label="libraryGroup.name"
                         :value="libraryGroup.id">
                     </el-option>
                 </el-option-group>
@@ -22,8 +22,8 @@
         name: 'c-home-library-list-bar',
         computed: {
             // 文档库分组集合
-            libraryGroupsCollect() {
-                const collect = [
+            libraryGroupsCollection() {
+                const collection = [
                     {
                         label: '常规分组',
                         libraryGroups: [
@@ -35,13 +35,13 @@
                 ];
 
                 if (this.libraryGroups.length > 0) {
-                    collect.push({
+                    collection.push({
                         label: '自定义分组',
                         libraryGroups: this.libraryGroups
                     });
                 }
 
-                return collect;
+                return collection;
             }
         },
         data() {
@@ -63,7 +63,7 @@
             // 初始化获取所有文档库分组
             async initLibraryGroups() {
                 let libraryGroups = [];
-                await this.$api.LibraryGroupAll().then(({ resData }) => {
+                await this.$api.v1.LibraryGroupCollection().then(({ resData }) => {
                     libraryGroups = resData;
                 });
 

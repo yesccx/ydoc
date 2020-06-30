@@ -71,7 +71,7 @@
             async getTeamInfo() {
                 const reqData = { id: this.team.id };
                 let teamInfo = this.$utils.CloneDeep(this.teamInfo);
-                await this.$api.TeamInfo(reqData, {
+                await this.$api.v1.TeamInfo(reqData, {
                     loading: status => {
                         this.loadingModal = status;
                     }
@@ -89,7 +89,7 @@
             },
             // 保存团队
             async saveTeam() {
-                const axiosTeamUpSert = this.team.id > 0 ? this.$api.TeamModify : this.$api.TeamCreate;
+                const axiosTeamUpSert = this.team.id > 0 ? this.$api.v1.TeamModify : this.$api.v1.TeamCreate;
                 const reqData = { ...this.team };
 
                 await axiosTeamUpSert(reqData, {

@@ -67,7 +67,7 @@
             // 删除文档库
             async removeLibrary(password) {
                 let removeRes = true;
-                await this.$api.LibraryRemove({ library_id: this.libraryId, password }, {
+                await this.$api.v1.LibraryRemove({ library_id: this.libraryId, password }, {
                     report: true,
                     loading: status => { this.removeLoading = status; }
                 }).then(() => {

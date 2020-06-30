@@ -4,7 +4,7 @@
             <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
-            <i class="item el-icon-refresh" @click="onGoLibraryCenter"></i>
+            <i class="item el-icon-refresh" @click="onFlushLibraryContentTree"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
             <i class="item el-icon-share" @click="shareItemsReady"></i>
@@ -25,17 +25,21 @@
         name: 'c-library-content-tree-tools',
         mixins: [LibraryContent],
         methods: {
-            // 事件： 新增文档分组
+            // 事件：新增文档分组
             onDocGroupWillCreate() {
                 this.libraryContentEventBus.$emit('doc-group-will-create');
             },
-            // 事件： 新增文档
+            // 事件：新增文档
             onDocWillCreate() {
                 this.libraryContentEventBus.$emit('doc-will-create');
             },
-            // 事件： 前往文档库中心
+            // 事件：前往文档库中心
             onGoLibraryCenter() {
                 this.$link.home();
+            },
+            // 事件：刷新文档树
+            onFlushLibraryContentTree() {
+                this.libraryContentEventBus.$emit('flush-library-content-tree');
             },
             shareItemsReady() {
 

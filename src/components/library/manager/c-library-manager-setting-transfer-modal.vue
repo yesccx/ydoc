@@ -69,7 +69,7 @@
             // 初始化文档库成员列表
             async initLibraryMembers() {
                 let members = [];
-                await this.$api.LibraryMembers({ library_id: this.libraryId }, {
+                await this.$api.v1.LibraryMemberCollection({ library_id: this.libraryId }, {
                     loading: status => { this.loadingModal = status; }
                 }).then(({ resData }) => {
                     members = resData;
@@ -90,7 +90,7 @@
             // 转让文档库
             async transferLibrary(password) {
                 let transferRes = true;
-                await this.$api.LibraryTransfer({ library_id: this.libraryId, member_id: this.useMember, password }, {
+                await this.$api.v1.LibraryTransfer({ library_id: this.libraryId, member_id: this.useMember, password }, {
                     report: true,
                     loading: status => { this.transferLoading = status; }
                 }).then(() => {

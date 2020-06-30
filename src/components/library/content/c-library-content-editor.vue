@@ -2,7 +2,8 @@
     <div class="c-library-content-editor">
         <!-- 编辑器 -->
         <el-tabs v-model="activeDocEditor" v-show="isEditorMode" type="card" @tab-remove="onRemoveDocEditor" closable>
-            <el-tab-pane v-for="docEditor in docEditorCollect" :key="docEditor.id" :label="docEditor.title" :name="docEditor.id">
+            <el-tab-pane v-for="docEditor in docEditorCollection" :key="docEditor.id" :label="docEditor.title"
+                :name="docEditor.id">
                 <!-- 操作区 -->
                 <c-library-editor-meta :loading="saveLoading" :meta="docEditor" />
 
@@ -30,7 +31,7 @@
         computed: {
             docEditorMap() {
                 const map = {};
-                this.$utils.ForEach(this.docEditorCollect, (docEditor, key) => {
+                this.$utils.ForEach(this.docEditorCollection, (docEditor, key) => {
                     map[docEditor.id] = key;
                 });
                 return map;
@@ -42,7 +43,7 @@
         data() {
             return {
                 activeDocEditor: '',
-                docEditorCollect: [],
+                docEditorCollection: [],
                 creatorCounter: 0,
                 saveLoading: false
             };
@@ -71,22 +72,22 @@
                     return false;
                 }
                 const docInfo = {
-                    doc_id: docId >> 0,
+                    library_doc_id: docId >> 0,
                     library_id: initialDocInfo.libraryId,
                     title: initialDocInfo.title,
                     content: initialDocInfo.content,
                     group_id: initialDocInfo.groupId
                 };
 
-                const axiosLibraryDocUpsert = docInfo.doc_id > 0 ? this.$api.LibraryDocModify : this.$api.LibraryDocCreate;
+                const axiosLibraryDocUpsert = docInfo.library_doc_id > 0 ? this.$api.v1.LibraryDocModify : this.$api.v1.LibraryDocCreate;
                 await axiosLibraryDocUpsert(docInfo, {
                     loading: status => { this.saveLoading = status; }
                 }).then(({ resMsg, resData }) => {
-                    if (docInfo.doc_id === 0) {
-                        this.docEditorCollect[initialDocInfo.editorIndex].id = resData.id;
+                    if (docInfo.library_doc_id === 0) {
+                        this.docEditorCollection[initialDocInfo.editorIndex].id = resData.id;
                         this.handleActiveDocEditor(resData.id);
                     } else {
-                        this.docEditorCollect[initialDocInfo.editorIndex].updateTime = resData.update_time;
+                        this.docEditorCollection[initialDocInfo.editorIndex].updateTime = resData.update_time;
                     }
                     this.libraryContentEventBus.$emit('doc-saved', resData.id);
                 });
@@ -106,7 +107,7 @@
             },
             // 使用修改文档型的编辑器选择卡
             async useModifyDocEditor(docId) {
-                const { resData: docInfo } = await this.$api.LibraryDocInfo({ library_id: this.libraryId, doc_id: docId });
+                const { resData: docInfo } = await this.$api.v1.LibraryDocInfo({ library_id: this.libraryId, library_doc_id: docId });
                 this.useDocEditor({
                     id: String(docId),
                     libraryId: docInfo.library_id,
@@ -119,7 +120,7 @@
             // 使用编辑器选项卡（如果已存在将不重复创建）
             useDocEditor(docInfo) {
                 if (!this.checkExistDocEditor(docInfo.id)) {
-                    this.docEditorCollect.push(docInfo);
+                    this.docEditorCollection.push(docInfo);
                 }
                 this.handleActiveDocEditor(docInfo.id);
             },
@@ -131,7 +132,7 @@
                 }
 
                 // 获取编辑内容
-                let docInfo = this.docEditorCollect[editorIndex];
+                let docInfo = this.docEditorCollection[editorIndex];
                 const content = this.$refs.docEditor[editorIndex].fetchContent();
                 docInfo.content = content;
                 docInfo.editorIndex = editorIndex;
@@ -149,17 +150,17 @@
             },
             // 事件：移除某个文档编辑器
             onRemoveDocEditor(removeDocEditor) {
-                let docEditorCollect = this.docEditorCollect;
+                let docEditorCollection = this.docEditorCollection;
                 let activeDocEditor = this.activeDocEditor;
 
                 // 如果activeTab被移除，则寻找相邻tab做为下一个activeTab
                 if (activeDocEditor === removeDocEditor) {
                     const removeDocEditorIndex = this.docEditorMap[removeDocEditor];
-                    const nextDocEditor = docEditorCollect[removeDocEditorIndex + 1] || docEditorCollect[removeDocEditorIndex - 1];
+                    const nextDocEditor = docEditorCollection[removeDocEditorIndex + 1] || docEditorCollection[removeDocEditorIndex - 1];
                     this.activeDocEditor = nextDocEditor ? nextDocEditor.id : '';
                 }
 
-                this.docEditorCollect = docEditorCollect.filter(docEditor => docEditor.id !== removeDocEditor);
+                this.docEditorCollection = docEditorCollection.filter(docEditor => docEditor.id !== removeDocEditor);
             }
         }
     };

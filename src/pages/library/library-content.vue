@@ -88,7 +88,7 @@
             // 初始化文档库管理信息
             async initLibraryManagerInfo(libraryId) {
                 let libraryManagerInfo = false;
-                await this.$api.LibraryManagerInfo({ library_id: libraryId }, { report: true }).then(({ resData }) => {
+                await this.$api.v1.LibraryManagerInfo({ library_id: libraryId }, { report: true }).then(({ resData }) => {
                     libraryManagerInfo = resData;
                 }).catch(async ({ resMsg = '未知错误' }) => {
                     await this.$utils.Error(resMsg);

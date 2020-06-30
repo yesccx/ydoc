@@ -47,7 +47,7 @@
             // 提交登录
             async submitLogin() {
                 await this.checkValidate('user');
-                await this.$api.GuestUserAccountLogin(this.user, {
+                await this.$api.v1.GuestUserAccountLogin(this.user, {
                     loading: status => { this.submitLoading = status; }
                 }).then(({ resData }) => {
                     this.$notify.success({ title: '登录成功', message: '欢迎回来' });

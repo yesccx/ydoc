@@ -1,5 +1,5 @@
 <template>
-    <div class="c-library-content-tree">
+    <div class="c-library-content-tree" v-loading="groupTreeLoading">
         <!-- TODO: 目前只支持搜索项名称，后期做成搜索项内容（需要后端支持） -->
         <el-input v-model="searchKey" size="small" class="directory-tree-search" placeholder="输入关键字，检索目录与文档" clearable>
         </el-input>
@@ -7,9 +7,9 @@
         <!-- 目录树 -->
         <el-scrollbar class="tree">
             <div @contextmenu.prevent="onNodeContextMenu">
-                <el-tree v-loading="groupTreeLoading" element-loading-spinner="el-icon-loading" :data="dataTree"
-                    :props="defaultProps" node-key="id" @node-click="onNodeClick" @node-drop="onNodeDrop"
-                    :allow-drop="handleAllowDrop" :empty-text="emptyText" draggable default-expand-all>
+                <el-tree element-loading-spinner="el-icon-loading" :data="dataTree" :props="defaultProps" node-key="key"
+                    @node-click="onNodeClick" @node-drop="onNodeDrop" :allow-drop="handleAllowDrop" :empty-text="emptyText"
+                    draggable default-expand-all>
                     <div slot-scope="{ node,data }" class="directory-tree-item">
 
                         <!-- 项图标 -->
@@ -18,7 +18,7 @@
 
                         <!-- Tip -->
                         <el-tooltip :content="data.name" :open-delay="800" effect="dark" placement="top-end">
-                            <span class="tree-node-label">{{ data.name | cutNodeName(node.level) }}</span>
+                            <span class="tree-node-label" :level="node.level">{{ data.name }}</span>
                         </el-tooltip>
 
                         <!-- 操作项 -->
@@ -112,6 +112,7 @@
                 docList.forEach(doc => {
                     doc.nodeType = 'doc';
                     doc.name = doc.title;
+                    doc.key = 'doc-' + doc.id;
                     if (!docGroup[doc.group_id]) {
                         docGroup[doc.group_id] = [];
                     }
@@ -166,11 +167,15 @@
                 bus.$on('doc-saved', (docId) => {
                     this.initComponent();
                 });
+                // 事件：刷新文档内容树
+                bus.$on('flush-library-content-tree', () => {
+                    this.initComponent();
+                });
             },
             // 获取分组树
             async getDocGroupTree() {
                 const reqData = { library_id: this.libraryId };
-                await this.$api.LibraryDocGroupTree(reqData, {
+                await this.$api.v1.LibraryDocGroupTree(reqData, {
                     loading: status => {
                         this.groupTreeLoading = status;
                     }
@@ -181,7 +186,7 @@
             // 获取文档列表
             async getDocList() {
                 const reqData = { library_id: this.libraryId };
-                await this.$api.LibraryDocList(reqData, {
+                await this.$api.v1.LibraryDocList(reqData, {
                     loading: status => {
                         this.groupTreeLoading = status;
                     }
@@ -191,9 +196,9 @@
             },
             // 删除文档分组
             async removeDocGroup(groupId, isDeep) {
-                const reqData = { doc_group_id: groupId, is_deep: isDeep, library_id: this.libraryId };
+                const reqData = { library_doc_group_id: groupId, is_deep: isDeep, library_id: this.libraryId };
                 let removeRes = false;
-                await this.$api.LibraryDocGroupRemove(reqData, { report: true }).then(({ resMsg }) => {
+                await this.$api.v1.LibraryDocGroupRemove(reqData, { report: true }).then(({ resMsg }) => {
                     this.$tip.success(resMsg);
                     removeRes = true;
                 }).catch(({ resMsg }) => {
@@ -203,9 +208,9 @@
             },
             // 删除文档
             async removeDoc(docId) {
-                const reqData = { doc_id: docId };
+                const reqData = { library_doc_id: docId, library_id: this.libraryId };
                 let removeRes = false;
-                await this.$api.LibraryDocRemove(reqData).then(({ resMsg }) => {
+                await this.$api.v1.LibraryDocRemove(reqData).then(({ resMsg }) => {
                     this.$tip.success(resMsg);
                     removeRes = true;
                 });
@@ -218,9 +223,6 @@
 
                 if (node.nodeType === 'doc') {
                     this.libraryContentEventBus.$emit('doc-will-modify', node.id);
-                    this.$emit('doc-view', node);
-                } else {
-                    this.$emit('doc-group-view', node);
                 }
             },
             onNodeContextMenu(event) {
@@ -337,6 +339,7 @@
 
                 groupTree.forEach(group => {
                     group.nodeType = group.nodeType ? group.nodeType : 'group';
+                    group.key = 'group-' + group.id;
                     group.children = this.deepBuildDataTree(group.children, docGroup) || [];
                     if (docGroup[group.id]) {
                         group.children = group.children.concat(docGroup[group.id]);
@@ -370,9 +373,9 @@
             },
             // 修改文档/文档分组的所属上级分组
             async modifyParentGroup(type, id, parentId, sort = -1) {
-                const axiosModifyGroup = type === 'group' ? this.$api.LibraryDocGroupModifyGroup : this.$api.LibraryDocModifyGroup;
+                const axiosModifyGroup = type === 'group' ? this.$api.v1.LibraryDocGroupSort : this.$api.v1.LibraryDocSort;
                 const reqData = { library_id: this.libraryId, parent_group_id: parentId, sort };
-                reqData[type === 'group' ? 'doc_group_id' : 'doc_id'] = id;
+                reqData[type === 'group' ? 'library_doc_group_id' : 'library_doc_id'] = id;
 
                 await axiosModifyGroup(reqData, {
                     loading: status => {
@@ -445,20 +448,6 @@
 
                 return targetGroup;
             }
-        },
-        filters: {
-            // 精简节点名称（省略中间的字符）
-            cutNodeName(str, level = 0) {
-                let resStr = str;
-                const maxLength = Math.max(10, 17 - level * 2);
-                const endLength = 3;
-                const placeholder = '....';
-                const cutLength = maxLength - placeholder.length - endLength;
-                if (resStr.length >= maxLength && cutLength > 0) {
-                    resStr = resStr.slice(0, cutLength) + placeholder + resStr.slice(-1 * endLength);
-                }
-                return resStr;
-            }
         }
     };
 </script>
@@ -466,7 +455,7 @@
 <style lang="scss">
     .c-library-content-tree {
         .el-loading-mask {
-            background: none;
+            background: #f5f7fab0;
         }
         .el-tree-node {
             &__content {
@@ -482,6 +471,19 @@
                 .tree-node-label {
                     font-size: 14px;
                     color: #2d2d2d;
+                    width: 195px;
+                    overflow: hidden;
+                    display: inline-block;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    line-height: 14px;
+                    position: relative;
+                    top: 2px;
+                }
+                @for $i from 1 through 10 {
+                    .tree-node-label[level="#{$i}"] {
+                        width: (195px - ($i - 1) * 17);
+                    }
                 }
                 > .el-tree-node__expand-icon {
                     margin-left: -12px;

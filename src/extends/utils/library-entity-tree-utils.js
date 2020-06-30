@@ -2,8 +2,8 @@ import { LIBRARY_GROUP_KEY, LIBRARY_KEY } from '@/extends/utils/library-group-ma
 import { CloneDeep, ForEach } from '@/common/utils/global-utils';
 
 // 构建entity集合（文档库分组、文档库）
-export const buildEntityCollect = function (olibraryGroups, olibrarys) {
-    const collect = [];
+export const buildEntityCollection = function (olibraryGroups, olibrarys) {
+    const collection = [];
     const libraryGroups = CloneDeep(olibraryGroups);
     const librarys = CloneDeep(olibrarys);
 
@@ -29,7 +29,7 @@ export const buildEntityCollect = function (olibraryGroups, olibrarys) {
         const children = libraryGroupMap[group.id] || [];
         children.sort((a, b) => (a.sort - b.sort));
 
-        collect.push({
+        collection.push({
             id: group.id,
             label: group.name,
             children,
@@ -40,25 +40,25 @@ export const buildEntityCollect = function (olibraryGroups, olibrarys) {
 
         delete libraryGroupMap[group.id];
     });
-    collect.sort((a, b) => (a.sort - b.sort));
+    collection.sort((a, b) => (a.sort - b.sort));
 
     // 默认分组
     ForEach(libraryGroupMap, (librarys) => {
         librarys.map(library => { library.group_id = 0; return library; });
-        collect.unshift(...librarys);
+        collection.unshift(...librarys);
     });
 
-    return collect;
+    return collection;
 };
 
 // 计算拖拽后的entity排序值
-export const computedEntityPosition = function (libraryGroupCollect, dropType, draggingNode, dropNode) {
+export const computedEntityPosition = function (libraryGroupCollection, dropType, draggingNode, dropNode) {
     if (draggingNode.type === LIBRARY_KEY && dropType.type === LIBRARY_GROUP_KEY && dropType !== 'inner') {
         return { sort: 0, groupId: 0 };
     } else if (draggingNode.type === LIBRARY_KEY && dropType.type === LIBRARY_KEY && dropType.group_id === 0) {
         return { sort: 0, groupId: 0 };
     }
-    const dataTree = libraryGroupCollect;
+    const dataTree = libraryGroupCollection;
     let nodeGroupId = 0;
     let nodeSort = 0;
     if (dropType === 'inner') {

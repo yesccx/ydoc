@@ -55,7 +55,7 @@
             // 获取文档库列表
             async getLibraryList(page, handler) {
                 let hres = {};
-                await this.$api.LibraryList(page).then(({ resData, res }) => {
+                await this.$api.v1.LibraryList(page).then(({ resData, res }) => {
                     this.$utils.ArrayConcat(this.libraryList, resData.list);
                     hres = res;
                 });

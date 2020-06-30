@@ -61,7 +61,7 @@
 
                 // 搜索用户列表
                 if (searchMemberKey) {
-                    await this.$api.ToolMemberSearch({ search_key: searchMemberKey }).then(({ resData }) => {
+                    await this.$api.v1.ToolsMemberCollection({ search_key: searchMemberKey }).then(({ resData }) => {
                         members = resData;
                     });
                 }
@@ -83,7 +83,7 @@
                 }
 
                 let isSuccess = false;
-                await this.$api.LibraryMemberInvite({ library_id: this.libraryId, member_ids: memberIds }, {
+                await this.$api.v1.LibraryMemberInvite({ library_id: this.libraryId, member_ids: memberIds }, {
                     loading: (state) => { this.inviteMemberLoading = state; }
                 }).then(() => {
                     isSuccess = true;

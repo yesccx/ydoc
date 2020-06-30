@@ -2,7 +2,7 @@
 <template>
     <div class="c-library-entity-tree">
         <el-scrollbar class="contains">
-            <el-tree ref="tree" :data="entityCollect" node-key="key" @node-click="onEntityClick" @node-drop="onEntityDrop"
+            <el-tree ref="tree" :data="entityCollection" node-key="key" @node-click="onEntityClick" @node-drop="onEntityDrop"
                 :allow-drop="handleAllowDrop" :filter-node-method="handleFilterEntity" :empty-text="treeEmptyTips" draggable
                 default-expand-all>
                 <div slot-scope="{ node, data: entity }" class="directory-tree-item" :class="{stick: entity.isStick}">
@@ -92,11 +92,11 @@
                 return this.inited ? '暂无分组，赶快添加一个吧' : '加载中';
             },
             // entity集合
-            entityCollect() {
-                const collect = EntityUtils.buildEntityCollect(this.libraryGroups, this.librarys);
+            entityCollection() {
+                const collection = EntityUtils.buildEntityCollection(this.libraryGroups, this.librarys);
 
                 // 根据entity过滤，追加相关标识class样式
-                this.$utils.ForEach(collect, (entity) => {
+                this.$utils.ForEach(collection, (entity) => {
                     entity.isStick = this.checkEntityStickStatus(entity);
                     if (entity.children && entity.children.length > 0) {
                         this.$utils.ForEach(entity.children, (subEntity) => {
@@ -105,7 +105,7 @@
                     }
                 });
 
-                return collect;
+                return collection;
             }
         },
         data() {
@@ -125,7 +125,7 @@
             // 删除文档库分组
             async libraryGroupRemove(groupId) {
                 let res = false;
-                await this.$api.LibraryGroupRemove({ group_id: groupId }, { report: true }).then(({ resMsg }) => {
+                await this.$api.v1.LibraryGroupRemove({ library_group_id: groupId }, { report: true }).then(({ resMsg }) => {
                     res = true;
                     this.$tip.success(resMsg);
                 }).catch(({ resMsg }) => {
@@ -136,11 +136,11 @@
             },
             // 排序文档库分组
             async libraryGroupSort(groupId, sort) {
-                await this.$api.LibraryGroupSort({ group_id: groupId, sort });
+                await this.$api.v1.LibraryGroupSort({ library_group_id: groupId, sort });
             },
             // 排序文档库
             async librarySort(libraryId, sort, groupId = 0) {
-                await this.$api.LibrarySort({ id: libraryId, sort, group_id: groupId });
+                await this.$api.v1.LibraryMemberLibrarySort({ library_id: libraryId, sort, library_group_id: groupId });
             },
             // 处理：拖拽时能否被放置(放置范围判定)
             handleAllowDrop(draggingNode, dropNode, type) {
@@ -166,7 +166,7 @@
             },
             // 事件：文档库分组/文档库 拖拽结束
             async onEntityDrop(draggingNode, dropNode, dropType, ev) {
-                const position = EntityUtils.computedEntityPosition(this.entityCollect, dropType, draggingNode.data, dropNode.data);
+                const position = EntityUtils.computedEntityPosition(this.entityCollection, dropType, draggingNode.data, dropNode.data);
 
                 if (draggingNode.data.type === LIBRARY_GROUP_KEY) {
                     await this.libraryGroupSort(draggingNode.data.id, position.sort);

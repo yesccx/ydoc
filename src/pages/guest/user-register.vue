@@ -56,7 +56,7 @@
             // 提交注册
             async submitRegister() {
                 await this.checkValidate('user');
-                await this.$api.GuestUserAccountRegister(this.user, {
+                await this.$api.v1.GuestUserAccountRegister(this.user, {
                     loading: (status) => { this.submitLoading = status; }
                 }).then(({ resData }) => {
                     this.$notify.success({ title: '注册成功', message: '欢迎使用Y-DOC' });

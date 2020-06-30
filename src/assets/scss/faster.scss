@@ -49,3 +49,10 @@ body {
 *:focus {
     outline: none;
 }
+
+.el-button {
+    &>span,
+    &>i {
+        font-weight: bold;
+    }
+}

@@ -12,7 +12,7 @@
                         v-model="library.desc" show-word-limit></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" icon="el-icon-circle-check" @click="onModifyLibrary"
+                    <el-button type="primary" icon="el-icon-circle-check" @click="onLibraryModify"
                         :loading="modifyLibraryLoading">保存信息
                     </el-button>
                 </el-form-item>
@@ -29,7 +29,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button icon="el-icon-refresh" type="primary" @click="onModifyLibraryGroup"
+                    <el-button icon="el-icon-refresh" type="primary" @click="onLibraryMemberLibrarySort"
                         :loading="modifyLibraryGroupLoading">更新分组
                     </el-button>
                 </el-form-item>
@@ -81,24 +81,30 @@
             // 初始化获取所有文档库分组
             async initLibraryGroups() {
                 let libraryGroups = [];
-                await this.$api.LibraryGroupAll().then(({ resData }) => {
+                await this.$api.v1.LibraryGroupCollection().then(({ resData }) => {
                     libraryGroups = resData;
                 });
 
                 this.libraryGroups = libraryGroups;
+
+                // 初始化文档库分组时，需要判断当前文档库的分组是否还存在
+                const libraryGroupIds = libraryGroups.map((group) => group.id);
+                if (!this.libraryGroup || libraryGroupIds.indexOf(this.libraryGroup) < 0) {
+                    this.libraryGroup = '';
+                }
             },
-            // 事件：修改文档库
-            async onModifyLibrary() {
+            // 事件：文档库修改
+            async onLibraryModify() {
                 const reqData = { library_id: this.library.id, name: this.library.name, desc: this.library.desc };
-                await this.$api.LibraryModify(reqData, {
+                await this.$api.v1.LibraryModify(reqData, {
                     loading: (status) => { this.modifyLibraryLoading = status; }
                 }).then(() => {
                     this.$tip.success('修改成功');
                 });
             },
-            // 事件：修改文档库分组
-            async onModifyLibraryGroup() {
-                await this.$api.LibraryModifyGroup({ library_id: this.library.id, group_id: this.libraryGroup }, {
+            // 事件：文档库成员的文档库排序
+            async onLibraryMemberLibrarySort() {
+                await this.$api.v1.LibraryMemberLibrarySort({ library_id: this.library.id, library_group_id: this.libraryGroup }, {
                     loading: (status) => { this.modifyLibraryGroupLoading = status; }
                 }).then(() => {
                     this.$tip.success('更新成功');

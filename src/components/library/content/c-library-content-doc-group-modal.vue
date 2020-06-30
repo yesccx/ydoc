@@ -11,6 +11,9 @@
                     <el-input v-model="group.desc" maxlength="255" placeholder="简介，1～255个字符之间" type="textarea" rows="4"
                         resize="none" @keydown.enter.native="onSaveGroup" show-word-limit></el-input>
                 </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input-number :min="-1" v-model="group.sort" :step="1000"></el-input-number>
+                </el-form-item>
             </el-form>
             <div class="actions">
                 <el-button icon="el-icon-close" @click="onClose">取 消</el-button>
@@ -62,7 +65,8 @@
                     library_id: 0,
                     name: '',
                     desc: '',
-                    pid: 0
+                    pid: 0,
+                    sort: -1
                 },
                 isUpdated: false,
                 saveLoading: false
@@ -84,8 +88,8 @@
             },
             // 获取分组信息
             async getGroupInfo() {
-                const reqData = { doc_group_id: this.group.id, library_id: this.group.library_id };
-                await this.$api.LibraryDocGroupInfo(reqData, {
+                const reqData = { library_doc_group_id: this.group.id, library_id: this.group.library_id };
+                await this.$api.v1.LibraryDocGroupInfo(reqData, {
                     loading: status => {
                         this.loadingModal = status;
                     }
@@ -100,13 +104,14 @@
                 this.group = {
                     ...this.group,
                     name: '',
-                    desc: ''
+                    desc: '',
+                    sort: -1
                 };
             },
             // 保存分组
             async saveGroup() {
-                const axiosLibraryDocGroupUpSert = this.group.id > 0 ? this.$api.LibraryDocGroupModify : this.$api.LibraryDocGroupCreate;
-                const reqData = { ...this.group, doc_group_id: this.group.id };
+                const axiosLibraryDocGroupUpSert = this.group.id > 0 ? this.$api.v1.LibraryDocGroupModify : this.$api.v1.LibraryDocGroupCreate;
+                const reqData = { ...this.group, library_doc_group_id: this.group.id };
                 await axiosLibraryDocGroupUpSert(reqData, {
                     loading: status => {
                         this.saveLoading = status;

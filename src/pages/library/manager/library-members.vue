@@ -8,14 +8,15 @@
             <el-tag size="medium">已有成员：{{ libraryMemberCount }}人 </el-tag>
         </div>
 
-        <el-table :data="libraryMemberCollect" style="width: 100%" empty-text="暂无成员" stripe>
+        <el-table :data="libraryMemberCollection" style="width: 100%" empty-text="暂无成员" stripe>
             <el-table-column label="成员" width="180">
                 <template v-slot="{ row: member }">
                     <el-avatar size="small" icon="el-icon-user-solid" :src="member.user_info.avatar_url"></el-avatar>
                     <span style="position: absolute; left: 39px; top: 9px;">{{ member.user_info.nickname }}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="address" label="角色" :filters="memberRoleFilterCollect" :filter-method="handleMemberRoleFilter">
+            <el-table-column prop="address" label="角色" :filters="memberRoleFilterCollection"
+                :filter-method="handleMemberRoleFilter">
                 <template v-slot="{ row: member }">
                     <el-dropdown @command="onModifyRole" trigger="click" placement="bottom-start">
                         <span class="el-dropdown-link">
@@ -26,7 +27,7 @@
                         </span>
                         <el-dropdown-menu slot="dropdown">
                             <div v-if="member.allowManager">
-                                <el-dropdown-item v-for="role in libraryMemberRoleCollect" :key="role.name" :divided="true"
+                                <el-dropdown-item v-for="role in libraryMemberRoleCollection" :key="role.name" :divided="true"
                                     :command="{ roleId: role.id, uid: member.uid }">
                                     <span style="font-size: 12px;">{{ role.name }}</span><br />
                                     <span style="font-size: 12px;color: #a8a8a8;">{{ role.desc }}</span>
@@ -79,20 +80,20 @@
             'c-library-manager-member-invite-modal': () => import('@/components/library/manager/c-library-manager-member-invite-modal')
         },
         computed: {
-            memberRoleFilterCollect() {
-                const collect = [];
+            memberRoleFilterCollection() {
+                const collection = [];
                 this.$utils.ForEach(MemberRoleMap, (role, key) => {
-                    collect.push({ text: role.name, value: key });
+                    collection.push({ text: role.name, value: key });
                 });
 
-                return collect;
+                return collection;
             },
             // 成员数
             libraryMemberCount() {
                 return this.libraryMembers.length;
             },
             // 成员集合
-            libraryMemberCollect() {
+            libraryMemberCollection() {
                 return this.libraryMembers.filter(member =>
                     !this.searchMembersKey.trim() ||
                     member.user_info.nickname.toLowerCase().includes(this.searchMembersKey.trim().toLowerCase())
@@ -103,14 +104,14 @@
                 });
             },
             // 文档库管理角色信息集
-            libraryMemberRoleCollect() {
-                const roleCollect = [];
+            libraryMemberRoleCollection() {
+                const roleCollection = [];
                 this.$utils.ForEach(this.$utils.CloneDeep(MemberRoleMap), (role) => {
                     if (role.id !== MemberRoleKey.CREATOR && this.libraryMember.urole < role.id) {
-                        roleCollect.push(role);
+                        roleCollection.push(role);
                     }
                 });
-                return roleCollect;
+                return roleCollection;
             }
         },
         filters: {
@@ -140,14 +141,14 @@
             // 初始化文档库成员列表
             async initLibraryMembers() {
                 let members = [];
-                await this.$api.LibraryMembers({ library_id: this.libraryId }).then(({ resData }) => {
+                await this.$api.v1.LibraryMemberCollection({ library_id: this.libraryId }).then(({ resData }) => {
                     members = resData;
                 });
                 this.libraryMembers = members;
             },
             // 移除用户
             async uninviteMember(uid) {
-                await this.$api.LibraryMemberUninvite({ library_id: this.libraryId, member_id: uid }, {
+                await this.$api.v1.LibraryMemberUninvite({ library_id: this.libraryId, member_id: uid }, {
                     loading: (status) => { this.pageLoading = status; }
                 }).then(() => {
                     this.$tip.success('移除成功');
@@ -156,7 +157,7 @@
             },
             // 调整用户角色
             async memberModifyRole(memberId, roleId) {
-                await this.$api.LibraryMemberModifyRole({ library_id: this.libraryId, member_id: memberId, role_id: roleId }, {
+                await this.$api.v1.LibraryMemberRoleModify({ library_id: this.libraryId, member_id: memberId, library_role_id: roleId }, {
                     loading: (status) => { this.pageLoading = status; }
                 }).then(() => {
                     this.$tip.success('调整成功');
@@ -165,7 +166,7 @@
             },
             // 调整用户状态（启用/禁用）
             async memberModifyStatus(memberId, status) {
-                await this.$api.LibraryMemberModifyStatus({ library_id: this.libraryId, member_id: memberId, status }, {
+                await this.$api.v1.LibraryMemberStatusModify({ library_id: this.libraryId, member_id: memberId, status }, {
                     loading: (status) => { this.pageLoading = status; }
                 }).then(() => {
                     this.$tip.success('调整成功');

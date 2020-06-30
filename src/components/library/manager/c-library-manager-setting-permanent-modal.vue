@@ -67,7 +67,7 @@
             // 归档文档库
             async permanentLibrary(password) {
                 let permanentRes = true;
-                await this.$api.LibraryPermanent({ library_id: this.libraryId, password }, {
+                await this.$api.v1.LibraryPermanent({ library_id: this.libraryId, password }, {
                     report: true,
                     loading: status => { this.permanentLoading = status; }
                 }).then(() => {

@@ -62,7 +62,7 @@
                     this.info = { name: '', desc: '', create_time: 0, update_time: 0 };
                     return true;
                 }
-                await this.$api.LibraryGroupInfo({ group_id: this.id }, {
+                await this.$api.v1.LibraryGroupInfo({ library_group_id: this.id }, {
                     loading: (status) => { this.loading = status; }
                 }).then(({ resData }) => {
                     this.info = resData;

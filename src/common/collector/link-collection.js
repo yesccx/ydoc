@@ -7,7 +7,7 @@
 
 import * as RouterLinks from '@/common/router-links';
 
-const RouterLinkCollect = {};
+const RouterLinkCollection = {};
 
 // 遍历api文件，收集apiCall
 RouterLinks && Object.keys(RouterLinks).forEach(key => {
@@ -21,7 +21,7 @@ RouterLinks && Object.keys(RouterLinks).forEach(key => {
     let linkName = linkInfo[1];
     linkName = linkName.replace(/^([A-Z])/, (v) => (v.toLowerCase()));
 
-    RouterLinkCollect[linkName] = RouterLinks[key];
+    RouterLinkCollection[linkName] = RouterLinks[key];
 });
 
-export default RouterLinkCollect;
+export default RouterLinkCollection;

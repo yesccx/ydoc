@@ -12,6 +12,9 @@
                     <el-input v-model="group.desc" maxlength="255" placeholder="简介，1～255个字符之间" type="textarea" rows="4"
                         resize="none" show-word-limit></el-input>
                 </el-form-item>
+                <el-form-item label="排序" prop="sort">
+                    <el-input-number v-model="group.sort" :step="1000"></el-input-number>
+                </el-form-item>
             </el-form>
             <div class="footer">
                 <el-button icon="el-icon-close" @click="onClose">取 消</el-button>
@@ -48,7 +51,8 @@
                 group: {
                     id: 0,
                     name: '',
-                    desc: ''
+                    desc: '',
+                    sort: -1
                 },
                 isUpdated: false,
                 saveLoading: false
@@ -69,7 +73,7 @@
             // 获取分组信息
             async getGroupInfo() {
                 let groupInfo = this.$utils.CloneDeep(this.groupInfo);
-                await this.$api.LibraryGroupInfo({ group_id: this.groupId }, {
+                await this.$api.v1.LibraryGroupInfo({ library_group_id: this.groupId }, {
                     loading: status => { this.loadingModal = status; },
                     report: true
                 }).then(({ resData }) => {
@@ -83,12 +87,12 @@
             },
             // 重置分组信息
             resetGroupInfo() {
-                this.group = { id: 0, name: '', desc: '' };
+                this.group = { id: 0, name: '', desc: '', sort: -1 };
             },
             // 保存分组
             async saveGroup() {
-                const axiosLibraryDocGroupUpsert = this.group.id > 0 ? this.$api.LibraryGroupModify : this.$api.LibraryGroupCreate;
-                const groupInfo = { group_id: this.group.id, name: this.group.name, desc: this.group.desc };
+                const axiosLibraryDocGroupUpsert = this.group.id > 0 ? this.$api.v1.LibraryGroupModify : this.$api.v1.LibraryGroupCreate;
+                const groupInfo = { library_group_id: this.group.id, name: this.group.name, desc: this.group.desc, sort: this.group.sort };
                 await axiosLibraryDocGroupUpsert(groupInfo, {
                     loading(status) { this.saveLoading = status; }
                 }).then(({ resData }) => {

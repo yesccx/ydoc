@@ -102,16 +102,16 @@
             // 初始化获取所有文档库分组
             async getLibraryGroups() {
                 let libraryGroups = [];
-                await this.$api.LibraryGroupAll().then(({ resData }) => {
+                await this.$api.v1.LibraryGroupCollection().then(({ resData }) => {
                     libraryGroups = resData;
                 });
 
                 return libraryGroups;
             },
-            // 初始化获取所有文档库
+            // 初始化获取所有文档库集合
             async getLibrarys() {
                 let librarys = [];
-                await this.$api.LibraryAll().then(({ resData }) => {
+                await this.$api.v1.LibraryCollection().then(({ resData }) => {
                     librarys = resData;
                 });
 

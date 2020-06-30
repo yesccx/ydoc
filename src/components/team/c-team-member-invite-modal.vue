@@ -54,7 +54,7 @@
             async fetchMembers(searchKey, cb) {
                 let members = [];
                 if (searchKey) {
-                    await this.$api.ToolMemberSearch({ search_key: searchKey }).then(({ resData }) => {
+                    await this.$api.v1.ToolsMemberCollection({ search_key: searchKey }).then(({ resData }) => {
                         members = resData;
                     });
                 }
@@ -75,7 +75,7 @@
                 const memberIds = useMembers.map(member => member.id);
 
                 let isSuccess = false;
-                await this.$api.TeamInviteMembers({ team_id: this.teamId, member_ids: memberIds }, {
+                await this.$api.v1.TeamInviteMembers({ team_id: this.teamId, member_ids: memberIds }, {
                     loading: (state) => { this.inviteMemberLoading = state; }
                 }).then(() => {
                     isSuccess = true;
