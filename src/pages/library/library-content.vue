@@ -1,5 +1,6 @@
 <template>
-    <el-card class="page-library-content layout-wrapper" :class="sideStatus ? 'side-open' : 'side-close'">
+    <el-card class="page-library-content layout-wrapper" :class="sideStatus ? 'side-open' : 'side-close'"
+        v-loading.body="libraryManagerLoading">
         <div class="layout-body">
             <div class="layout-body-inner">
                 <!-- left：目录、菜单栏 -->

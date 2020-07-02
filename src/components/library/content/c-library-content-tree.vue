@@ -167,8 +167,8 @@
                 bus.$on('doc-saved', (docId) => {
                     this.initComponent();
                 });
-                // 事件：刷新文档内容树
-                bus.$on('flush-library-content-tree', () => {
+                // 事件：文档内容树刷新
+                bus.$on('library-content-tree-flush', () => {
                     this.initComponent();
                 });
             },
@@ -294,29 +294,7 @@
             },
             // 事件：删除文档
             onRemoveDoc(docId) {
-                this.$msgbox({
-                    title: '删除文档',
-                    message: '此操作将永久删除该文档, 是否继续?',
-                    showCancelButton: true,
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    beforeClose: async (action, instance, done) => {
-                        if (action === 'confirm') {
-                            instance.confirmButtonLoading = true;
-                            instance.confirmButtonText = '删除中...';
-                            const removeRes = await this.removeDoc(docId);
-                            instance.confirmButtonText = '确定';
-                            if (removeRes) {
-                                done();
-                            }
-                            instance.confirmButtonLoading = false;
-                            await this.getDocGroupTree();
-                            await this.getDocList();
-                        } else {
-                            done();
-                        }
-                    }
-                });
+                this.libraryContentEventBus.$emit('doc-remove', { docId });
             },
             // 事件：分组模态框关闭
             onGroupModalClose(data) {

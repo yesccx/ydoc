@@ -4,7 +4,7 @@
             <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
-            <i class="item el-icon-refresh" @click="onFlushLibraryContentTree"></i>
+            <i class="item el-icon-refresh" @click="onLibraryContentTreeFlush"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
             <i class="item el-icon-share" @click="shareItemsReady"></i>
@@ -38,8 +38,8 @@
                 this.$link.home();
             },
             // 事件：刷新文档树
-            onFlushLibraryContentTree() {
-                this.libraryContentEventBus.$emit('flush-library-content-tree');
+            onLibraryContentTreeFlush() {
+                this.libraryContentEventBus.$emit('library-content-tree-flush');
             },
             shareItemsReady() {
 

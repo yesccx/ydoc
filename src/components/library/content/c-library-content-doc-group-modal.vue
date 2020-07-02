@@ -1,5 +1,5 @@
 <template>
-    <el-dialog class="c-library-doc-content-group-modal" :title="title" :visible.sync="visibleModal" :before-close="handleClose"
+    <el-dialog class="c-library-content-doc-group-modal" :title="title" :visible.sync="visibleModal" :before-close="handleClose"
         width="450px" append-to-body>
         <div v-loading="loadingModal">
             <el-form :model="group" label-width="40px" size="mini">
@@ -26,7 +26,7 @@
     import BaseModal from '@/common/mixins/base-modal';
 
     export default {
-        name: 'c-library-doc-content-group-modal',
+        name: 'c-library-content-doc-group-modal',
         mixins: [BaseModal],
         props: {
             // 文档库id

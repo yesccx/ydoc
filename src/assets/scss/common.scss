@@ -6,6 +6,10 @@
     float: right;
 }
 
+.fr+.fr {
+    margin-right: 10px;
+}
+
 .text-overflow {
     overflow: hidden;
     white-space: nowrap;

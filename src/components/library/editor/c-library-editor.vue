@@ -1,6 +1,6 @@
 <template>
     <div class="c-library-edtior">
-        <div ref="editor" class="layout-editor" :is="layout" :init-content="content"></div>
+        <div ref="editor" class="layout-editor" :is="layout" :init-content="content" @input="onInput"></div>
     </div>
 </template>
 
@@ -17,6 +17,11 @@
                 default: ''
             }
         },
+        watch: {
+            content() {
+                this.onInput();
+            }
+        },
         data() {
             return {
                 layout: 'c-library-editor-markdown'
@@ -26,13 +31,18 @@
             // 暴露给外部调用，返回正在编辑的内容
             fetchContent() {
                 return this.$refs.editor.fetchContent();
+            },
+            // 暴露给外部调用，设置正在编辑的内容
+            setContent(content) {
+                this.$refs.editor.setContent(content);
+            },
+            // 事件：input
+            onInput() {
+                this.$emit('input');
             }
         }
     };
 </script>
 
 <style lang="scss" scoped>
-    .layout-editor {
-        height: calc(100vh - 80px);
-    }
 </style>

@@ -51,8 +51,32 @@ body {
 }
 
 .el-button {
+
     &>span,
     &>i {
         font-weight: bold;
     }
+}
+
+.button-bold {
+
+    &>span,
+    &>i {
+        font-weight: bold !important;
+    }
+}
+
+.bold-normal .el-button {
+
+    &>span,
+    &>i {
+        font-weight: normal;
+    }
+}
+
+body>.el-loading-mask {
+    height: 100vh !important;
+    width: 100vw !important;
+    top: 0 !important;
+    left: 0 !important;
 }

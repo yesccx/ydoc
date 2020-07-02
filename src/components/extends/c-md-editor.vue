@@ -350,6 +350,9 @@
     }
 
     .menubar {
+        position: sticky;
+        z-index: 10;
+        top: 0;
         padding: 13px 8px;
         -webkit-transition: visibility 0.2s 0.4s, opacity 0.2s 0.4s;
         transition: visibility 0.2s 0.4s, opacity 0.2s 0.4s;

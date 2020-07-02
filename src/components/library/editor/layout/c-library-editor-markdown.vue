@@ -1,6 +1,6 @@
 <template>
     <div class="c-library-editor-markdown">
-        <c-md-editor :content.sync="content" />
+        <c-md-editor ref="editor" :content.sync="content" />
     </div>
 </template>
 
@@ -18,22 +18,32 @@
             }
         },
         watch: {
-            initContent: {
-                handler(val) {
-                    this.content = val;
-                },
-                immediate: true
+            initContent(val) {
+                this.setContent(val);
+            },
+            content(val) {
+                this.$emit('input');
             }
         },
         data() {
             return {
-                content: ''
+                content: this.initContent
             };
         },
         methods: {
             // 暴露给外部调用，返回正在编辑的内容
             fetchContent() {
-                return this.content;
+                return this.getEditor().getHTML();
+            },
+            // 暴露给外部调用，设置正在编辑的内容
+            setContent(content) {
+                this.getEditor().setContent(content);
+            },
+            getEditor() {
+                return (this.$refs.editor && this.$refs.editor.editor) ? this.$refs.editor.editor : {
+                    setContent() { },
+                    getHTML() { }
+                };
             }
         }
     };

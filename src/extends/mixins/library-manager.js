@@ -4,6 +4,11 @@ export default {
     computed: {
         ...mapState('libraryManager', ['libraryInfo', 'libraryMember', 'libraryId'])
     },
+    data() {
+        return {
+            libraryManagerLoading: false
+        };
+    },
     async created() {
         // 子组件初始化
         if (typeof this.moduleInitialize === 'function') {

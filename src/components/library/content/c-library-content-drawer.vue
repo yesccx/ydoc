@@ -1,38 +1,18 @@
 <template>
     <div class="c-library-content-drawer">
-        <c-library-drawer-doc :doc-info="docInfo" :visible.sync="docVisible" />
+        <c-library-drawer-doc />
+        <c-library-drawer-doc-templates />
+        <c-library-drawer-doc-template-info />
     </div>
 </template>
 
 <script>
-    import LibraryContent from '@/extends/mixins/library-content';
-
     export default {
         name: 'c-library-content-drawer',
         components: {
-            'c-library-drawer-doc': () => import('@/components/library/drawer/c-library-drawer-doc')
-        },
-        mixins: [LibraryContent],
-        data() {
-            return {
-                docInfo: {
-                    id: 0,
-                    title: '',
-                    content: '',
-                    groupId: 0,
-                    libraryId: 0
-                },
-                docVisible: false
-            };
-        },
-        methods: {
-            // 初始化eventbus事件监听
-            initEventBus(bus) {
-                bus.$on('editor-doc-info', (docInfo) => {
-                    this.docInfo = this.$utils.CloneDeep(docInfo);
-                    this.docVisible = true;
-                });
-            }
+            'c-library-drawer-doc': () => import('@/components/library/drawer/c-library-drawer-doc'),
+            'c-library-drawer-doc-templates': () => import('@/components/library/drawer/c-library-drawer-doc-templates'),
+            'c-library-drawer-doc-template-info': () => import('@/components/library/drawer/c-library-drawer-doc-template-info')
         }
     };
 </script>

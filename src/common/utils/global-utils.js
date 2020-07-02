@@ -6,7 +6,7 @@
  * @Author: yesc (yes.ccx@gmail.com)
  */
 
-import { Loading, MessageBox } from 'element-ui';
+import { Loading, MessageBox, Notification } from 'element-ui';
 import Router from '@/kernel/router';
 import Store from '@/kernel/store';
 import { RouterLinkHome, RouterLinkBack } from '@/common/router-links';
@@ -87,6 +87,28 @@ export const Input = (field, def = '') => {
     }
 
     return val;
+};
+
+// 功能开发中 提示框
+export const Abuilding = () => {
+    return Notification({ title: 'ydoc', message: '功能开发中～', type: 'success' });
+};
+
+// 确认框
+export const Confirm = async (message = '', title = '', options = {}) => {
+    title = title || '提醒';
+    return MessageBox.confirm(message, title, {
+        confirmButtonText: '好的',
+        type: 'warning',
+        showClose: false,
+        dangerouslyUseHTMLString: true,
+        distinguishCancelAndClose: false,
+        closeOnPressEscape: false,
+        closeOnClickModal: false,
+        center: true,
+        cancelButtonText: '再看看',
+        ...options
+    });
 };
 
 // 显示全局错误
@@ -256,4 +278,4 @@ export const DateFormat = (timestamp, format, dft = '-') => {
     return new Date(timestamp * 1000).format(format);
 };
 
-export default { FullLoading, CloneDeep, Sleep, DateFormat, SetDocummentTitle, ArrayConcat, Input, Error, ForEach };
+export default { FullLoading, CloneDeep, Sleep, DateFormat, SetDocummentTitle, ArrayConcat, Input, Confirm, Error, ForEach, Abuilding };
