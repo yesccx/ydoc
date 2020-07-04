@@ -57,10 +57,10 @@
                 saveLoading: false
             };
         },
-        created () {
+        created() {
             this.globalDocSaveShortcutKeyHandler(true);
         },
-        destroyed () {
+        destroyed() {
             this.globalDocSaveShortcutKeyHandler(false);
         },
         methods: {
@@ -115,13 +115,37 @@
                 });
 
                 // 事件：文档被删除
-                bus.$on('doc-removed', ({ docId }) => {
+                bus.$on('doc-removed', ({ docId, groupId = -1 }) => {
+                    docId = String(docId);
                     const docInfo = this.fetchEditorDocInfo(docId);
-                    docInfo.id = 't' + this.creatorCounter++;
-                    if (this.activeDocEditor === docId) {
-                        this.handleActiveDocEditor(docInfo.id);
+                    if (docInfo) {
+                        docInfo.id = 't' + this.creatorCounter++;
+                        if (groupId >= 0) {
+                            console.log(123);
+                            docInfo.groupId = groupId;
+                        }
+                        if (this.activeDocEditor === docId) {
+                            this.handleActiveDocEditor(docInfo.id);
+                        }
+                        this.tagDocNotSave(docInfo.id);
                     }
-                    this.tagDocNotSave(docInfo.id);
+                });
+
+                // 事件：文档被修改
+                bus.$on('doc-modifyed', ({ docId }) => {
+                    if (this.docEditorMap[docId] !== undefined || String(docId).indexOf('t') === 0) {
+                        this.tagDocNotSave(String(docId));
+                    }
+                });
+
+                // 事件：文档历史恢复
+                bus.$on('doc-history-recovery', (docHistory) => {
+                    const docInfo = this.docEditorCollection[this.docEditorMap[docHistory.doc_id]];
+                    docInfo.groupId = docHistory.group_id;
+                    docInfo.title = docHistory.title;
+                    docInfo.content = docHistory.content;
+
+                    this.tagDocNotSave(docHistory.doc_id);
                 });
             },
             // 根据文档id保存文档（根据编辑器选项卡）

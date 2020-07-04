@@ -36,8 +36,8 @@
             },
             // 获取文档信息
             async getDocInfo() {
-                const reqData = { library_id: this.libraryId, doc_id: this.docId };
-                await this.$api.LibraryDocInfo(reqData, {
+                const reqData = { library_id: this.libraryId, library_doc_id: this.docId };
+                await this.$api.v1.LibraryDocInfo(reqData, {
                     loading: status => {
                         this.docLoading = status;
                     }

@@ -61,7 +61,7 @@
         },
         computed: {
             libraryInfoTip() {
-                return this.libraryInfo.name + ' [点击查看更多]';
+                return this.libraryInfo.name;
             }
         },
         data() {
@@ -117,7 +117,7 @@
             top: 0;
             left: 0;
         }
-        .el-card__body {
+        & > .el-card__body {
             padding: 0;
             height: calc(100vh - 30px);
         }
@@ -228,7 +228,7 @@
 
     .library-info {
         transition: margin 0.2s;
-        margin: 5px 5px 10px 5px;
+        margin: 5px 5px 20px 5px;
         color: $--color-primary-light-2;
         cursor: pointer;
 
@@ -236,7 +236,7 @@
             transition: width 0.5s;
             width: auto;
             max-width: 260px;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;

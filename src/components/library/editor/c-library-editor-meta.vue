@@ -12,7 +12,7 @@
                 </span>
             </span>
             <el-button-group class="fr">
-                <el-button size="mini">历史记录</el-button>
+                <el-button size="mini" @click="onDocHistory">历史记录</el-button>
                 <el-dropdown trigger="click" type="primary" size="mini" icon="el-icon-circle-check" @command="onHandleCommand"
                     @click="onSaveDoc" split-button>
                     保存文档
@@ -56,13 +56,6 @@
             }
         },
         methods: {
-            // 初始化eventbus事件监听
-            initEventBus(bus) {
-                // 文档删除
-                bus.$on('doc-remove', ({ docId }) => {
-                    this.onDocRemove(docId);
-                });
-            },
             // 事件：保存文档
             onSaveDoc() {
                 this.libraryContentEventBus.$emit('doc-save', { docId: this.meta.id });
@@ -99,41 +92,12 @@
             },
             // 事件：文档删除
             onDocRemove(docId) {
-                this.$msgbox({
-                    title: '删除文档',
-                    message: '此操作将永久删除该文档, 是否继续?',
-                    showCancelButton: true,
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    beforeClose: async (action, instance, done) => {
-                        if (action === 'confirm') {
-                            instance.confirmButtonLoading = true;
-                            instance.confirmButtonText = '删除中...';
-                            const removeRes = await this.docRemove(docId);
-                            instance.confirmButtonText = '确定';
-                            if (removeRes) {
-                                done();
-                            }
-                            instance.confirmButtonLoading = false;
-                        } else {
-                            done();
-                        }
-                    }
-                });
+                this.libraryContentEventBus.$emit('doc-remove', { docId });
             },
-            // 文档删除
-            async docRemove(docId) {
-                const reqData = { library_doc_id: docId, library_id: this.libraryId };
-                let removeRes = false;
-                await this.$api.v1.LibraryDocRemove(reqData, {
-                    loading: (status) => { this.libraryManagerLoading = status; }
-                }).then(({ resMsg }) => {
-                    this.$tip.success(resMsg);
-                    removeRes = true;
-                    this.libraryContentEventBus.$emit('library-content-tree-flush');
-                    this.libraryContentEventBus.$emit('doc-removed', { docId });
-                });
-                return removeRes;
+            // 事件：文档历史记录
+            onDocHistory() {
+                const docId = this.meta.id;
+                this.libraryContentEventBus.$emit('doc-history', { docId });
             }
         }
     };

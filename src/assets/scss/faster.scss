@@ -37,7 +37,8 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-[class*=y-icon-]+span {
+[class*=y-icon-]+span,
+[class*=el-icon-]+span {
     margin-left: 5px;
 }
 

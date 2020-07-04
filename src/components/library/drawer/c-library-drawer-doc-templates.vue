@@ -8,10 +8,10 @@
                     <el-tag class="operate-container__total">当前共计 <b>{{tmeplateCount}}</b> 个模板</el-tag>
                     <el-button class="button-bold operate-container__item" :loading="templateLoading" size="small"
                         icon="el-icon-refresh" type="text" @click="onDocTemplateListFlush">刷新列表</el-button>
-                    <el-button class="button-bold operate-container__item" size="small" icon="el-icon-plus" type="text"
+                    <!-- <el-button class="button-bold operate-container__item" size="small" icon="el-icon-plus" type="text"
                         @click="onDocTemplateListFlush">
                         新建模板
-                    </el-button>
+                    </el-button> -->
                     <el-input class="operate-container__search-input" prefix-icon="el-icon-search" size="mini" v-model="searchKey"
                         placeholder="搜索关键字（模板名称、简介、创建人）" clearable></el-input>
                 </div>

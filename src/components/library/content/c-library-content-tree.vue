@@ -45,9 +45,9 @@
 
                             <!-- 文档操作项 -->
                             <el-dropdown-menu v-else slot="dropdown">
-                                <el-dropdown-item :command="'renameDoc|' + data.id">
+                                <!-- <el-dropdown-item :command="'renameDoc|' + data.id">
                                     <i class="el-icon-edit"></i>重命名
-                                </el-dropdown-item>
+                                </el-dropdown-item> -->
                                 <el-dropdown-item :command="'removeDoc|' + data.id">
                                     <i class="el-icon-delete"></i>删除
                                 </el-dropdown-item>
@@ -109,7 +109,9 @@
                 const docList = this.$utils.CloneDeep(this.docList);
 
                 // 文档划分
-                docList.forEach(doc => {
+                docList.filter((doc) => {
+                    return doc.title.indexOf(this.searchKey) >= 0;
+                }).forEach(doc => {
                     doc.nodeType = 'doc';
                     doc.name = doc.title;
                     doc.key = 'doc-' + doc.id;
@@ -159,17 +161,25 @@
                 bus.$on('doc-group-will-create', () => {
                     this.openGroupModal(0, 0);
                 });
+
                 // 事件：文档分组将修改
                 bus.$on('doc-group-will-modify', (groupId) => {
                     this.openGroupModal(groupId);
                 });
+
                 // 事件：文档库保存成功（更新列表）
                 bus.$on('doc-saved', (docId) => {
                     this.initComponent();
                 });
+
                 // 事件：文档内容树刷新
                 bus.$on('library-content-tree-flush', () => {
                     this.initComponent();
+                });
+
+                // 文档删除
+                bus.$on('doc-remove', ({ docId }) => {
+                    this.onDocRemove(docId);
                 });
             },
             // 获取分组树
@@ -198,21 +208,14 @@
             async removeDocGroup(groupId, isDeep) {
                 const reqData = { library_doc_group_id: groupId, is_deep: isDeep, library_id: this.libraryId };
                 let removeRes = false;
-                await this.$api.v1.LibraryDocGroupRemove(reqData, { report: true }).then(({ resMsg }) => {
-                    this.$tip.success(resMsg);
+                await this.$api.v1.LibraryDocGroupRemove(reqData, { report: true }).then(({ resMsg, resData }) => {
+                    this.$tip.success('删除成功');
                     removeRes = true;
+                    resData.forEach((docId) => {
+                        this.libraryContentEventBus.$emit('doc-removed', { docId, groupId: 0 });
+                    });
                 }).catch(({ resMsg }) => {
                     this.$tip.error(resMsg);
-                });
-                return removeRes;
-            },
-            // 删除文档
-            async removeDoc(docId) {
-                const reqData = { library_doc_id: docId, library_id: this.libraryId };
-                let removeRes = false;
-                await this.$api.v1.LibraryDocRemove(reqData).then(({ resMsg }) => {
-                    this.$tip.success(resMsg);
-                    removeRes = true;
                 });
                 return removeRes;
             },
@@ -253,7 +256,7 @@
                         this.libraryContentEventBus.$emit('doc-will-create', param);
                         break;
                     case 'removeDoc':
-                        this.onRemoveDoc(param);
+                        this.onDocRemove(param);
                         break;
 
                     default:
@@ -292,9 +295,44 @@
                     }
                 });
             },
-            // 事件：删除文档
-            onRemoveDoc(docId) {
-                this.libraryContentEventBus.$emit('doc-remove', { docId });
+
+            // 事件：文档删除
+            onDocRemove(docId) {
+                this.$msgbox({
+                    title: '删除文档',
+                    message: '此操作将永久删除该文档, 是否继续?',
+                    showCancelButton: true,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    beforeClose: async (action, instance, done) => {
+                        if (action === 'confirm') {
+                            instance.confirmButtonLoading = true;
+                            instance.confirmButtonText = '删除中...';
+                            const removeRes = await this.docRemove(docId);
+                            instance.confirmButtonText = '确定';
+                            if (removeRes) {
+                                done();
+                            }
+                            instance.confirmButtonLoading = false;
+                        } else {
+                            done();
+                        }
+                    }
+                });
+            },
+            // 文档删除
+            async docRemove(docId) {
+                const reqData = { library_doc_id: docId, library_id: this.libraryId };
+                let removeRes = false;
+                await this.$api.v1.LibraryDocRemove(reqData, {
+                    loading: (status) => { this.libraryManagerLoading = status; }
+                }).then(({ resMsg }) => {
+                    this.$tip.success(resMsg);
+                    removeRes = true;
+                    this.libraryContentEventBus.$emit('library-content-tree-flush');
+                    this.libraryContentEventBus.$emit('doc-removed', { docId });
+                });
+                return removeRes;
             },
             // 事件：分组模态框关闭
             onGroupModalClose(data) {
@@ -363,6 +401,7 @@
                 if (type === 'group') {
                     await this.getDocGroupTree();
                 } else {
+                    this.libraryContentEventBus.$emit('doc-modifyed', { docId: id });
                     await this.getDocList();
                 }
             },
@@ -540,7 +579,7 @@
 </style>
 <style lang="scss" scoped>
     .tree {
-        height: calc(100vh - 150px);
+        height: calc(100vh - 170px);
     }
     .tree-node-group-icon {
         font-size: 15px;
