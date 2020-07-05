@@ -3,7 +3,7 @@
         <el-drawer :title="title" :visible.sync="visibleDrawer" custom-class="content-drawer" size="400px"
             :modal-append-to-body="false">
             <div class="content-drawer__content">
-                <el-scrollbar style="height: 86.5vh;">
+                <el-scrollbar style="height: calc(100vh - 110px);">
                     <c-infinite-list ref="list" :request="getLibraryDocHistoryList" empty-tip="暂无历史">
                         <ul>
                             <li v-for="docHistory in docHistoryList" :key="docHistory.id" class="version-item">
@@ -64,7 +64,7 @@
                 let docHistoryInfo = false;
                 await this.$api.v1.LibraryDocHistoryInfo({
                     library_id: this.libraryId, doc_history_id: docHistoryId
-                }, { loading: (status) => { this.$fullLoading.status = status; } }).then(({ resData }) => {
+                }, { loading: (status) => { this.libraryManagerLoading = status; } }).then(({ resData }) => {
                     docHistoryInfo = resData;
                 });
 

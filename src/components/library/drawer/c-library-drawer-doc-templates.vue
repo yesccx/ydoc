@@ -160,7 +160,7 @@
 
 <style lang="scss" scoped>
     .template-collection-container {
-        height: 77.5vh;
+        height: calc(100vh - 225px);
     }
     .operate-container {
         margin-bottom: 10px;

@@ -7,7 +7,7 @@
             <i class="item el-icon-refresh" @click="onLibraryContentTreeFlush"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
-            <i class="item el-icon-share" @click="shareItemsReady"></i>
+            <i class="item el-icon-share" @click="onLibraryShare"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="新建文档" placement="top-start">
             <i class="item el-icon-document-add" @click="onDocWillCreate"></i>
@@ -41,8 +41,9 @@
             onLibraryContentTreeFlush() {
                 this.libraryContentEventBus.$emit('library-content-tree-flush');
             },
-            shareItemsReady() {
-
+            // 事件：文档库分享
+            onLibraryShare() {
+                this.libraryContentEventBus.$emit('library-share');
             }
         }
     };

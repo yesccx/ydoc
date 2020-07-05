@@ -11,7 +11,7 @@
                 <c-library-editor-meta :loading="saveLoading" :meta="docEditor" @input="onEditorInput(docEditor)" />
 
                 <!-- 编辑区 -->
-                <el-scrollbar style="height: 85vh;">
+                <el-scrollbar style="height: calc(100vh - 125px);">
                     <c-library-editor ref="docEditor" :content="docEditor.content" @input="onEditorInput(docEditor)" />
                 </el-scrollbar>
             </el-tab-pane>

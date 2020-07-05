@@ -19,11 +19,11 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="doc-info">文档信息</el-dropdown-item>
                         <el-dropdown-item command="doc-remove">删除文档</el-dropdown-item>
-                        <el-dropdown-item command="switch-style">切换风格</el-dropdown-item>
-                        <el-dropdown-item command="save-as-doc" divided>另存为文档</el-dropdown-item>
-                        <el-dropdown-item command="save-to-template" divided>另存为模板</el-dropdown-item>
-                        <el-dropdown-item command="use-template">使用模板</el-dropdown-item>
-                        <el-dropdown-item command="share-doc" divided>分享</el-dropdown-item>
+                        <el-dropdown-item command="doc-switch-style">切换风格</el-dropdown-item>
+                        <el-dropdown-item command="doc-save-as" divided>另存为文档</el-dropdown-item>
+                        <el-dropdown-item command="doc-save-to-template" divided>另存为模板</el-dropdown-item>
+                        <el-dropdown-item command="doc-use-template">使用模板</el-dropdown-item>
+                        <el-dropdown-item command="doc-share" divided>分享</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-button-group>
@@ -68,13 +68,13 @@
                     case 'doc-info':
                         this.libraryContentEventBus.$emit('editor-doc-info', { docInfo });
                         break;
-                    case 'use-template':
+                    case 'doc-use-template':
                         this.libraryContentEventBus.$emit('doc-template-will-use');
                         break;
                     case 'doc-remove':
                         this.onDocRemove(this.meta.id);
                         break;
-                    case 'save-to-template':
+                    case 'doc-save-to-template':
                         this.libraryContentEventBus.$emit('editor-doc-template-info', {
                             id: 0,
                             introduction: '',
@@ -82,8 +82,11 @@
                             content: docInfo.content
                         });
                         break;
-                    case 'save-as-doc':
+                    case 'doc-save-as':
                         this.libraryContentEventBus.$emit('editor-doc-info', { docInfo, isSaveAsMode: true });
+                        break;
+                    case 'doc-share':
+                        this.libraryContentEventBus.$emit('doc-will-share', { docId: this.meta.id });
                         break;
                     default:
                         this.$utils.Abuilding();
