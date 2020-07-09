@@ -7,6 +7,7 @@
 
 import Vue from 'vue';
 import Axios from '@/kernel/axios';
+import '@/kernel/directire';
 import Utils from '@/common/utils/global-utils';
 import Tip from '@/common/utils/tip';
 import ApiCollection from '@/common/collector/api-collection';

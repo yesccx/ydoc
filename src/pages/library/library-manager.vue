@@ -94,7 +94,7 @@
                     await this.$utils.Error(resMsg);
                 });
 
-                this.$store.commit('libraryManager/libraryManagerInfo', libraryManagerInfo);
+                this.$store.commit('libraryManager/setLibraryManagerInfo', libraryManagerInfo);
 
                 return libraryManagerInfo;
             },

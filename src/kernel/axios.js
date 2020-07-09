@@ -97,6 +97,7 @@ const buildResposne = function (res) {
         res,
         ...handlerAxiosAnticipation(res.data),
         resData: res.data.data,
+        resCode: res.data.code,
         resMsg: res.data.msg
     };
     if (!response.$resSuccess) {

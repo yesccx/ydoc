@@ -126,7 +126,7 @@ export const Error = async (message, title = '') => {
         distinguishCancelAndClose: false,
         closeOnPressEscape: false,
         closeOnClickModal: false,
-        center: true,
+        center: false,
         cancelButtonText: '返回首页'
     }).then(() => {
         RouterLinkBack();

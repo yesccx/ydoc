@@ -7,14 +7,14 @@ export default {
         libraryId: {
             async handler(id) {
                 if (id > 0) {
-                    await this.initComponent();
+                    this.initComponent && await this.initComponent();
                 }
             },
             immediate: true
         }
     },
     async created() {
-        this.initEventBus(this.libraryContentEventBus);
+        this.initEventBus && this.initEventBus(this.libraryContentEventBus);
     },
     methods: {
         // 初始化eventbus事件监听

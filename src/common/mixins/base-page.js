@@ -1,7 +1,8 @@
 export default {
     data() {
         return {
-            pageLoading: true
+            pageLoading: true,
+            pageFirstInited: false
         };
     },
     methods: {

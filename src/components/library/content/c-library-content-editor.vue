@@ -168,7 +168,6 @@
                         return false;
                     }
 
-                    this.$tip.success('保存成功');
                     if (docInfo.library_doc_id === 0) {
                         this.docEditorCollection[initialDocInfo.editorIndex].id = resData.id;
                         this.handleActiveDocEditor(resData.id);

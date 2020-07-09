@@ -1,25 +1,24 @@
 <template>
-    <el-card class="page-library-content layout-wrapper" :class="sideStatus ? 'side-open' : 'side-close'"
-        v-loading.body="libraryManagerLoading">
-        <div class="layout-body">
-            <div class="layout-body-inner">
+    <el-card class="page-library-preview layout-wrapper" :class="bodyClass" v-loading.body="libraryPreviewEventBus.loading">
+        <div class="layout-body" v-show="pageFirstInited">
+            <div v-if="isAccessed" class="layout-body-inner">
                 <!-- left：目录、菜单栏 -->
                 <div class="layout-side">
                     <!-- left-header：文档库信息、目录搜索区 -->
                     <div class="layout-side__header">
                         <div class="library-info">
-                            <span class="library-info__name" :title="libraryInfoTip"> {{ libraryInfo.name }} </span>
+                            <span class="library-info__name" :title="libraryInfoTip" @click="onShareInfoView"> 123 </span>
                         </div>
                     </div>
 
                     <!-- left-body：目录区 -->
                     <div class="layout-side__body">
-                        <c-library-content-tree />
+                        <c-library-preview-tree />
                     </div>
 
                     <!-- left-footer：目录功能操作区 -->
                     <div class="layout-side__footer">
-                        <c-library-content-tree-tools />
+                        <c-library-preview-tree-tools />
                     </div>
                 </div>
 
@@ -28,87 +27,128 @@
                     <i class="el-icon-d-arrow-right" @click="onChangeSide"></i>
                 </div>
 
-                <!-- right：编辑区 -->
+                <!-- right：视图区 -->
                 <div class="layout-main">
-                    <c-library-content-editor />
+                    <c-library-preview-view />
                 </div>
 
                 <!-- 侧边面板 -->
                 <div class="layout-drawer">
-                    <c-library-content-drawer />
+                    <c-library-preview-drawer />
                 </div>
+            </div>
+            <div v-else>
+                <c-library-preview-protected />
             </div>
         </div>
     </el-card>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import BasePage from '@/common/mixins/base-page';
-    import LibraryManager from '@/extends/mixins/library-manager';
-    import libraryContentEventBus from '@/extends/utils/library-content-event-bus';
+    import libraryPreviewEventBus from '@/extends/utils/library-preview-event-bus';
+    import ResponseCode from '@/common/constants/response-code';
+    import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 
     export default {
-        name: 'page-library-content',
-        mixins: [BasePage, LibraryManager],
+        name: 'page-library-preview',
+        mixins: [BasePage],
         components: {
-            'c-library-content-editor': () => import('@/components/library/content/c-library-content-editor'),
-            'c-library-content-tree': () => import('@/components/library/content/c-library-content-tree'),
-            'c-library-content-tree-tools': () => import('@/components/library/content/c-library-content-tree-tools'),
-            'c-library-content-drawer': () => import('@/components/library/content/c-library-content-drawer')
+            'c-library-preview-protected': () => import('@/components/library/preview/c-library-preview-protected'),
+            'c-library-preview-view': () => import('@/components/library/preview/c-library-preview-view'),
+            'c-library-preview-tree': () => import('@/components/library/preview/c-library-preview-tree'),
+            'c-library-preview-tree-tools': () => import('@/components/library/preview/c-library-preview-tree-tools'),
+            'c-library-preview-drawer': () => import('@/components/library/preview/c-library-preview-drawer')
         },
         provide() {
-            return { libraryContentEventBus };
+            return { libraryPreviewEventBus: this.libraryPreviewEventBus };
         },
         computed: {
+            ...mapState('libraryPreview', ['libraryShareInfo', 'isAccessed', 'isShareSimplify']),
             libraryInfoTip() {
-                return this.libraryInfo.name;
+                return '';
+            },
+            bodyClass() {
+                return {
+                    'side-open': this.sideStatus,
+                    'side-close': !this.sideStatus,
+                    'simplify': this.isShareSimplify
+                };
+            }
+        },
+        watch: {
+            isShareSimplify(val) {
+                if (val) {
+                    this.sideStatus = false;
+                }
+            },
+            isAccessed: {
+                async handler(val) {
+                    if (val) {
+                        this.$utils.SetDocummentTitle(this.libraryShareInfo.share_name);
+                    }
+                },
+                immediate: true
             }
         },
         data() {
             return {
+                libraryPreviewEventBus,
                 sideStatus: true
             };
         },
         async created() {
-            const libraryId = this.$utils.Input('library_id/d', 0);
-            if (libraryId <= 0) {
+            this.libraryPreviewEventBus.loading = true;
+
+            const shareCode = this.$utils.Input('code/s', '');
+            if (!shareCode) {
                 await this.$utils.Error('参数错误，缺少必需参数');
             }
 
-            // 初始化文档库管理信息
-            await this.initLibraryManagerInfo(libraryId);
-        },
-        async mounted() {
-            // const hash = this.$route.hash.slice(1);
-            // const hashParams = hash.match(/^(doc|group)-(\d+)$/);
+            // 从本地缓存中获取历史密码
+            const accessPasswordCollection = DataStore.getItem(STORE_KEYS.SHARE_ACCESS_PASSWORD, {});
+            const accessPassword = accessPasswordCollection[shareCode] || '';
+
+            // 初始化文档库分享信息
+            await this.initLibraryShareInfo(shareCode, accessPassword);
+
+            this.libraryPreviewEventBus.loading = false;
+            this.pageFirstInited = true;
         },
         beforeDestroy() {
-            libraryContentEventBus.destroy();
+            this.libraryPreviewEventBus.destroy();
         },
         methods: {
-            // 初始化文档库管理信息
-            async initLibraryManagerInfo(libraryId) {
-                let libraryManagerInfo = false;
-                await this.$api.v1.LibraryManagerInfo({ library_id: libraryId }, { report: true }).then(({ resData }) => {
-                    libraryManagerInfo = resData;
-                }).catch(async ({ resMsg = '未知错误' }) => {
-                    await this.$utils.Error(resMsg);
+            // 初始化文档库分享信息
+            async initLibraryShareInfo(shareCode, accessPassword = '') {
+                const reqData = { share_code: shareCode, share_access_password: accessPassword };
+
+                await this.$api.v1.LibraryShareInfo(reqData, { report: true }).then(({ resData }) => {
+                    this.$store.commit('libraryPreview/setLibraryShareInfo', { libraryShareInfo: resData, isAccessed: true, accessPassword });
+                }).catch(async ({ resMsg = '未知错误', resCode, resData }) => {
+                    // 密码错误时，询问输入密码
+                    if (resCode === ResponseCode.LIRARY_SHARE_PROTECTED) {
+                        this.$store.commit('libraryPreview/setLibraryShareInfo', { libraryShareInfo: resData, isAccessed: false });
+                    } else {
+                        await this.$utils.Error(resMsg);
+                    }
                 });
-
-                this.$store.commit('libraryManager/setLibraryManagerInfo', libraryManagerInfo);
-
-                return libraryManagerInfo;
             },
             // 事件：改变侧边栏状态
             onChangeSide() {
                 this.sideStatus = !this.sideStatus;
+            },
+            // 事件：查看当前分享源信息
+            onShareInfoView() {
+                this.libraryPreviewEventBus.$emit('share-info-view');
             }
         }
     };
 </script>
 
 <style lang="scss">
-    .page-library-content {
+    .page-library-preview {
         & {
             box-shadow: initial !important;
             border: 0 !important;
@@ -134,7 +174,7 @@
                 width: calc(100vw - 90px) !important;
             }
             .library-info,
-            .c-library-content-tree {
+            .c-library-preview-tree {
                 opacity: 0;
             }
             .layout-side {
@@ -157,7 +197,13 @@
 </style>
 
 <style lang="scss" scoped>
-    .page-library-content {
+    .simplify {
+        .layout-side__body,
+        .layout-side-action {
+            display: none;
+        }
+    }
+    .page-library-preview {
         overflow: hidden;
         max-width: none !important;
     }

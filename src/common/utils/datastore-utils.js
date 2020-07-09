@@ -6,17 +6,25 @@
  */
 
 export const keys = {
-    USER_SESSION: 'user_session'
+    USER_SESSION: 'user_session',
+    SHARE_ACCESS_PASSWORD: 'share_access_password'
 };
 
 const DataStore = {
     driver: window.localStorage, // 存储驱动对象，需要实现（getItem、setItem、removeItem）方法
     prefix: '',
     // 存储
-    setItem(key, value) {
+    setItem(key, value, expire = 3600) {
+        if (typeof value === 'function') {
+            value = value(this.getItem(key));
+        }
+
+        // 过期时间
+        const expireTime = expire > 0 ? parseInt(Date.now() / 1000) + expire : 0;
+
         key = this._key(key);
         try {
-            value = btoa(JSON.stringify(value));
+            value = btoa(JSON.stringify({ expire_time: expireTime, data: value }));
         } catch (error) {
             return false;
         }
@@ -33,6 +41,10 @@ const DataStore = {
 
         try {
             value = JSON.parse(atob(value));
+            if (value.expire_time >> 0 !== 0 && value.expire_time < parseInt(Date.now() / 1000)) {
+                throw new Error('已过期');
+            }
+            value = value.data;
         } catch (error) {
             return def;
         }

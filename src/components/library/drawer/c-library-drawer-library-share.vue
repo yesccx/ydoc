@@ -69,11 +69,13 @@
                 <div class="content-drawer__footer">
                     <el-input class="share-url-input" :value="shareUrl" placeholder="点击下方的 '生成分享'" readonly>
                         <span slot="prepend"><i class="el-icon-share"></i> 分享地址</span>
-                        <i slot="suffix" class="el-input__icon el-icon-document-copy"></i>
+                        <i slot="suffix" class="el-input__icon el-icon-document-copy" v-clipboard="shareUrl"></i>
                     </el-input>
                     <div class="footer-optrate">
-                        <el-button v-if="shareInfo.id > 0" slot="reference" type="danger" @click="onShareCancel">取消分享</el-button>
-                        <el-button type="primary" :loading="shareLoading" @click="onShare">生成分享</el-button>
+                        <el-button v-if="shareInfo.id > 0" type="danger" @click="onShareCancel">取消分享</el-button>
+                        <el-button type="primary" :loading="shareLoading" @click="onShare">
+                            {{ shareInfo.id > 0 ? '重新生成分享' : '生成分享' }}
+                        </el-button>
                     </div>
                 </div>
             </div>
@@ -85,6 +87,7 @@
     import BaseDrawer from '@/common/mixins/base-drawer';
     import LibraryContent from '@/extends/mixins/library-content';
     import { mapGetters } from 'vuex';
+    import { APP_ROOT_URL } from '@/common/constants/app-code';
 
     // 分享信息初始值
     const shareInfoInitial = {
@@ -109,7 +112,7 @@
                 if (!this.shareInfo.share_code) {
                     return '';
                 }
-                return `https://www.baidu.com/share/${this.shareInfo.share_code}`;
+                return `${APP_ROOT_URL}/library/preview?code=${this.shareInfo.share_code}`;
             }
         },
         data() {

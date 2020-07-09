@@ -14,8 +14,8 @@ const state = {
 const getters = {};
 
 const mutations = {
-    // 初始化文档库管理信息
-    libraryManagerInfo(state, { libraryInfo, libraryMember }) {
+    // 设置文档库管理信息
+    setLibraryManagerInfo(state, { libraryInfo, libraryMember }) {
         state.libraryInfo = libraryInfo;
         state.libraryMember = libraryMember;
         state.libraryId = libraryInfo.id;

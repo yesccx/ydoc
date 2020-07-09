@@ -9,7 +9,7 @@
     },
     "dependencies": {
         "axios": "^0.18.0",
-        "clipboard": "^2.0.4",
+        "clipboard": "^2.0.6",
         "element-ui": "2.13",
         "js-md5": "^0.7.3",
         "normalize.css": "^8.0.1",
@@ -34,5 +34,7 @@
         "vue-cli-plugin-element": "^1.0.1",
         "vue-template-compiler": "^2.5.21"
     },
-    "resolutions": { "prosemirror-model": "1.8.2" }
+    "resolutions": {
+        "prosemirror-model": "1.8.2"
+    }
 }

@@ -103,12 +103,11 @@ export default [
         component: () => import('@/pages/library/library-content.vue')
     },
     {
-        path: '/library/doc/modify',
-        name: 'library-doc-modify',
+        path: '/library/preview',
+        name: 'library-preview',
         meta: {
-            title: '文档编辑',
-            ...PAGE_AUTH_IS_USER
+            title: '文档库预览内容'
         },
-        component: () => import('@/pages/library/library-doc-modify.vue')
+        component: () => import('@/pages/library/library-preview.vue')
     }
 ];

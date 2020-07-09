@@ -4,6 +4,7 @@ import Store from '@/kernel/store';
 import { SetDocummentTitle } from '@/common/utils/global-utils';
 import { PAGE_AUTH_IS_GUEST, PAGE_AUTH_IS_USER } from '@/common/constants/page-auth';
 import NProgress from 'nprogress';
+import { APP_ENV_IS_DEV } from '@/common/constants/app-code';
 
 Vue.use(Router);
 
@@ -13,7 +14,7 @@ const moduleFiles = require.context('@/kernel/router/modules', false, /\.js$/);
 moduleFiles.keys().forEach(key => {
     routerModuels = routerModuels.concat(moduleFiles(key).default);
 });
-const RouterInstance = new Router({ routes: [...routerModuels] });
+const RouterInstance = new Router({ mode: APP_ENV_IS_DEV ? '' : 'history', routes: [...routerModuels] });
 
 // 路由守卫-前置
 RouterInstance.beforeEach(async (to, from, next) => {
