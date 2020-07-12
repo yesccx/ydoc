@@ -52,8 +52,17 @@
                 }).then(({ resData }) => {
                     this.$notify.success({ title: '登录成功', message: '欢迎回来' });
                     this.userSession(resData.uid, resData.token);
-                    this.$link.home();
+                    this.goRedirect();
                 });
+            },
+            // 跳转回登录前访问的页面
+            goRedirect() {
+                const redirect = this.$route.query.r;
+                if (redirect) {
+                    this.$router.push(redirect);
+                } else {
+                    this.$link.home();
+                }
             },
             // 用户会话状态保存
             userSession(uid, token) {

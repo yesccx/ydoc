@@ -10,6 +10,7 @@ import { Loading, MessageBox, Notification } from 'element-ui';
 import Router from '@/kernel/router';
 import Store from '@/kernel/store';
 import { RouterLinkHome, RouterLinkBack } from '@/common/router-links';
+import { APP_ROOT_URL } from '@/common/constants/app-code';
 
 // 全屏Loading
 export const FullLoading = class FullLoading {
@@ -278,4 +279,21 @@ export const DateFormat = (timestamp, format, dft = '-') => {
     return new Date(timestamp * 1000).format(format);
 };
 
-export default { FullLoading, CloneDeep, Sleep, DateFormat, SetDocummentTitle, ArrayConcat, Input, Confirm, Error, ForEach, Abuilding };
+// 生成完整url
+export const UrlBuilder = (url, params = {}) => {
+    let strParams = '';
+    let fullUrl = `${APP_ROOT_URL}${url}`;
+
+    // 构建参数
+    ForEach(params, (value, key) => {
+        strParams += `${key}=${value}&`;
+    });
+    strParams = strParams.replace(/&$/, '');
+
+    // 拼接url
+    fullUrl += strParams ? `?${strParams}` : '';
+
+    return fullUrl;
+};
+
+export default { FullLoading, CloneDeep, Sleep, DateFormat, SetDocummentTitle, ArrayConcat, Input, Confirm, Error, ForEach, Abuilding, UrlBuilder };

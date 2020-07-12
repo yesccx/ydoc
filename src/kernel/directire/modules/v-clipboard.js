@@ -40,13 +40,15 @@ const virtualClipboardInit = function () {
 };
 
 // 绑定时，初始化click事件
-const bindHook = function (el) {
+const bindHook = function (el, params) {
     const virtualId = virtualClipboardInit();
     el.classList.add('pointer');
     el.dataset.virtualId = virtualId;
     el.addEventListener('click', function () {
         $buttonCollection[virtualId].click();
     });
+
+    $valueCollection[virtualId] = params.value || '';
 };
 
 // 解绑时，回收处理

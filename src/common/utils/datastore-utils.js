@@ -14,7 +14,7 @@ const DataStore = {
     driver: window.localStorage, // 存储驱动对象，需要实现（getItem、setItem、removeItem）方法
     prefix: '',
     // 存储
-    setItem(key, value, expire = 3600) {
+    setItem(key, value, expire = 0) {
         if (typeof value === 'function') {
             value = value(this.getItem(key));
         }

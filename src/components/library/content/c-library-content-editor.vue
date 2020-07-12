@@ -121,7 +121,6 @@
                     if (docInfo) {
                         docInfo.id = 't' + this.creatorCounter++;
                         if (groupId >= 0) {
-                            console.log(123);
                             docInfo.groupId = groupId;
                         }
                         if (this.activeDocEditor === docId) {

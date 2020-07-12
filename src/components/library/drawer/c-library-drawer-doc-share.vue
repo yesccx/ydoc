@@ -87,7 +87,7 @@
     import BaseDrawer from '@/common/mixins/base-drawer';
     import LibraryContent from '@/extends/mixins/library-content';
     import { mapGetters } from 'vuex';
-    import { APP_ROOT_URL } from '@/common/constants/app-code';
+    import { buildLibraryShareLink } from '@/extends/utils/library-share-utils';
 
     // 分享信息初始值
     const shareInfoInitial = {
@@ -112,7 +112,7 @@
                 if (!this.shareInfo.share_code) {
                     return '';
                 }
-                return `${APP_ROOT_URL}/library/preview?code=${this.shareInfo.share_code}`;
+                return buildLibraryShareLink(this.shareInfo.share_code);
             }
         },
         data() {

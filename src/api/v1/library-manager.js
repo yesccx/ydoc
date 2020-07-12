@@ -34,3 +34,18 @@ export const axiosLibraryMemberRoleModify = (param = {
 export const axiosLibraryMemberUninvite = (param = {
     library_id: 0, member_id: 0
 }, conf = {}) => axios.post('/v1/library/manager/library-member/uninvite', param, conf);
+
+// 获取文档库成员分享列表
+export const axiosLibraryShareList = (param = {
+    library_id: 0
+}, conf = {}) => axios.post('/v1/library/manager/share-list', param, conf);
+
+// 删除文档库成员分享
+export const axiosLibraryShareRemove = (param = {
+    library_id: 0, library_share_id: 0
+}, conf = {}) => axios.post('/v1/library/manager/share-remove', param, conf);
+
+// 修改文档库成员分享状态
+export const axiosLibraryShareStatusModify = (param = {
+    library_id: 0, library_share_id: 0
+}, conf = {}) => axios.post('/v1/library/manager/share-status-modify', param, conf);

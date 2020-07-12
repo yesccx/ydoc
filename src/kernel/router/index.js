@@ -31,7 +31,7 @@ RouterInstance.beforeEach(async (to, from, next) => {
     let userInfo = await Store.dispatch('userSession/init');
     if (to.meta.auth === PAGE_AUTH_IS_USER.auth && (!userInfo || userInfo.uid <= 0)) {
         NProgress.done();
-        next({ name: 'user-login', query: { r: to.path } });
+        next({ name: 'user-login', query: { r: to.fullPath } });
     } else if (to.meta.auth === PAGE_AUTH_IS_GUEST.auth && userInfo.uid > 0) {
         NProgress.done();
         next('/');
