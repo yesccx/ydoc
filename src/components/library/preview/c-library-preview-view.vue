@@ -2,8 +2,14 @@
     <div class="c-library-preview-view" v-loading="viewLoading" element-loading-text="Loading...">
         <el-scrollbar v-if="isView" class="scrollbar">
             <div ref="view" class="layout-editor" :is="layout" :doc-info="docInfo"></div>
-        </el-scrollbar>
 
+            <div class="view-operation">
+                <el-button title="刷新" :loading="viewLoading" class="refresh-btn" type="text" icon="el-icon-refresh"
+                    @click="onRefresh">
+                </el-button>
+            </div>
+
+        </el-scrollbar>
         <!-- 欢迎页 -->
         <c-library-preview-welcome v-else />
     </div>
@@ -65,6 +71,10 @@
                 }).then(({ resData }) => {
                     this.docInfo = resData;
                 });
+            },
+            // 事件：刷新视图
+            onRefresh() {
+                this.libraryPreviewEventBus.$emit('doc-view', this.docInfo.id);
             }
         }
     };
@@ -72,10 +82,28 @@
 
 <style lang="scss">
     .c-library-preview-view {
+        .refresh-btn {
+            font-size: 40px;
+            color: $--color-primary-light-4;
+            i {
+                font-weight: normal !important;
+            }
+        }
     }
 </style>
 
 <style lang="scss" scoped>
+    .view-operation {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        opacity: 0.4;
+        transition: opacity 0.3s;
+        &:hover {
+            opacity: 1;
+        }
+    }
+
     .scrollbar {
         height: calc(100vh - 50px);
     }

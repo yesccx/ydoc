@@ -91,17 +91,7 @@
                     upload: {
                         accept: 'image/*',
                         handler: (files) => {
-                            const params = new FormData();
-                            params.append('file', files[0]);
-                            this.editor.tip('上传中...');
-                            this.$api.v1.ToolsImageUpload(params, {
-                                report: true
-                            }).then(({ resData }) => {
-                                this.editor.insertValue(`<img src="${resData.url}" alt="${resData.key}">`);
-                                this.editor.tip('上传成功', 1000);
-                            }).catch(({ resMsg }) => {
-                                this.editor.tip('上传失败：' + resMsg, 3000);
-                            });
+                            this.onUploadFiles(files);
                         },
                         url: this.$utils.ApiUrlBuilder('v1/tools/image/upload')
                     }
@@ -114,6 +104,20 @@
                 }
                 lastValue = value;
                 this.handlerInput(value);
+            },
+            // 事件：文件上传
+            onUploadFiles(files) {
+                const params = new FormData();
+                params.append('file', files[0]);
+                this.editor.tip('上传中...');
+                this.$api.v1.ToolsImageUpload(params, {
+                    report: true
+                }).then(({ resData }) => {
+                    this.editor.insertValue(`<img src="${resData.url}" alt="${resData.key}">`);
+                    this.editor.tip('上传成功', 1000);
+                }).catch(({ resMsg }) => {
+                    this.editor.tip('上传失败：' + resMsg, 3000);
+                });
             }
         },
         beforeDestroy() {

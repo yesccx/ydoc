@@ -282,7 +282,8 @@
             transition: width 0.5s;
             width: auto;
             max-width: 260px;
-            font-size: 28px;
+            font-size: 24px;
+            line-height: 32px;
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;

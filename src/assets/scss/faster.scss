@@ -81,3 +81,11 @@ body>.el-loading-mask {
     top: 0 !important;
     left: 0 !important;
 }
+
+#app {
+    min-width: 1200px;
+}
+
+body {
+    overflow: hidden;
+}

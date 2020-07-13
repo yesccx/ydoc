@@ -93,6 +93,8 @@
 
                 this.$store.commit('libraryManager/setLibraryManagerInfo', libraryManagerInfo);
 
+                this.$utils.SetDocummentTitle(libraryManagerInfo.libraryInfo.name);
+
                 return libraryManagerInfo;
             },
             // 事件：改变侧边栏状态
@@ -199,6 +201,7 @@
             padding: 10px 15px;
             background: #fff;
             position: fixed;
+            min-width: 650px;
             right: 0;
             top: 0;
             width: calc(100vw - 335px);
@@ -233,7 +236,8 @@
             transition: width 0.5s;
             width: auto;
             max-width: 260px;
-            font-size: 28px;
+            font-size: 24px;
+            line-height: 32px;
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
