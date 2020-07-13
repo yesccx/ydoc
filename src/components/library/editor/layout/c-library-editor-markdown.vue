@@ -1,14 +1,15 @@
 <template>
     <div class="c-library-editor-markdown">
-        <c-md-editor ref="editor" :content.sync="content" />
+        <c-md-vditor ref="editor" :init-content.sync="initContent" :handler-input="onInput" />
     </div>
 </template>
 
 <script>
+
     export default {
         name: 'c-library-edtior-markdown',
         components: {
-            'c-md-editor': () => import('@/components/extends/c-md-editor')
+            'c-md-vditor': () => import('@/components/extends/c-md-vditor')
         },
         props: {
             // 初始化值
@@ -17,32 +18,35 @@
                 default: ''
             }
         },
-        watch: {
-            initContent(val) {
-                this.setContent(val);
-            },
-            content(val) {
-                this.$emit('input');
-            }
-        },
         data() {
             return {
-                content: this.initContent
+                lastValueHash: ''
             };
         },
         methods: {
+            // 事件：input（正在输入）
+            onInput(value) {
+                const vHash = this.$utils.Md5(value);
+                if (this.lastValueHash === vHash) {
+                    return true;
+                }
+                this.$emit('input');
+            },
             // 暴露给外部调用，返回正在编辑的内容
             fetchContent() {
-                return this.getEditor().getHTML();
+                const value = this.getEditor().getValue();
+                this.lastValueHash = this.$utils.Md5(value);
+                return value;
             },
             // 暴露给外部调用，设置正在编辑的内容
             setContent(content) {
-                this.getEditor().setContent(content);
+                this.getEditor().setValue(content);
             },
+            // 获取编辑器对象
             getEditor() {
                 return (this.$refs.editor && this.$refs.editor.editor) ? this.$refs.editor.editor : {
-                    setContent() { },
-                    getHTML() { }
+                    setValue() { },
+                    getValue() { }
                 };
             }
         }

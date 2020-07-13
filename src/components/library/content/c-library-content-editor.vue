@@ -12,7 +12,7 @@
 
                 <!-- 编辑区 -->
                 <el-scrollbar style="height: calc(100vh - 125px);">
-                    <c-library-editor ref="docEditor" :content="docEditor.content" @input="onEditorInput(docEditor)" />
+                    <c-library-editor ref="docEditor" :init-content="docEditor.content" @input="onEditorInput(docEditor)" />
                 </el-scrollbar>
             </el-tab-pane>
         </el-tabs>
@@ -105,11 +105,15 @@
                 // 事件：文档使用模板
                 bus.$on('doc-template-use', (template) => {
                     let activeDocContent = this.fetchEditorDocContent(this.activeDoc.id);
-                    if (activeDocContent === '' || activeDocContent === '<p></p>') {
+                    const editorIndex = this.docEditorMap[this.activeDoc.id];
+                    if (!(activeDocContent.trim())) {
                         this.activeDoc.content = template.content;
+                        this.$refs.docEditor[editorIndex].setContent(template.content);
                     } else {
                         this.$utils.Confirm('是否使用该模板，该操作将会替换正在编辑的内容！').then(() => {
                             this.activeDoc.content = template.content;
+                            this.tagDocNotSave(this.activeDoc.id);
+                            this.$refs.docEditor[editorIndex].setContent(template.content);
                         });
                     }
                 });
@@ -139,10 +143,12 @@
 
                 // 事件：文档历史恢复
                 bus.$on('doc-history-recovery', (docHistory) => {
-                    const docInfo = this.docEditorCollection[this.docEditorMap[docHistory.doc_id]];
+                    const editorIndex = this.docEditorMap[docHistory.doc_id];
+                    const docInfo = this.docEditorCollection[editorIndex];
                     docInfo.groupId = docHistory.group_id;
                     docInfo.title = docHistory.title;
                     docInfo.content = docHistory.content;
+                    this.$refs.docEditor[editorIndex].setContent(docInfo.content);
 
                     this.tagDocNotSave(docHistory.doc_id);
                 });
@@ -198,6 +204,7 @@
             },
             // 标记某个选项卡未保存
             tagDocNotSave(docId) {
+                docId = docId + '';
                 this.docEditorSaveStatusCollection.push(docId);
             },
             // 取消标记某个选项卡未保存
@@ -286,6 +293,7 @@
                 }
 
                 this.docEditorCollection = docEditorCollection.filter(docEditor => docEditor.id !== removeDocEditor);
+                this.untagDocNotSave(activeDocEditor);
             },
             // 事件：编辑器输入
             onEditorInput(docEditor) {

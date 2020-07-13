@@ -1,6 +1,6 @@
 <template>
     <div class="c-library-edtior">
-        <div ref="editor" class="layout-editor" :is="layout" :init-content="content" @input="onInput"></div>
+        <div ref="editor" class="layout-editor" :is="layout" :init-content="initContent" @input="onInput"></div>
     </div>
 </template>
 
@@ -12,14 +12,9 @@
         },
         props: {
             // 初始化值
-            content: {
+            initContent: {
                 type: String,
                 default: ''
-            }
-        },
-        watch: {
-            content() {
-                this.onInput();
             }
         },
         data() {

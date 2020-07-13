@@ -10,7 +10,8 @@ import { Loading, MessageBox, Notification } from 'element-ui';
 import Router from '@/kernel/router';
 import Store from '@/kernel/store';
 import { RouterLinkHome, RouterLinkBack } from '@/common/router-links';
-import { APP_ROOT_URL } from '@/common/constants/app-code';
+import { APP_ROOT_URL, APP_API_BASE_URL } from '@/common/constants/app-code';
+import Md5Handler from 'md5';
 
 // 全屏Loading
 export const FullLoading = class FullLoading {
@@ -296,4 +297,41 @@ export const UrlBuilder = (url, params = {}) => {
     return fullUrl;
 };
 
-export default { FullLoading, CloneDeep, Sleep, DateFormat, SetDocummentTitle, ArrayConcat, Input, Confirm, Error, ForEach, Abuilding, UrlBuilder };
+// 生成完整api url
+export const ApiUrlBuilder = (url, params = {}) => {
+    let strParams = '';
+    let fullUrl = `${APP_API_BASE_URL}${url}`;
+
+    // 构建参数
+    ForEach(params, (value, key) => {
+        strParams += `${key}=${value}&`;
+    });
+    strParams = strParams.replace(/&$/, '');
+
+    // 拼接url
+    fullUrl += strParams ? `?${strParams}` : '';
+
+    return fullUrl;
+};
+
+// md5
+export const Md5 = (value) => {
+    return Md5Handler(value);
+};
+
+export default {
+    FullLoading,
+    CloneDeep,
+    Sleep,
+    DateFormat,
+    SetDocummentTitle,
+    ArrayConcat,
+    Input,
+    Confirm,
+    Error,
+    ForEach,
+    Abuilding,
+    UrlBuilder,
+    Md5,
+    ApiUrlBuilder
+};

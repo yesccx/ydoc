@@ -221,9 +221,6 @@
             },
             onVisibleChagne(status) { },
             onNodeClick(node) {
-                const hash = `#${node.nodeType}-${node.id}`;
-                hash !== this.$route.hash && this.$router.replace({ ...this.$route, hash });
-
                 if (node.nodeType === 'doc') {
                     this.libraryContentEventBus.$emit('doc-will-modify', node.id);
                 }

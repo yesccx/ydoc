@@ -78,10 +78,6 @@
             // 初始化文档库管理信息
             await this.initLibraryManagerInfo(libraryId);
         },
-        async mounted() {
-            // const hash = this.$route.hash.slice(1);
-            // const hashParams = hash.match(/^(doc|group)-(\d+)$/);
-        },
         beforeDestroy() {
             libraryContentEventBus.destroy();
         },
@@ -187,6 +183,7 @@
             bottom: 0;
             width: 270px;
             transition: width 0.1s;
+            z-index: 0;
         }
 
         .layout-side__footer {
