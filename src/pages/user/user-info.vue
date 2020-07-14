@@ -49,11 +49,11 @@
                         </li>
                     </ul>
                 </el-card>
-                <el-card>
+                <el-card disabled>
                     <div slot="header">
                         <p>联系方式</p>
                     </div>
-                    <ul class="user-info">
+                    <ul>
                         <li>
                             <div>
                                 <span class="field">手机号</span>

@@ -23,8 +23,8 @@
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item command="createLibrary">创建文档库</el-dropdown-item>
-                                    <el-dropdown-item command="importLibrary">导入文档库</el-dropdown-item>
-                                    <el-dropdown-item command="createTeam">创建团队</el-dropdown-item>
+                                    <el-dropdown-item command="importLibrary" disabled>导入文档库</el-dropdown-item>
+                                    <el-dropdown-item command="createTeam" disabled>创建团队</el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </div>
@@ -134,6 +134,7 @@
         .el-menu--horizontal > .el-menu-item {
             height: 45px !important;
             line-height: 45px !important;
+            color: $--color-primary-light-1;
         }
 
         .el-menu.el-menu--horizontal {

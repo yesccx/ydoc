@@ -71,6 +71,14 @@
     };
 </script>
 
+<style lang="scss">
+    .page-user-register {
+        .user-more-actions .el-button--text {
+            color: $--color-primary-light-3;
+        }
+    }
+</style>
+
 <style lang="scss" scoped>
     .page-user-register {
         width: 350px;
@@ -83,6 +91,7 @@
     }
 
     .user-more-actions {
+        margin-top: 10px;
         width: 100%;
         text-align: center;
     }

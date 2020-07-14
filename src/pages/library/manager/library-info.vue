@@ -16,6 +16,24 @@
                         :loading="modifyLibraryLoading">保存信息
                     </el-button>
                 </el-form-item>
+
+                <!-- 封面 -->
+                <div class="library-cover">
+                    <span class="library-cover__lable">文档库封面</span>
+                    <el-upload class="library-cover__upload" action="https://jsonplaceholder.typicode.com/posts/"
+                        :show-file-list="false" :http-request="handlerLibraryCoverUpload">
+                        <el-image :src="library.cover" class="avatar">
+                            <div slot="error" class="image-slot__error">
+                                ydoc
+                            </div>
+                        </el-image>
+                    </el-upload>
+                    <div class="library-cover__operate">
+                        <el-button size="mini" type="primary" icon="el-icon-refresh" @click="onRandomImage"
+                            :loading="libraryCoverLoading" plain>随机生成封面
+                        </el-button>
+                    </div>
+                </div>
             </el-form>
 
             <el-divider></el-divider>
@@ -49,12 +67,14 @@
             return {
                 library: {
                     name: '',
-                    desc: ''
+                    desc: '',
+                    cover: ''
                 },
                 libraryGroup: 0,
                 libraryGroups: [],
                 modifyLibraryLoading: false,
-                modifyLibraryGroupLoading: false
+                modifyLibraryGroupLoading: false,
+                libraryCoverLoading: false
             };
         },
         watch: {
@@ -93,9 +113,22 @@
                     this.libraryGroup = '';
                 }
             },
+            // 处理文档库封面上传
+            handlerLibraryCoverUpload({ file }) {
+                const params = new FormData();
+                params.append('file', file);
+                this.$api.v1.ToolsImageUpload(params, {
+                    loading: (status) => { this.libraryCoverLoading = status; },
+                    report: true
+                }).then(({ resData }) => {
+                    this.library.cover = resData.url;
+                }).catch(({ resMsg }) => {
+                    this.$utils.tip('上传失败：' + resMsg);
+                });
+            },
             // 事件：文档库修改
             async onLibraryModify() {
-                const reqData = { library_id: this.library.id, name: this.library.name, desc: this.library.desc };
+                const reqData = { library_id: this.library.id, ...this.library };
                 await this.$api.v1.LibraryModify(reqData, {
                     loading: (status) => { this.modifyLibraryLoading = status; }
                 }).then(() => {
@@ -109,10 +142,87 @@
                 }).then(() => {
                     this.$tip.success('更新成功');
                 });
+            },
+            // 事件：随机生成图片
+            onRandomImage() {
+                this.$api.v1.ToolsImageRandomTmp({ key: this.library.name }, {
+                    loading: (status) => { this.libraryCoverLoading = status; }
+                }).then(({ resData }) => {
+                    this.library.cover = resData.url;
+                });
             }
         }
     };
 </script>
+
+<style lang="scss">
+    .page-library-info {
+        position: relative;
+        .library-cover {
+            width: 200px;
+            text-align: right;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            &__upload .el-upload {
+                border: 1px solid $--color-primary-light-8;
+                border-radius: 6px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+            }
+
+            &__upload .el-upload:hover {
+                border-color: $--color-primary-light-5;
+            }
+
+            &__upload-icon {
+                font-size: 28px;
+                color: #8c939d;
+                width: 140px;
+                height: 140px;
+                line-height: 188px;
+                text-align: center;
+            }
+
+            .avatar {
+                width: 140px;
+                height: 140px;
+                display: block;
+                padding: 10px;
+            }
+
+            &__lable {
+                font-size: 14px;
+                color: rgb(96, 98, 102);
+                font-weight: bold;
+                bottom: 20px;
+                text-align: left;
+                display: inline-block;
+                width: 160px;
+                margin-bottom: 16px;
+            }
+
+            &__operate {
+                text-align: right;
+                margin-top: 10px;
+            }
+        }
+
+        .image-slot__error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #c0c4cc;
+            vertical-align: middle;
+            width: 100%;
+            height: 100%;
+            background: #f5f7fa;
+        }
+    }
+</style>
 
 <style lang="scss" scoped>
     .title {

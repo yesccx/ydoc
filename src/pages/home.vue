@@ -8,7 +8,7 @@
             <el-col :span="16">
                 <el-card class="box-card" shadow="hover">
                     <div slot="header" class="clearfix">
-                        文档库动态
+                        <span>文档库动态</span>
                         <span v-show="operateLogLastUpdateTime" class="refresh-last-time">
                             (上一次更新时间: {{ operateLogLastUpdateTime | dateFormat('H:i:s') }})
                         </span>

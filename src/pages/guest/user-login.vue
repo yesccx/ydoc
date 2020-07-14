@@ -3,9 +3,9 @@
     <div class="page-user-login">
         <el-form ref="user" :model="user" :rules="userRules">
             <h2 class="user-title">
-                Y-DOC <el-tag size="mini" type="danger">v1.0</el-tag>
+                Y-DOC <el-tag size="mini" type="danger">Beta</el-tag>
             </h2>
-            <el-form-item prop="user">
+            <el-form-item prop="account" >
                 <el-input v-model="user.account" placeholder="请输入用户名/邮箱账号" prefix-icon="el-icon-user" auto-complete="off"
                     @keydown.enter.native="onLogin" clearable>
                 </el-input>
@@ -18,7 +18,7 @@
             <el-button :loading="submitLoading" class="inline-block" type="primary" @click="onLogin">登录</el-button>
             <div class="user-actions">
                 <el-button type="text" @click="onWillRegister">立即注册?</el-button>
-                <el-button type="text">忘记密码?</el-button>
+                <el-button type="text" @click="onWillRetrieve">忘记密码?</el-button>
             </div>
         </el-form>
     </div>
@@ -75,10 +75,22 @@
             // 事件：前往用户注册
             onWillRegister() {
                 this.$link.register();
+            },
+            // 事件：前往用户找回密码
+            onWillRetrieve() {
+                this.$utils.Abuilding();
             }
         }
     };
 </script>
+
+<style lang="scss">
+    .page-user-login {
+        .user-actions .el-button--text {
+            color: $--color-primary-light-3;
+        }
+    }
+</style>
 
 <style lang="scss" scoped>
     .page-user-login {
@@ -92,6 +104,7 @@
     }
 
     .user-actions {
+        margin-top: 10px;
         width: 100%;
         text-align: center;
     }

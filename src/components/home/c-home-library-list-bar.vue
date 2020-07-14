@@ -1,6 +1,6 @@
 <template>
     <div class="c-home-library-list-bar">
-        <el-input v-model="searchKey" @keydown.enter.native="onSearch" @change="onSearchKeyChange" placeholder="请输入内容" clearable>
+        <el-input v-model="searchKey" @keydown.enter.native="onSearch" @change="onSearchKeyChange" placeholder="搜索文档库名称" clearable>
             <el-select class="search-select" v-model="libraryGroupId" @change="onLibraryGroupChange" slot="prepend"
                 placeholder="请选择">
                 <el-button class="library-group-manager" @click="onLibraryGroupManager" type="text" icon="el-icon-setting">

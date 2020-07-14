@@ -11,7 +11,11 @@
             <c-infinite-list ref="libraryList" :request="getLibraryList" :empty-tip="'暂无文档库'">
                 <el-card v-for="library in libraryList" :key="library.id" class="box-card" shadow="hover">
                     <div class="library-item">
-                        <el-image class="library-item__image"> </el-image>
+                        <el-image class="library-item__image" :src="library.library_info.cover">
+                            <div slot="error" class="image-slot__error">
+                                ydoc
+                            </div>
+                        </el-image>
                         <div class="library-item__main">
                             <!-- 文档库基本信息 -->
                             <div class="library-item__name text-overflow" :title="library.library_info.name"
@@ -19,7 +23,7 @@
                                 {{ library.library_info.name }}
                             </div>
                             <div class="library-item__desc" :title="library.library_info.desc" @click="onLibraryDocList(library)">
-                                {{ library.library_info.desc }}
+                                {{ library.library_info.desc || '暂无简介' }}
                             </div>
 
                             <!-- 文档库操作 -->
@@ -76,11 +80,27 @@
             },
             // 事件：文档库相关分享
             onLibraryShare(library) {
-                this.$link.libraryInfo({ library_id: library.library_id });
+                this.$utils.Abuilding();
             }
         }
     };
 </script>
+
+<style lang="scss">
+    .c-home-library-list {
+        .image-slot__error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            color: #c0c4cc;
+            vertical-align: middle;
+            width: 100%;
+            height: 100%;
+            background: #f5f7fa;
+        }
+    }
+</style>
 
 <style lang="scss" scoped>
     .library-item {
@@ -89,6 +109,8 @@
         &__image {
             width: 90px;
             height: 90px;
+            border-radius: 7px;
+            border: 1px solid #f5f7fa;
         }
 
         &__main {
@@ -102,6 +124,7 @@
 
         &__name {
             font-size: 16px;
+            color: $--color-primary-light-1;
         }
 
         &__desc {

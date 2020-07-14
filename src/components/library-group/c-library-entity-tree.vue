@@ -238,6 +238,7 @@
                 padding: 6px 0;
                 .tree-node-group-icon {
                     margin-right: 3px;
+                    font-size: 16px;
                 }
                 .tree-node-library-icon {
                     font-size: 15px;
