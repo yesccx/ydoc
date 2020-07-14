@@ -9,14 +9,14 @@
                 <el-card class="box-card" shadow="hover">
                     <div slot="header" class="clearfix">
                         文档库动态
-                        <span v-show="dynamicLastUpdateTime" class="refresh-last-time">
-                            (上一次更新时间: {{ dynamicLastUpdateTime | dateFormat('H:i:s') }})
+                        <span v-show="operateLogLastUpdateTime" class="refresh-last-time">
+                            (上一次更新时间: {{ operateLogLastUpdateTime | dateFormat('H:i:s') }})
                         </span>
-                        <div class="refresh-dynamic" :class="dynamicLoading ? 'loading' : ''" @click="onRefreshLibraryDynamic">
+                        <div class="refresh-operate-log" :class="operateLogLoading ? 'loading' : ''" @click="onRefreshLibraryOperateLog">
                             <i class="el-icon-refresh"></i>
                         </div>
                     </div>
-                    <c-home-library-dynamic ref="libraryDynamic"></c-home-library-dynamic>
+                    <c-home-library-operate-log ref="libraryOperateLog"></c-home-library-operate-log>
                 </el-card>
             </el-col>
         </el-row>
@@ -31,28 +31,28 @@
         mixins: [BasePage],
         components: {
             'c-home-library-list': () => import('@/components/home/c-home-library-list'),
-            'c-home-library-dynamic': () => import('@/components/home/c-home-library-dynamic')
+            'c-home-library-operate-log': () => import('@/components/home/c-home-library-operate-log')
         },
         data() {
             return {
-                dynamicLoading: false,
-                dynamicLastUpdateTime: ''
+                operateLogLoading: false,
+                operateLogLastUpdateTime: ''
             };
         },
         methods: {
             // 事件：刷新文档库动态
-            onRefreshLibraryDynamic() {
+            onRefreshLibraryOperateLog() {
                 this.loadaction(async () => {
-                    await this.$refs.libraryDynamic.initActionDynamicList();
-                    this.dynamicLastUpdateTime = parseInt(Date.now() / 1000);
-                }, 'dynamicLoading');
+                    await this.$refs.libraryOperateLog.initOperateLogList();
+                    this.operateLogLastUpdateTime = parseInt(Date.now() / 1000);
+                }, 'operateLogLoading');
             }
         }
     };
 </script>
 
 <style lang="scss" scoped>
-    .refresh-dynamic {
+    .refresh-operate-log {
         float: right;
         cursor: pointer;
 

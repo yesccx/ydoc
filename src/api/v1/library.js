@@ -33,6 +33,3 @@ export const axiosLibraryCollection = (param = {}, conf = {}) => axios.post('/v1
 
 // 归档文档库
 export const axiosLibraryPermanent = (param = {}, conf = {}) => axios.post('/v1/library/permanent', param, conf);
-
-// 获取文档库操作动态列表
-export const axiosLibraryActionDynamicList = (param = { library_id: 0 }, conf = {}) => axios.post('/v1/library/actionDynamicList', param, conf);

@@ -5,10 +5,10 @@
                 <el-col :span="18">
                     <el-menu @select="onSelect" :default-active="defaultActive" mode="horizontal">
                         <el-menu-item index="home"><i class="el-icon-setting"></i>工作台</el-menu-item>
-                        <el-menu-item index="team-home">我的团队</el-menu-item>
-                        <el-menu-item index="3">模板管理</el-menu-item>
-                        <el-menu-item index="4">分享管理</el-menu-item>
-                        <el-menu-item index="6">开发者中心</el-menu-item>
+                        <el-menu-item index="team-home" disabled>我的团队</el-menu-item>
+                        <el-menu-item index="3" disabled>模板管理</el-menu-item>
+                        <el-menu-item index="4" disabled>分享管理</el-menu-item>
+                        <el-menu-item index="6" disabled>开发者中心</el-menu-item>
                     </el-menu>
                 </el-col>
                 <el-col :span="6">
