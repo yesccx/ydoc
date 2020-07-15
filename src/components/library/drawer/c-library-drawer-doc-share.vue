@@ -185,7 +185,7 @@
             },
             // 构建随机的分享名称
             generateShareName() {
-                return this.$utils.DateFormat(Date.now() / 1000, 'm-d H:i') + ` 来自「${this.userInfo.nickname}」的分享`;
+                return this.$utils.DateFormat(Date.now() / 1000, 'm-d H:i') + ` 来自「${this.userInfo.nickname.substr(0, 13)}」的分享`;
             },
             // 事件：drawer被展开
             onDrawerOpen() {

@@ -19,19 +19,19 @@
                             <el-menu-item index="library-members">
                                 <span slot="title">成员管理</span>
                             </el-menu-item>
-                            <el-menu-item index="library-groups">
+                            <el-menu-item index="library-groups" disabled>
                                 <span slot="title">用户组管理</span>
                             </el-menu-item>
                         </el-menu-item-group>
                         <el-menu-item-group>
                             <span slot="title">其它</span>
-                            <el-menu-item index="library-shares">
+                            <el-menu-item index="library-shares" disabled>
                                 <span slot="title">分享管理</span>
                             </el-menu-item>
-                            <el-menu-item index="library-logs">
+                            <el-menu-item index="library-logs" disabled>
                                 <span slot="title">操作日志</span>
                             </el-menu-item>
-                            <el-menu-item index="library-open">
+                            <el-menu-item index="library-open" disabled>
                                 <span slot="title">开放API</span>
                             </el-menu-item>
                         </el-menu-item-group>

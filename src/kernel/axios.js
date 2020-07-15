@@ -39,6 +39,7 @@ Axios.interceptors.response.use(
 
         // 提示未登录时，需要做特殊处理
         if (!res.config.ignore_auth && res.data && res.data.code === Axios.RESPONSE_LOGIN) {
+            Store.dispatch('userSession/clearSession');
             RouterLinkLogin();
         }
 

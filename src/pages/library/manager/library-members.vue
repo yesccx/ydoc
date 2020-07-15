@@ -12,7 +12,7 @@
             <el-table-column label="成员" width="180">
                 <template v-slot="{ row: member }">
                     <el-avatar size="small" icon="el-icon-user-solid" :src="member.user_info.avatar_url"></el-avatar>
-                    <span style="position: absolute; left: 39px; top: 9px;">{{ member.user_info.nickname }}</span>
+                    <span class="text-overflow" style="width: 130px;position: absolute; left: 39px; top: 9px;">{{ member.user_info.nickname }}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="address" label="角色" :filters="memberRoleFilterCollection"

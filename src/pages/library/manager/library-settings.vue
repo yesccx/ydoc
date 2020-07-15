@@ -8,7 +8,7 @@
         </div>
         <el-divider></el-divider>
         <div>
-            <el-button type="primary" icon="el-icon-takeaway-box " @click="onLibraryPermanentReady">归档文档库</el-button>
+            <el-button type="primary" icon="el-icon-takeaway-box" @click="onLibraryPermanentReady" disabled>归档文档库</el-button>
             <el-alert class="block-alert" title="此操作后，将文档库变为只读状态" type="warning" :closable="false" show-icon>
             </el-alert>
         </div>

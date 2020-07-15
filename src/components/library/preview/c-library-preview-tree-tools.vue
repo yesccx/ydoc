@@ -3,7 +3,7 @@
         <el-tooltip class="item" effect="dark" content="文档库中心" placement="top-start">
             <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
+        <el-tooltip v-show="!isShareSimplify" class="item" effect="dark" content="刷新数据" placement="top-start">
             <i class="item el-icon-refresh" @click="onDocTreeFlush"></i>
         </el-tooltip>
         <!-- <el-tooltip class="item" effect="dark" content="分享" placement="top-start">

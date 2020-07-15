@@ -37,8 +37,13 @@ const mutations = {
         // 缓存用户token等相关信息
         DataStore.setItem(STORE_KEYS.USER_SESSION, { token });
     },
+    // 更新用户昵称
+    updateNickname(state, nickname) {
+        state.nickname = nickname;
+    },
     // 设置初始化状态
     setInited(state, { status = true }) {
+        console.log('setInited');
         state.inited = status;
     }
 };
@@ -82,6 +87,11 @@ const actions = {
             res = true;
         });
         return res;
+    },
+    // 清除会话
+    clearSession({ commit }) {
+        commit('setSession', {});
+        commit('setInited', { status: false });
     }
 };
 

@@ -78,10 +78,13 @@
             }
         },
         watch: {
-            isShareSimplify(val) {
-                if (val) {
-                    this.sideStatus = false;
-                }
+            isShareSimplify: {
+                handler(val) {
+                    if (val) {
+                        this.sideStatus = false;
+                    }
+                },
+                immediate: true
             },
             isAccessed: {
                 async handler(val) {

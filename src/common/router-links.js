@@ -15,6 +15,11 @@ export const RouterLinkUserInfo = (query = {}, options = {}) => {
     routeLink('user-info', query, options);
 };
 
+// 前往用户密码页
+export const RouterLinkUserPassword = (query = {}, options = {}) => {
+    routeLink('user-password', query, options);
+};
+
 // 前往用户注册页
 export const RouterLinkRegister = (query = {}, options = {}) => {
     routeLink('user-register', query, options);

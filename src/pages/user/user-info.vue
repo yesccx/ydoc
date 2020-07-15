@@ -17,8 +17,8 @@
                     </ul>
                 </el-card>
                 <el-card class="user-base-operate">
-                    <el-button type="primary" plain>修改密码</el-button>
-                    <el-button type="danger" @click="onLogout" plain>退出登录</el-button>
+                    <el-button type="primary" icon="el-icon-lock" @click="onModifyPassword" plain>修改密码</el-button>
+                    <el-button type="danger" icon="el-icon-back" @click="onLogout" plain>退出登录</el-button>
                 </el-card>
             </el-col>
 
@@ -34,17 +34,14 @@
                                 <span class="field">用户名 / 登录账号</span>
                                 <span class="value">{{ user.account || '-' }}</span>
                             </div>
-                            <!-- <span class="operate">
-                                <i class="el-icon-arrow-right"></i>
-                            </span> -->
                         </li>
-                        <li>
+                        <li @click="onUserNicknameModify">
                             <div>
                                 <span class="field">用户昵称</span>
                                 <span class="value">{{ user.nickname || '-' }}</span>
                             </div>
                             <span class="operate">
-                                <i class="el-icon-arrow-right"></i>
+                                修改<i class="el-icon-arrow-right"></i>
                             </span>
                         </li>
                     </ul>
@@ -131,6 +128,39 @@
                 } else {
                     this.$tip.error('退出登录失败，请重试');
                 }
+            },
+            // 事件：前往修改密码
+            onModifyPassword() {
+                this.$link.userPassword();
+            },
+            // 事件：修改用户昵称
+            onUserNicknameModify() {
+                this.$prompt('请输入新昵称', '修改昵称', {
+                    confirmButtonText: '确认',
+                    cancelButtonText: '取消',
+                    inputValue: this.user.nickname,
+                    beforeClose: async (action, instance, done) => {
+                        if (action !== 'confirm') {
+                            done();
+                            return true;
+                        }
+                        await this.$api.v1.UserNicknameModify({ nickname: instance.inputValue }, {
+                            loading: (status) => {
+                                instance.confirmButtonLoading = status;
+                                instance.confirmButtonText = status ? '修改中...' : '确认';
+                            },
+                            report: true
+                        }).then(({ resData }) => {
+                            done();
+                        }).catch(({ resMsg }) => {
+                            this.$tip.error(resMsg);
+                        });
+                    }
+                }).then(({ value: nickname }) => {
+                    this.user.nickname = nickname;
+                    this.$store.commit('userSession/updateNickname', nickname);
+                    this.$tip.success('修改成功');
+                });
             }
         }
     };
