@@ -6,7 +6,8 @@
  */
 
 const state = {
-    pageError: false // 页面错误状态
+    pageError: false, // 页面错误状态
+    userMessageUnreadCount: 0 // 用户消息未读数
 };
 
 const getters = {};
@@ -15,6 +16,10 @@ const mutations = {
     // 设置页面错误状态
     setPageError(state, pageError = false) {
         state.pageError = pageError;
+    },
+    // 设置用户消息未读数
+    setUserMessageUnreadCount(state, count) {
+        state.userMessageUnreadCount = count;
     }
 };
 

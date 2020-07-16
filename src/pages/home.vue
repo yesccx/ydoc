@@ -3,7 +3,7 @@
     <div class="page-home">
         <el-row :gutter="10">
             <el-col :span="8">
-                <c-home-library-list></c-home-library-list>
+                <c-home-library-list />
             </el-col>
             <el-col :span="16">
                 <el-card class="box-card" shadow="hover">
@@ -12,11 +12,12 @@
                         <span v-show="operateLogLastUpdateTime" class="refresh-last-time">
                             (上一次更新时间: {{ operateLogLastUpdateTime | dateFormat('H:i:s') }})
                         </span>
-                        <div class="refresh-operate-log" :class="operateLogLoading ? 'loading' : ''" @click="onRefreshLibraryOperateLog">
+                        <div class="refresh-operate-log" :class="operateLogLoading ? 'loading' : ''"
+                            @click="onRefreshLibraryOperateLog">
                             <i class="el-icon-refresh"></i>
                         </div>
                     </div>
-                    <c-home-library-operate-log ref="libraryOperateLog"></c-home-library-operate-log>
+                    <c-home-library-operate-log ref="libraryOperateLog" />
                 </el-card>
             </el-col>
         </el-row>

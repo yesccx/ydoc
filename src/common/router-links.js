@@ -20,6 +20,11 @@ export const RouterLinkUserPassword = (query = {}, options = {}) => {
     routeLink('user-password', query, options);
 };
 
+// 前往用户消息页
+export const RouterLinkUserMessage = (query = {}, options = {}) => {
+    routeLink('user-message', query, options);
+};
+
 // 前往用户注册页
 export const RouterLinkRegister = (query = {}, options = {}) => {
     routeLink('user-register', query, options);

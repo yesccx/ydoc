@@ -100,11 +100,21 @@
     .loading-tip,
     .final-tip {
         text-align: center;
-        color: $--color-primary-light-5;
+        font-size: 15px;
         padding: 8px 0px;
         cursor: pointer;
         border-radius: 4px;
+        color: $--color-primary-light-6;
     }
+
+    .el-icon-loading {
+        margin-right: 5px;
+    }
+
+    .final-tip {
+        color: $--color-primary-light-7;
+    }
+
     .c-infinite-list {
         margin-bottom: 70px;
     }

@@ -43,7 +43,6 @@ const mutations = {
     },
     // 设置初始化状态
     setInited(state, { status = true }) {
-        console.log('setInited');
         state.inited = status;
     }
 };

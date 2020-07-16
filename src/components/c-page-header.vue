@@ -12,14 +12,14 @@
                     </el-menu>
                 </el-col>
                 <el-col :span="6">
-                    <div class="user">
-                        <div class="user-actions">
-                            <i class="el-icon-bell user-actions-notices" @click="onNotice"></i>
-
+                    <div class="header-tools">
+                        <div class="operate">
+                            <el-badge :is-dot="userMessageUnreadCount > 0">
+                                <i class="el-icon-message operate__user-message" title="消息通知" @click="onUserMessage"></i>
+                            </el-badge>
                             <el-dropdown @command="onCreateCommand" trigger="click">
                                 <span class="el-dropdown-link">
-                                    <i class="el-icon-plus user-actions-create-library"></i>
-                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                    <i class="el-icon-circle-plus operate__create-library" title="创建文档库"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item command="createLibrary">创建文档库</el-dropdown-item>
@@ -28,13 +28,16 @@
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </div>
-                        <div class="user-info">
+                        <div class="user">
                             <el-dropdown @command="onUserCommand" trigger="click">
                                 <span class="el-dropdown-link">
-                                    <img class="user-info-avatar" :src="userInfo.avatar_url" align="default">
-                                    <span class="user-info-nickname text-overflow"
-                                        :title="userInfo.nickname">{{ userInfo.nickname }}</span>
-                                    <i class="el-icon-arrow-down el-icon--right"></i>
+                                    <div class="user-info">
+                                        <img class="user-info__avatar" :src="userInfo.avatar_url" align="default">
+                                        <span class="user-info__nickname text-overflow" :title="userInfo.nickname">
+                                            {{ userInfo.nickname }}
+                                        </span>
+                                        <i class="el-icon-arrow-down el-icon--right"></i>
+                                    </div>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item command="user">个人信息</el-dropdown-item>
@@ -51,16 +54,18 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex';
+    import { mapGetters, mapState } from 'vuex';
 
     export default {
         name: 'c-page-header',
         computed: {
-            ...mapGetters('userSession', ['userInfo'])
+            ...mapGetters('userSession', ['userInfo']),
+            ...mapState('global', ['userMessageUnreadCount'])
         },
         watch: {
             $route(route) {
                 this.defaultActive = route.name || 'home';
+                this.fetchUserMessageUnreadCount();
             }
         },
         data() {
@@ -73,6 +78,16 @@
             // 用户信息
             user() {
                 this.$link.userInfo();
+            },
+            // 获取用户消息未读数
+            async fetchUserMessageUnreadCount() {
+                if (!this.userInfo.uid) {
+                    return false;
+                }
+
+                await this.$api.v1.UserMessageCount({ status: 0 }).then(({ resData }) => {
+                    this.$store.commit('global/setUserMessageUnreadCount', resData.count);
+                });
             },
             // 用户退出登录
             async userLogout() {
@@ -123,7 +138,8 @@
                 }
             },
             // 事件：消息中心
-            onNotice() {
+            onUserMessage() {
+                this.$link.userMessage();
             }
         }
     };
@@ -146,6 +162,7 @@
         }
     }
 </style>
+
 <style lang="scss" scoped>
     .c-page-header {
         z-index: 900;
@@ -155,47 +172,64 @@
         box-shadow: 0 2px 3px rgba(0, 0, 0, 0.04);
         position: sticky;
         top: 0;
+
+        .container {
+            padding: 7px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
     }
 
-    .user {
-        text-align: right;
+    .header-tools {
+        display: flex;
+        align-items: center;
+        height: 45px;
+        float: right;
+    }
+
+    .operate {
         margin-right: 20px;
-        &-actions {
-            display: inline-block;
-            margin-right: 30px;
-            &-create-library {
-                cursor: pointer;
-            }
-            &-notices {
-                margin-right: 15px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+
+        &__user-message {
+            cursor: pointer;
+            font-size: 19px;
+            color: $--color-primary-light-3;
+            &:hover {
+                color: $--color-primary-light-1;
             }
         }
-        &-info {
-            display: inline-block;
-            height: 45px;
-            line-height: 45px;
+
+        &__create-library {
             cursor: pointer;
-            text-align: right;
-
-            &-avatar {
-                border-radius: 18px;
-                width: 28px;
-                height: 28px;
-                top: 8px;
-                position: relative;
-                left: -8px;
-            }
-
-            &-nickname {
-                max-width: 120px;
-                display: table-cell;
+            font-size: 19px;
+            color: $--color-primary-light-3;
+            margin-left: 20px;
+            &:hover {
+                color: $--color-primary-light-2;
             }
         }
     }
 
-    .container {
-        padding: 7px 0;
-        max-width: 1250px;
-        margin: 0 auto;
+    .user-info {
+        display: inline-flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: space-between;
+
+        &__avatar {
+            border-radius: 18px;
+            width: 21px;
+            height: 21px;
+            margin-right: 5px;
+        }
+
+        &__nickname {
+            color: $--color-primary-light-2;
+            font-size: 13px;
+            max-width: 80px;
+        }
     }
 </style>

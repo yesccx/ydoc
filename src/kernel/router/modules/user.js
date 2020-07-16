@@ -20,5 +20,15 @@ export default [
             header: true
         },
         component: () => import('@/pages/user/user-password.vue')
+    },
+    {
+        path: '/user/message',
+        name: 'user-message',
+        meta: {
+            title: '用户消息',
+            ...PAGE_AUTH_IS_USER,
+            header: true
+        },
+        component: () => import('@/pages/user/user-message.vue')
     }
 ];
