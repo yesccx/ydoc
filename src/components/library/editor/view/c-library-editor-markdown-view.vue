@@ -26,7 +26,7 @@
                 }
             }
         },
-        mounted () {
+        mounted() {
             this.render(this.docInfo.content);
         },
         methods: {
@@ -48,6 +48,10 @@
         .doc-title {
             text-align: center;
             margin-bottom: 50px;
+        }
+
+        .vditor-reset table {
+            font-size: 14px;
         }
     }
 </style>

@@ -169,6 +169,10 @@
 
         .vditor-reset {
             padding: 20px 35px !important;
+
+            table {
+                font-size: 14px;
+            }
         }
 
         .vditor-wysiwyg {
