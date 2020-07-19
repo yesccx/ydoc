@@ -123,7 +123,7 @@
 
                 docDocGroupTree.forEach(group => {
                     group.nodeType = group.nodeType ? group.nodeType : 'group';
-                    group.key = 'group-' + group.id;
+                    group.key = group.nodeType + group.id;
                     group.children = this.deepBuildDataTree(group.children, docGroup) || [];
                     if (docGroup[group.id]) {
                         group.children = group.children.concat(docGroup[group.id]);

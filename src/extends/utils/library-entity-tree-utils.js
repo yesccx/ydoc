@@ -18,7 +18,7 @@ export const buildEntityCollection = function (olibraryGroups, olibrarys) {
             label: library.library_info.name,
             group_id: library.group_id,
             children: [],
-            sort: library.library_info.sort,
+            sort: library.sort,
             type: LIBRARY_KEY,
             key: `${LIBRARY_KEY}-${library.library_info.id}`
         });

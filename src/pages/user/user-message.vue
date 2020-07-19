@@ -307,7 +307,7 @@
     }
 
     .message-view-empty {
-        height: calc(100vh - 142px);
+        height: calc(100vh - 342px);
 
         &__tip {
             text-align: center;
@@ -318,7 +318,7 @@
     }
 
     .message-view {
-        height: calc(100vh - 142px);
+        height: calc(100vh - 342px);
 
         &__title {
             text-align: center;

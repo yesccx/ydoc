@@ -352,7 +352,7 @@
 
                 groupTree.forEach(group => {
                     group.nodeType = group.nodeType ? group.nodeType : 'group';
-                    group.key = 'group-' + group.id;
+                    group.key = group.nodeType + group.id;
                     group.children = this.deepBuildDataTree(group.children, docGroup) || [];
                     if (docGroup[group.id]) {
                         group.children = group.children.concat(docGroup[group.id]);
@@ -425,7 +425,7 @@
                     case 'before': // 项前
                         targetGroup.children.forEach((node, key, data) => {
                             if (node.id === dropNode.id) {
-                                let adjoinSort = key === 1 ? 0 : data[key - 2].sort;
+                                let adjoinSort = key <= 1 ? 0 : data[key - 2].sort;
                                 nodeSort = (node.sort + adjoinSort) / 2;
                             }
                         });
