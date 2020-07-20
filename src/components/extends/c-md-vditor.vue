@@ -130,6 +130,7 @@
     @import "~vditor/src/assets/scss/index";
 
     .c-md-vditor {
+        height: inherit;
         .vditor.vditor--fullscreen {
             .vditor-toolbar--pin {
                 position: initial;
@@ -139,6 +140,7 @@
 
         .vditor {
             border: none;
+            height: inherit;
         }
 
         .vditor-toolbar {

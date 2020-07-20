@@ -7,7 +7,7 @@
 <script>
 
     export default {
-        name: 'c-library-edtior-markdown',
+        name: 'c-library-editor-markdown',
         components: {
             'c-md-vditor': () => import('@/components/extends/c-md-vditor')
         },
@@ -52,3 +52,9 @@
         }
     };
 </script>
+
+<style lang="scss">
+    .c-library-editor-markdown {
+        height: inherit;
+    }
+</style>

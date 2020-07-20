@@ -52,6 +52,18 @@
     };
 </script>
 
+<style lang="scss">
+    .c-home-library-operate-log {
+        .el-timeline-item__node--normal {
+            left: 0px;
+        }
+
+        .el-timeline-item__tail {
+            left: 5px;
+        }
+    }
+</style>
+
 <style lang="scss" scoped>
     .operate-item {
         display: inline-flex;

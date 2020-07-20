@@ -10,7 +10,7 @@
         <el-scrollbar class="scrollbar">
             <c-infinite-list ref="libraryList" :request="getLibraryList" :empty-tip="'暂无文档库'">
                 <el-card v-for="library in libraryList" :key="library.id" class="box-card" shadow="hover">
-                    <div class="library-item">
+                    <div class="library-item" @click="onLibraryContent(library)">
                         <el-image class="library-item__image" :src="library.library_info.cover">
                             <div slot="error" class="image-slot__error">
                                 ydoc
@@ -18,20 +18,19 @@
                         </el-image>
                         <div class="library-item__main">
                             <!-- 文档库基本信息 -->
-                            <div class="library-item__name text-overflow" :title="library.library_info.name"
-                                @click="onLibraryDocList(library)">
+                            <div class="library-item__name text-overflow" :title="library.library_info.name">
                                 {{ library.library_info.name }}
                             </div>
-                            <div class="library-item__desc" :title="library.library_info.desc" @click="onLibraryDocList(library)">
+                            <div class="library-item__desc" :title="library.library_info.desc">
                                 {{ library.library_info.desc || '暂无简介' }}
                             </div>
 
                             <!-- 文档库操作 -->
                             <div class="library-item__actions">
-                                <span class="library-item__actions-item" title="相关分享" @click="onLibraryShare(library)">
+                                <span class="library-item__actions-item" title="相关分享" @click.stop="onLibraryShare(library)">
                                     <i class="el-icon-share"></i>
                                 </span>
-                                <span class="library-item__actions-item" title="文档库管理" @click="onLibraryManager(library)">
+                                <span class="library-item__actions-item" title="文档库管理" @click.stop="onLibraryManager(library)">
                                     <i class="el-icon-s-tools"></i>
                                 </span>
                             </div>
@@ -65,8 +64,8 @@
                 });
                 handler(hres);
             },
-            // 事件：查看文档库文档列表
-            onLibraryDocList(library) {
+            // 事件：查看文档库内容
+            onLibraryContent(library) {
                 this.$link.libraryContent({ library_id: library.library_id });
             },
             // 事件：文档库分组查询

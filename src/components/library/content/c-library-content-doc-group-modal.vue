@@ -11,9 +11,9 @@
                     <el-input v-model="group.desc" maxlength="255" placeholder="简介，1～255个字符之间" type="textarea" rows="4"
                         resize="none" @keydown.enter.native="onSaveGroup" show-word-limit></el-input>
                 </el-form-item>
-                <el-form-item label="排序" prop="sort">
+                <!-- <el-form-item label="排序" prop="sort">
                     <el-input-number :min="-1" v-model="group.sort" :step="1000"></el-input-number>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
             <div class="actions">
                 <el-button icon="el-icon-close" @click="onClose">取 消</el-button>
