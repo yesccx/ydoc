@@ -3,7 +3,7 @@
         <div class="container">
             <el-row :gutter="20">
                 <el-col :span="18">
-                    <el-menu @select="onSelect" :default-active="defaultActive" mode="horizontal">
+                    <el-menu @select="onMenuSelect" :default-active="defaultActive" mode="horizontal">
                         <el-menu-item index="home"><i class="el-icon-setting"></i>工作台</el-menu-item>
                         <el-menu-item index="team-home" disabled>我的团队</el-menu-item>
                         <el-menu-item index="3" disabled>模板管理</el-menu-item>
@@ -40,8 +40,8 @@
                                     </div>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item command="user">个人信息</el-dropdown-item>
-                                    <el-dropdown-item>关于我们</el-dropdown-item>
+                                    <el-dropdown-item command="userCenter">个人信息</el-dropdown-item>
+                                    <el-dropdown-item command="aboutMe">关于我们</el-dropdown-item>
                                     <el-dropdown-item command="userLogout" divided>退出登录</el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
@@ -76,8 +76,22 @@
         },
         methods: {
             // 用户信息
-            user() {
+            userCenter() {
                 this.$link.userInfo();
+            },
+            aboutMe() {
+                this.$notify({
+                    title: '关于我们',
+                    duration: 0,
+                    dangerouslyUseHTMLString: true,
+                    message: `
+                    <br />
+                    GitHub: <a href="https://github.com/yesccx/ydoc" target="_blank">https://github.com/yesccx/ydoc</a>
+                    <br />
+                    <br />
+                    欢迎提出意见和建议
+                `
+                });
             },
             // 获取用户消息未读数
             async fetchUserMessageUnreadCount() {
@@ -112,8 +126,8 @@
             createTeam() {
                 this.$link.teamHome();
             },
-            // 事件：
-            onSelect(index) {
+            // 事件：菜单选择
+            onMenuSelect(index) {
                 switch (index) {
                     case 'home':
                         this.$link.home();
@@ -125,7 +139,7 @@
             },
             // 事件：用户操作项分发
             onUserCommand(command) {
-                const allowCommands = ['userLogout', 'user'];
+                const allowCommands = ['userCenter', 'userLogout', 'aboutMe'];
                 if (allowCommands.indexOf(command) >= 0) {
                     this[command] && this[command]();
                 }
