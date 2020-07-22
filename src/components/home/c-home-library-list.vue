@@ -9,34 +9,37 @@
         <!-- 文档库列表 -->
         <el-scrollbar class="scrollbar">
             <c-infinite-list ref="libraryList" :request="getLibraryList" :empty-tip="'暂无文档库'">
-                <el-card v-for="library in libraryList" :key="library.id" class="box-card" shadow="hover">
-                    <div class="library-item" @click="onLibraryContent(library)">
-                        <el-image class="library-item__image" :src="library.library_info.cover">
-                            <div slot="error" class="image-slot__error">
-                                ydoc
-                            </div>
-                        </el-image>
-                        <div class="library-item__main">
-                            <!-- 文档库基本信息 -->
-                            <div class="library-item__name text-overflow" :title="library.library_info.name">
-                                {{ library.library_info.name }}
-                            </div>
-                            <div class="library-item__desc" :title="library.library_info.desc">
-                                {{ library.library_info.desc || '暂无简介' }}
-                            </div>
+                <div class="library-list">
+                    <el-card v-for="library in libraryList" :key="library.id" class="box-card" shadow="hover">
+                        <div class="library-item" @click="onLibraryContent(library)">
+                            <el-image class="library-item__image" :src="library.library_info.cover">
+                                <div slot="error" class="image-slot__error">
+                                    ydoc
+                                </div>
+                            </el-image>
+                            <div class="library-item__main">
+                                <!-- 文档库基本信息 -->
+                                <div class="library-item__name text-overflow" :title="library.library_info.name">
+                                    {{ library.library_info.name }}
+                                </div>
+                                <div class="library-item__desc" :title="library.library_info.desc">
+                                    {{ library.library_info.desc || '暂无简介' }}
+                                </div>
 
-                            <!-- 文档库操作 -->
-                            <div class="library-item__actions">
-                                <span class="library-item__actions-item" title="相关分享" @click.stop="onLibraryShare(library)">
-                                    <i class="el-icon-share"></i>
-                                </span>
-                                <span class="library-item__actions-item" title="文档库管理" @click.stop="onLibraryManager(library)">
-                                    <i class="el-icon-s-tools"></i>
-                                </span>
+                                <!-- 文档库操作 -->
+                                <div class="library-item__actions">
+                                    <span class="library-item__actions-item" title="相关分享" @click.stop="onLibraryShare(library)">
+                                        <i class="el-icon-share"></i>
+                                    </span>
+                                    <span class="library-item__actions-item" title="文档库管理"
+                                        @click.stop="onLibraryManager(library)">
+                                        <i class="el-icon-s-tools"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </el-card>
+                    </el-card>
+                </div>
             </c-infinite-list>
         </el-scrollbar>
     </div>
@@ -102,6 +105,17 @@
 </style>
 
 <style lang="scss" scoped>
+    .library-list--many {
+        .library-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            > .el-card {
+                width: 49%;
+            }
+        }
+    }
+
     .library-item {
         display: flex;
 
@@ -114,8 +128,7 @@
 
         &__main {
             margin-left: 10px;
-            flex-grow: 1;
-            width: 250px;
+            flex: 1;
             position: relative;
             cursor: pointer;
             padding: 5px 0px;

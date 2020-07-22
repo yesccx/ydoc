@@ -25,7 +25,7 @@
     @import "~@/assets/scss/overwrite-element.scss";
     @import "~@/assets/scss/faster.scss";
     @import "~@/assets/scss/common.scss";
-    @import "https://at.alicdn.com/t/font_1067565_k086i0obmv.css";
+    @import "https://at.alicdn.com/t/font_1067565_q3g40tweeuo.css";
 
     .root-container .el-scrollbar__wrap {
         overflow-x: hidden;

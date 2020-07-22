@@ -1,6 +1,7 @@
 <template>
     <div class="c-home-library-list-bar">
-        <el-input v-model="searchKey" @keydown.enter.native="onSearch" @change="onSearchKeyChange" placeholder="搜索文档库名称" clearable>
+        <el-input class="search-input" v-model="searchKey" @keydown.enter.native="onSearch" @change="onSearchKeyChange"
+            placeholder="搜索文档库名称" clearable>
             <el-select class="search-select" v-model="libraryGroupId" @change="onLibraryGroupChange" slot="prepend"
                 placeholder="请选择">
                 <el-button class="library-group-manager" @click="onLibraryGroupManager" type="text" icon="el-icon-setting">
@@ -14,13 +15,29 @@
             </el-select>
             <el-button @click="onSearch" slot="append" icon="el-icon-search"></el-button>
         </el-input>
+
+        <!-- 视图风格切换按钮 -->
+        <el-tooltip :content="viewStyleTip" placement="top-start" :open-delay="500">
+            <el-button class="view-style-btn" type="text" :icon="viewStyleIcon" @click="onSwitchViewStyle"> </el-button>
+        </el-tooltip>
     </div>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'c-home-library-list-bar',
+        watch: {
+            homeViewStyle: {
+                handler(val) {
+                    this.viewStyle = val;
+                },
+                immediate: true
+            }
+        },
         computed: {
+            ...mapGetters('global', ['homeViewStyle']),
             // 文档库分组集合
             libraryGroupsCollection() {
                 const collection = [
@@ -42,13 +59,28 @@
                 }
 
                 return collection;
+            },
+            // 视图风格icon
+            viewStyleIcon() {
+                return {
+                    'simple': 'icon y-icon-danliemoshi',
+                    'many': 'icon y-icon-duoliemoshi'
+                }[this.viewStyle] || '';
+            },
+            // 视图风格tip
+            viewStyleTip() {
+                return {
+                    'simple': '切换视图风格，当前为「单列」',
+                    'many': '切换视图风格，当前为「多列」'
+                }[this.viewStyle] || '切换视图风格';
             }
         },
         data() {
             return {
                 libraryGroups: [],
                 searchKey: '',
-                libraryGroupId: ''
+                libraryGroupId: '',
+                viewStyle: 'simple'
             };
         },
         async created() {
@@ -79,6 +111,11 @@
             onLibraryGroupChange() {
                 this.emitSearch();
             },
+            // 事件：切换视图风格
+            onSwitchViewStyle() {
+                this.viewStyle = this.viewStyle === 'simple' ? 'many' : 'simple';
+                this.$store.commit('global/setHomeViewStyle', this.viewStyle);
+            },
             // 事件：查询
             onSearch() {
                 this.emitSearch();
@@ -96,12 +133,34 @@
 
 <style lang="scss">
     .c-home-library-list-bar {
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+
         .el-input-group__append {
             padding: 0px 13px;
+        }
+
+        .view-style-btn {
+            i {
+                transition: color 0.3s;
+                font-size: 14px;
+                line-height: 12px;
+                color: $--color-primary-light-5;
+                &:hover {
+                    color: $--color-primary-light-2;
+                }
+            }
         }
     }
 </style>
 <style lang="scss" scoped>
+    .search-input {
+        margin-right: 10px;
+    }
+    .search-select {
+        width: 150px;
+    }
     .library-group-manager {
         padding-left: 20px;
         color: rgb(92, 98, 105);

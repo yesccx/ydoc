@@ -2,10 +2,10 @@
 <template>
     <div class="page-home">
         <el-row :gutter="10">
-            <el-col :span="8">
-                <c-home-library-list />
+            <el-col :span="viewStyleOpions.spanList">
+                <c-home-library-list :class="viewStyleOpions.theme" />
             </el-col>
-            <el-col :span="16">
+            <el-col :span="viewStyleOpions.spanOther">
                 <el-card class="box-card" shadow="hover">
                     <div slot="header" class="clearfix">
                         <span>文档库动态</span>
@@ -26,6 +26,7 @@
 
 <script>
     import BasePage from '@/common/mixins/base-page';
+    import { mapGetters } from 'vuex';
 
     export default {
         name: 'home',
@@ -33,6 +34,20 @@
         components: {
             'c-home-library-list': () => import('@/components/home/c-home-library-list'),
             'c-home-library-operate-log': () => import('@/components/home/c-home-library-operate-log')
+        },
+        computed: {
+            ...mapGetters('global', ['homeViewStyle']),
+            // 根据视图风格约定的相关配置
+            viewStyleOpions() {
+                const viewStyle = this.homeViewStyle;
+
+                const optionsMap = {
+                    simple: { theme: 'library-list--simple', spanList: 9, spanOther: 15 },
+                    many: { theme: 'library-list--many', spanList: 16, spanOther: 8 }
+                };
+
+                return optionsMap[viewStyle] || optionsMap.simple;
+            }
         },
         data() {
             return {

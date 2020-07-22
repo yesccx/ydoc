@@ -7,7 +7,8 @@
 
 export const keys = {
     USER_SESSION: 'user_session',
-    SHARE_ACCESS_PASSWORD: 'share_access_password'
+    SHARE_ACCESS_PASSWORD: 'share_access_password',
+    USER_SESSION_CONFIG: 'user_session_config'
 };
 
 const DataStore = {

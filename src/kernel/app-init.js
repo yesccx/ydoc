@@ -7,6 +7,7 @@
 
 import Vue from 'vue';
 import Axios from '@/kernel/axios';
+import Store from '@/kernel/store';
 import '@/kernel/directire';
 import Utils from '@/common/utils/global-utils';
 import Tip from '@/common/utils/tip';
@@ -45,5 +46,8 @@ const init = () => {
 
     // 初始化全局过滤器
     _initGlobalFilters();
+
+    // 初始化用户会话期间的配置参数
+    Store.dispatch('global/initUseSessionConfig');
 };
 init();

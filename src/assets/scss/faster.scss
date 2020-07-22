@@ -89,3 +89,7 @@ body>.el-loading-mask {
 body {
     overflow: hidden;
 }
+
+[class*=el-col-] {
+    transition: width 0.3s;
+}

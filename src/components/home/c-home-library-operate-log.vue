@@ -69,6 +69,7 @@
         display: inline-flex;
         margin: 5px 0 8px 0;
         align-items: center;
+        word-break: keep-all;
 
         &__user {
             display: flex;
