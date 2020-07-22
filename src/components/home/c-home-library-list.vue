@@ -8,7 +8,7 @@
 
         <!-- 文档库列表 -->
         <el-scrollbar class="scrollbar">
-            <c-infinite-list ref="libraryList" :request="getLibraryList" :empty-tip="'暂无文档库'">
+            <c-infinite-list ref="libraryList" :request="getLibraryList">
                 <div class="library-list">
                     <el-card v-for="library in libraryList" :key="library.id" class="box-card" shadow="hover">
                         <div class="library-item" @click="onLibraryContent(library)">
@@ -39,6 +39,11 @@
                             </div>
                         </div>
                     </el-card>
+                </div>
+
+                <div slot="empty-tip" class="bold-normal">
+                    <span>暂无文档库，</span>
+                    <el-button class="quick-library-create" type="text" @click="onLibraryWillCreate">立即创建</el-button>
                 </div>
             </c-infinite-list>
         </el-scrollbar>
@@ -83,6 +88,10 @@
             // 事件：文档库相关分享
             onLibraryShare(library) {
                 this.$utils.Abuilding();
+            },
+            // 事件：文档库将要创建
+            onLibraryWillCreate() {
+                this.$link.libraryCreate();
             }
         }
     };
@@ -100,6 +109,14 @@
             width: 100%;
             height: 100%;
             background: #f5f7fa;
+        }
+
+        .quick-library-create {
+            font-size: 15px;
+            color: $--color-primary-light-3;
+            &:hover {
+                color: $--color-primary-light-1;
+            }
         }
     }
 </style>

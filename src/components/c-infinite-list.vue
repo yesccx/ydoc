@@ -4,7 +4,10 @@
         <slot> </slot>
         <p v-show="!isEmpty && loading" class="loading-tip"><i class="el-icon-loading"></i>{{ loadingTip }}</p>
         <p v-show="!isEmpty && pageFinal" class="final-tip">{{ finalTip }}</p>
-        <p v-show="isEmpty" class="final-tip">{{ emptyTip }}</p>
+
+        <p v-show="isEmpty" class="final-tip">
+            <slot name="empty-tip">{{ emptyTip }}</slot>
+        </p>
     </div>
 </template>
 
