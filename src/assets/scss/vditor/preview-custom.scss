@@ -1,0 +1,19 @@
+.vditor-reset {
+    table {
+        font-size: 14px;
+        display: block;
+    }
+
+    .vditor-task {
+        word-break: break-all;
+    }
+
+    code {
+        transition: opacity 0.3s;
+        opacity: 0;
+    }
+
+    code.hljs {
+        opacity: 1;
+    }
+}

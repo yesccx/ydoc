@@ -1,4 +1,3 @@
-
 .vh-100 {
     height: 100vh;
 }
@@ -50,7 +49,8 @@ span.keyboard-join {
     cursor: pointer;
 }
 
-.el-card[disabled] * {
+.el-card[disabled] *,
+ul[disabled] * {
     pointer-events: none;
     filter: alpha(opacity=65);
     -webkit-box-shadow: none;

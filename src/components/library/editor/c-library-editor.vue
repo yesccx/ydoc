@@ -38,9 +38,3 @@
         }
     };
 </script>
-
-<style lang="scss" scoped>
-    .c-library-edtior {
-        height: initial;
-    }
-</style>

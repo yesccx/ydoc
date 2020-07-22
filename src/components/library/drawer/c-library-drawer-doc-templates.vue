@@ -101,7 +101,7 @@
                     return true;
                 }
 
-                await this.$api.v1.LibraryDocTempalteCollection({}, {
+                await this.$api.v1.LibraryDocTemplateCollection({}, {
                     loading: (status) => { this.templateLoading = status; }
                 }).then(({ resData }) => {
                     this.templateCollection = resData;

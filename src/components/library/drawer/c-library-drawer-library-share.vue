@@ -164,6 +164,7 @@
             initEventBus(bus) {
                 // 事件：文档库分享
                 bus.$on('library-share', () => {
+                    this.moreOptionsOpen = false;
                     this.visibleDrawer = true;
                 });
             },
@@ -179,6 +180,11 @@
                 }).then(({ resData }) => {
                     resData.expire_time = resData.expire_time ? resData.expire_time * 1000 : '';
                     this.shareInfo = resData;
+
+                    // 存在'更多参数'时，默认展开显示
+                    if (resData.share_desc || resData.expire_time || resData.access_password) {
+                        this.moreOptionsOpen = true;
+                    }
                 }).catch(() => { });
             },
             // 构建随机的分享名称

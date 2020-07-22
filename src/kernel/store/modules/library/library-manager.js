@@ -8,16 +8,18 @@
 const state = {
     libraryId: 0,
     libraryInfo: {},
-    libraryMember: {}
+    libraryMember: {},
+    libraryMemberPreference: {}
 };
 
 const getters = {};
 
 const mutations = {
     // 设置文档库管理信息
-    setLibraryManagerInfo(state, { libraryInfo, libraryMember }) {
+    setLibraryManagerInfo(state, { libraryInfo, libraryMember, libraryMemberPreference = {} }) {
         state.libraryInfo = libraryInfo;
         state.libraryMember = libraryMember;
+        state.libraryMemberPreference = libraryMemberPreference;
         state.libraryId = libraryInfo.id;
     }
 };

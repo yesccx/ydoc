@@ -11,8 +11,10 @@
                 <c-library-editor-meta :loading="saveLoading" :meta="docEditor" @input="onEditorInput(docEditor)" />
 
                 <!-- 编辑区 -->
-                <c-library-editor style="height: calc(100vh - 125px);" ref="docEditor" :init-content="docEditor.content"
-                    @input="onEditorInput(docEditor)" />
+                <el-scrollbar style="height: calc(100vh - 125px);">
+                    <c-library-editor class="little-view" ref="docEditor" :init-content="docEditor.content"
+                        @input="onEditorInput(docEditor)" />
+                </el-scrollbar>
             </el-tab-pane>
         </el-tabs>
 
@@ -53,7 +55,15 @@
                 docEditorCollection: [],
                 docEditorSaveStatusCollection: [],
                 creatorCounter: 0,
-                saveLoading: false
+                saveLoading: false,
+                docDefaultTemplate: {
+                    inited: false,
+                    data: {
+                        title: '',
+                        content: '',
+                        groupId: 0
+                    }
+                }
             };
         },
         created() {
@@ -152,6 +162,26 @@
                     this.tagDocNotSave(docHistory.doc_id);
                 });
             },
+            // 获取文档默认模板
+            async fetchDocDefaultTemplate() {
+                if (this.docDefaultTemplate.inited) {
+                    return this.docDefaultTemplate.data;
+                }
+
+                // 获取成员偏好设置中指定的模板id
+                const docDefaultTemplateId = this.libraryMemberPreference.config.library_doc_default_template;
+                if (!docDefaultTemplateId) {
+                    this.docDefaultTemplate.inited = true;
+                    return this.docDefaultTemplate.data;
+                }
+
+                // 获取模板信息
+                await this.$api.v1.LibraryDocTemplateInfo({ library_doc_template_id: docDefaultTemplateId }).then(({ resData }) => {
+                    this.docDefaultTemplate.data = resData;
+                });
+
+                return this.docDefaultTemplate.data;
+            },
             // 根据文档id保存文档（根据编辑器选项卡）
             async docSaveById(docId) {
                 const initialDocInfo = this.fetchEditorDocInfo(docId);
@@ -213,17 +243,20 @@
                 });
             },
             // 使用创建文档型的编辑器选择卡
-            useCreateDocEditor(groupId = 0, docTitle = '') {
+            async useCreateDocEditor(groupId = 0, docTitle = '') {
                 this.creatorCounter++;
                 docTitle = docTitle || '无标题-' + (this.creatorCounter);
                 const docVirtualId = 't' + this.creatorCounter;
+
+                // 获取默认文档模板
+                const docDefaultTempalte = await this.fetchDocDefaultTemplate();
 
                 this.useDocEditor({
                     id: docVirtualId,
                     libraryId: this.libraryId,
                     title: docTitle,
-                    content: '',
-                    groupId: groupId,
+                    content: docDefaultTempalte.content || '',
+                    groupId: groupId || docDefaultTempalte.groupId,
                     updateTime: 0
                 });
                 this.tagDocNotSave(docVirtualId);

@@ -29,7 +29,7 @@
 
                 <!-- right：视图区 -->
                 <div class="layout-main">
-                    <c-library-preview-view />
+                    <c-library-preview-view :class="libraryViewStyle" />
                 </div>
 
                 <!-- 侧边面板 -->
@@ -75,6 +75,13 @@
                     'side-close': !this.sideStatus,
                     'simplify': this.isShareSimplify
                 };
+            },
+            // 文档库视图风格（根据偏好设置中的library_default_style）
+            libraryViewStyle() {
+                if (!this.libraryShareInfo || !this.libraryShareInfo.library_style) {
+                    return '';
+                }
+                return 'library-view-style--' + this.libraryShareInfo.library_style;
             }
         },
         watch: {

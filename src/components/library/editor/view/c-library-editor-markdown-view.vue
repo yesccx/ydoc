@@ -45,13 +45,11 @@
     @import "~vditor/src/assets/scss/index";
 
     .c-library-editor-markdown-view {
+        @import "~@/assets/scss/vditor/preview-custom";
         .doc-title {
             text-align: center;
             margin-bottom: 50px;
         }
-
-        .vditor-reset table {
-            font-size: 14px;
-        }
     }
+    @import "~@/assets/scss/vditor/preview-layout";
 </style>

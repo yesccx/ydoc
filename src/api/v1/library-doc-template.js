@@ -1,7 +1,7 @@
 import axios from '@/kernel/axios';
 
 // 获取文档模板模板集合
-export const axiosLibraryDocTempalteCollection = (param = {
+export const axiosLibraryDocTemplateCollection = (param = {
     library_id: 0
 }, conf = {}) => axios.post('/v1/library/doc-template/collection', param, conf);
 

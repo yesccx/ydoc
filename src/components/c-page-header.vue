@@ -64,8 +64,11 @@
         },
         watch: {
             $route(route) {
+                // FIXME: 用户消息统计数获取接口调用机制有待优化（目前会在大多数页面进入后请求一次）
                 this.defaultActive = route.name || 'home';
-                this.fetchUserMessageUnreadCount();
+                if (route.meta.header) {
+                    this.fetchUserMessageUnreadCount();
+                }
             }
         },
         data() {
@@ -77,7 +80,7 @@
         methods: {
             // 用户信息
             userCenter() {
-                this.$link.userInfo();
+                this.$link.userCenter();
             },
             aboutMe() {
                 this.$notify({

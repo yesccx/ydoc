@@ -1,0 +1,127 @@
+.vditor {
+    border: none;
+    height: inherit;
+
+    code {
+        transition: opacity 0.3s;
+        opacity: 0;
+    }
+
+    code.hljs {
+        opacity: 1;
+    }
+
+    &--fullscreen {
+        .vditor-toolbar {
+            position: initial;
+            width: 100%;
+        }
+    }
+
+    &-toolbar {
+        border-bottom: 0;
+        padding: 0 10px !important;
+
+        &__item {
+            padding: 0 3px;
+
+            svg {
+                height: 17px;
+                width: 12px;
+            }
+        }
+    }
+
+    &-wysiwyg {
+
+        &__block[data-type="code-block"] .vditor-wysiwyg__pre code {
+            white-space: pre;
+            word-break: initial;
+        }
+
+        &__block[data-type="code-block"] .vditor-wysiwyg__preview {
+            margin-top: 1.5em;
+        }
+
+        &__block:before,
+        &__block[data-type="code-block"]:before {
+            font-size: 11px !important;
+            margin-top: 8px !important;
+        }
+
+        &:hover {
+            .vditor-panel {
+                opacity: 0.9;
+            }
+        }
+
+        .vditor-panel {
+            opacity: 0;
+            transition: opacity 0.2s, top 0.1s;
+            background-color: #f8f8f8;
+
+            .vditor-input {
+                background-color: #f8f8f8;
+            }
+        }
+
+        .vditor-toc:before,
+        div[data-type="footnotes-block"]:before,
+        div[data-type="link-ref-defs-block"]:before {
+            margin-top: 3px;
+        }
+    }
+
+    &-preview {
+        background-color: #fff;
+
+        &__action {
+            display: none;
+        }
+    }
+
+    &-wysiwyg,
+    &-preview {
+
+        .vditor-reset {
+            padding: 20px 35px !important;
+
+            &:focus {
+                background-color: #fff !important;
+            }
+
+            h1:before {
+                margin-top: 9px;
+            }
+
+            h2:before {
+                margin-top: 7px;
+            }
+
+            h3:before {
+                margin-top: 5px;
+            }
+
+            h4:before {
+                margin-top: 3px;
+            }
+
+            h5:before {
+                margin-top: 1px;
+            }
+
+            h6:before {
+                margin-top: 0px;
+            }
+
+            table {
+                font-size: 14px;
+                display: block;
+            }
+
+            .vditor-task {
+                word-break: break-all;
+            }
+        }
+    }
+}

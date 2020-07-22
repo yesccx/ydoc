@@ -10,8 +10,11 @@
                             <el-menu-item index="library-info">
                                 <span slot="title">基本信息</span>
                             </el-menu-item>
+                            <el-menu-item index="library-preference">
+                                <span slot="title">偏好设置</span>
+                            </el-menu-item>
                             <el-menu-item index="library-settings">
-                                <span slot="title">相关设置</span>
+                                <span slot="title">其他设置</span>
                             </el-menu-item>
                         </el-menu-item-group>
                         <el-menu-item-group>
@@ -106,6 +109,9 @@
                         break;
                     case 'library-members':
                         this.$link.libraryMembers({ library_id: this.libraryId }, { is_replace: true });
+                        break;
+                    case 'library-preference':
+                        this.$link.libraryPreference({ library_id: this.libraryId }, { is_replace: true });
                         break;
                     case 'library-settings':
                         this.$link.librarySettings({ library_id: this.libraryId }, { is_replace: true });

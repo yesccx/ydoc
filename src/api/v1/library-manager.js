@@ -10,6 +10,11 @@ export const axiosLibraryMemberLibrarySort = (param = {
     library_id: 0, library_group_id: 0, sort: 0
 }, conf = {}) => axios.post('/v1/library/manager/library-member/library-sort', param, conf);
 
+// 获取文档库成员的偏好设置参数
+export const axiosLibraryMemberLibraryPreference = (param = {
+    libray_id: 0
+}, conf = {}) => axios.post('/v1/library/manager/library-member/library-preference', param, conf);
+
 // 获取文档库成员集合
 export const axiosLibraryMemberCollection = (param = {
     library_id: 0

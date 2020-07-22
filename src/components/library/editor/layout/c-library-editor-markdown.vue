@@ -55,6 +55,7 @@
 
 <style lang="scss">
     .c-library-editor-markdown {
-        height: inherit;
+        @import "~@/assets/scss/vditor/editor-custom";
     }
+    @import "~@/assets/scss/vditor/editor-layout";
 </style>

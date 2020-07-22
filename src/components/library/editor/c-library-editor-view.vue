@@ -8,7 +8,7 @@
     export default {
         name: 'c-library-edtior-view',
         components: {
-            'c-library-editor-view-markdown': () => import('@/components/library/editor/view/c-library-editor-view-markdown')
+            'c-library-editor-markdown-view': () => import('@/components/library/editor/view/c-library-editor-markdown-view')
         },
         props: {
             // 初始化值
@@ -19,7 +19,7 @@
         },
         data() {
             return {
-                layout: 'c-library-editor-view-markdown'
+                layout: 'c-library-editor-markdown-view'
             };
         }
     };

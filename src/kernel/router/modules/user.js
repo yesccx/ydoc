@@ -2,14 +2,14 @@ import { PAGE_AUTH_IS_USER } from '@/common/constants/page-auth';
 
 export default [
     {
-        path: '/user/info',
-        name: 'user-info',
+        path: '/user/center',
+        name: 'user-center',
         meta: {
-            title: '用户信息',
+            title: '用户中心',
             ...PAGE_AUTH_IS_USER,
             header: true
         },
-        component: () => import('@/pages/user/user-info.vue')
+        component: () => import('@/pages/user/user-center.vue')
     },
     {
         path: '/user/password',

@@ -25,10 +25,21 @@ export default [
                 manager: () => import('@/pages/library/manager/library-info.vue')
             }
         }, {
+            path: 'preference',
+            name: 'library-preference',
+            meta: {
+                title: '偏好设置',
+                ...PAGE_AUTH_IS_USER,
+                header: true
+            },
+            components: {
+                manager: () => import('@/pages/library/manager/library-preference.vue')
+            }
+        }, {
             path: 'settings',
             name: 'library-settings',
             meta: {
-                title: '相关设置',
+                title: '其他设置',
                 ...PAGE_AUTH_IS_USER,
                 header: true
             },

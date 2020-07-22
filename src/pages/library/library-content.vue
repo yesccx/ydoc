@@ -30,7 +30,7 @@
 
                 <!-- right：编辑区 -->
                 <div class="layout-main">
-                    <c-library-content-editor />
+                    <c-library-content-editor :class="libraryViewStyle" />
                 </div>
 
                 <!-- 侧边面板 -->
@@ -62,6 +62,13 @@
         computed: {
             libraryInfoTip() {
                 return this.libraryInfo.name;
+            },
+            // 文档库视图风格（根据偏好设置中的library_default_style）
+            libraryViewStyle() {
+                if (!this.libraryMemberPreference.config || !this.libraryMemberPreference.config.library_default_style) {
+                    return '';
+                }
+                return 'library-view-style--' + this.libraryMemberPreference.config.library_default_style;
             }
         },
         data() {
@@ -90,6 +97,13 @@
                 }).catch(async ({ resMsg = '未知错误' }) => {
                     await this.$utils.Error(resMsg);
                 });
+
+                // 获取文档库偏好设置相关
+                let libraryMemberPreference = {};
+                await this.$api.v1.LibraryMemberLibraryPreference({ library_id: libraryId }).then(({ resData }) => {
+                    libraryMemberPreference = resData;
+                });
+                libraryManagerInfo.libraryMemberPreference = libraryMemberPreference;
 
                 this.$store.commit('libraryManager/setLibraryManagerInfo', libraryManagerInfo);
 

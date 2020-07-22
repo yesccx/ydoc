@@ -1,0 +1,38 @@
+.library-view-style--full {}
+
+.library-view-style--medium {
+    .vditor {
+        background-color: #fcfcfc !important;
+
+        &-toolbar {
+            display: flex;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        &-content {
+            width: 940px;
+            margin: 20px auto;
+            z-index: 0;
+        }
+
+        &-wysiwyg {
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+            .vditor-reset {
+                padding: 40px 60px !important;
+                min-height: calc(100vh - 100px);
+            }
+        }
+
+        &-preview {
+            border-left: 0;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
+            .vditor-reset {
+                padding: 40px 60px !important;
+                min-height: calc(100vh - 250px);
+            }
+        }
+    }
+}

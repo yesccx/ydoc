@@ -11,8 +11,8 @@ export const RouterLinkLogin = (query = {}, options = {}) => {
 };
 
 // 前往用户信息页
-export const RouterLinkUserInfo = (query = {}, options = {}) => {
-    routeLink('user-info', query, options);
+export const RouterLinkUserCenter = (query = {}, options = {}) => {
+    routeLink('user-center', query, options);
 };
 
 // 前往用户密码页
@@ -50,7 +50,12 @@ export const RouterLinkLibraryMembers = (query = { library_id: 0 }, options = {}
     routeLink('library-members', query, options);
 };
 
-// 前往文档库管理-相关设置页
+// 前往文档库管理-偏好设置页
+export const RouterLinkLibraryPreference = (query = { library_id: 0 }, options = {}) => {
+    routeLink('library-preference', query, options);
+};
+
+// 前往文档库管理-其他设置页
 export const RouterLinkLibrarySettings = (query = { library_id: 0 }, options = {}) => {
     routeLink('library-settings', query, options);
 };

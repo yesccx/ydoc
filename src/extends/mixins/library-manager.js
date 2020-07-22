@@ -2,7 +2,7 @@ import { mapState } from 'vuex';
 
 export default {
     computed: {
-        ...mapState('libraryManager', ['libraryInfo', 'libraryMember', 'libraryId'])
+        ...mapState('libraryManager', ['libraryInfo', 'libraryMember', 'libraryMemberPreference', 'libraryId'])
     },
     data() {
         return {
