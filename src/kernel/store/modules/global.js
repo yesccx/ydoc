@@ -10,7 +10,9 @@ import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 const state = {
     pageError: false, // 页面错误状态
     userMessageUnreadCount: 0, // 用户消息未读数
-    userSessionConfig: {} // 用户会话期间的配置参数
+    userSessionConfig: {
+        home_view_style: ''
+    } // 用户会话期间的配置参数
 };
 
 const getters = {
@@ -31,7 +33,7 @@ const mutations = {
     },
     // 设置会话参数-工作台视图风格
     setHomeViewStyle(state, style) {
-        state.userSessionConfig.home_view_style = style;
+        state.userSessionConfig = { ...state.userSessionConfig, ...{ home_view_style: style } };
 
         DataStore.setItem(STORE_KEYS.USER_SESSION_CONFIG, (data) => {
             data = data || {};
