@@ -1,7 +1,6 @@
 .library-view-style--medium {
 
     .c-library-editor-markdown-view {
-        width: 900px;
         margin: 20px auto;
     }
 
@@ -12,6 +11,16 @@
         text-align: center;
     }
 
+    .doc-body {
+        display: flex;
+        justify-content: center;
+
+        &__content {
+            width: 900px;
+            margin-right: 20px;
+        }
+    }
+
 }
 
 .library-view-style--full {
@@ -20,6 +29,20 @@
         margin-top: 0;
         margin-bottom: 50px;
         font-size: 40px;
+    }
+
+    .doc-body {
+        display: flex;
+        justify-content: center;
+
+        &__content {
+            width: 100%;
+            margin-right: 20px;
+        }
+
+        &__toc {
+            width: 300px;
+        }
     }
 
 }

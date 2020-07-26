@@ -1,7 +1,12 @@
 <template>
     <div class="c-library-editor-markdown-view">
         <h1 class="doc-title">{{ docInfo.title }}</h1>
-        <div ref="markdown"></div>
+        <div class="doc-body">
+            <div class="doc-body__content vditor-reset" ref="markdown"></div>
+            <div class="doc-body__toc">
+                <div ref="toc" class="doc-body__toc-content"></div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -29,6 +34,10 @@
         mounted() {
             this.render(this.docInfo.content);
         },
+        destroy() {
+            this.initAnchorClickEvent(false);
+            this.initAnchorScrollEvent(false);
+        },
         methods: {
             async render(value) {
                 await VditorMethod.preview(this.$refs.markdown, value, {
@@ -36,11 +45,71 @@
                         lineNumber: true
                     }
                 });
+                await VditorMethod.outlineRender(this.$refs.markdown, this.$refs.toc);
                 this.onInited();
             },
             // 事件：初始化成功
             onInited() {
+                this.initAnchorClickEvent(true);
+                this.initAnchorScrollEvent(true);
+                this.$nextTick(() => {
+                    const hash = this.$route.hash.slice(1);
+                    hash && this.goAnchor(decodeURI(hash));
+                });
+
                 this.$emit('inited');
+            },
+            // 跳转至锚点
+            goAnchor(key, scroll = true) {
+                this.$router.replace({ ...this.$route, hash: '#' + key }).catch(error => error);
+                if (scroll) {
+                    this.$el.parentNode.parentNode.scrollTop = this.$el.querySelector(`#${key}`).offsetTop;
+                }
+
+                const currentItem = this.$el.querySelector('.vditor-outline__item--current');
+                currentItem && currentItem.classList.remove('vditor-outline__item--current');
+                this.$el.querySelector(`[data-id="${key}"]`).classList.add('vditor-outline__item--current');
+            },
+            // 初始化锚点点击事件
+            initAnchorClickEvent(listen = true) {
+                const target = this.$el.querySelector('.doc-body__toc-content');
+                if (listen) {
+                    target.addEventListener('click', this.handleAnchorClick);
+                } else {
+                    target.removeEventListener('click', this.handleAnchorClick);
+                }
+            },
+            // 处理锚点点击事件
+            handleAnchorClick(event) {
+                if (Array.from(event.target.classList).indexOf('vditor-outline__item') >= 0) {
+                    this.goAnchor(event.target.dataset.id);
+                }
+            },
+            // 初始化锚点滚动事件
+            initAnchorScrollEvent(listen = true) {
+                const target = this.$el.parentNode.parentNode;
+                if (listen) {
+                    target.addEventListener('scroll', this.handleAnchorScroll);
+                } else {
+                    target.removeEventListener('scroll', this.handleAnchorScroll);
+                }
+            },
+            // 处理锚点滚动事件
+            handleAnchorScroll(event) {
+                // 遍历找出最近的一个anchor
+                let anchorCollection = this.$el.querySelectorAll('[data-id]');
+                let lately = null;
+                anchorCollection.forEach((anchor) => {
+                    const anchorTarget = this.$el.querySelector(`#${anchor.dataset.id}`);
+                    if (anchorTarget && anchorTarget.getBoundingClientRect().top < 50 &&
+                        (!lately || anchorTarget.getBoundingClientRect().top > lately.getBoundingClientRect().top)) {
+                        lately = anchorTarget;
+                    }
+                });
+
+                if (lately) {
+                    this.goAnchor(lately.id, false);
+                }
             }
         }
     };

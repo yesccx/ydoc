@@ -16,5 +16,34 @@
             opacity: 1;
         }
     }
+}
+
+.doc-body__toc {
+    border-left: 1px solid $--color-primary-light-9;
+    width: 200px;
+
+    &-content {
+        position: sticky;
+        top: 0;
+        padding: 10px 0;
+        font-size: 13px;
+        color: $--color-primary-light-4;
+
+        .vditor-outline__item {
+            padding: 0 15px;
+            margin: 10px 0;
+            margin-left: -1px;
+            border-left: 2px solid #00000000;
+
+            &:hover {
+                color: $--color-primary-light-1;
+            }
+
+            &--current {
+                color: $--color-primary-light-1;
+                border-left: 2px solid $--color-primary-light-1;
+            }
+        }
+    }
 
 }

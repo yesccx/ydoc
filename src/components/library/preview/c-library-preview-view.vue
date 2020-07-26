@@ -59,11 +59,8 @@
             if (this.isShareSimplify) {
                 this.fetchDocInfo(this.libraryShareInfo.doc_id);
             } else {
-                const hash = this.$route.hash.slice(1);
-                const hashParams = hash.match(/^(doc|group)-(\d+)$/);
-                if (hashParams && hashParams[1] === 'doc') {
-                    this.fetchDocInfo(hashParams[2]);
-                }
+                const hashDocId = this.$route.query.doc_id || 0;
+                hashDocId && this.fetchDocInfo(hashDocId);
             }
         },
         methods: {

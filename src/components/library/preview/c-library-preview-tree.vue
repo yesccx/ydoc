@@ -107,10 +107,8 @@
                 });
             },
             onNodeClick(node) {
-                const hash = `#${node.nodeType}-${node.id}`;
-                hash !== this.$route.hash && this.$router.replace({ ...this.$route, hash });
-
                 if (node.nodeType === 'doc') {
+                    this.$router.replace({ query: { ...this.$route.query, ...{ doc_id: node.id } } }).catch(error => error);
                     this.libraryPreviewEventBus.$emit('doc-view', node.id);
                 }
             },
