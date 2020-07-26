@@ -79,7 +79,7 @@
             // 事件：文档库分组查询
             onLibraryGroupSearch({ search_key, group_id }) {
                 this.libraryList = [];
-                this.$refs.libraryList.initList({ search_key, group_id });
+                this.$refs.libraryList && this.$refs.libraryList.initList({ search_key, group_id });
             },
             // 事件：管理文档库
             onLibraryManager(library) {

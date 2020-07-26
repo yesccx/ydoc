@@ -25,6 +25,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 
     export default {
         name: 'c-home-library-list-bar',
@@ -89,8 +90,8 @@
         methods: {
             // 初始化
             async initialize() {
-                this.libraryGroupId = 'all';
                 await this.initLibraryGroups();
+                this.initDefaultLibraryGroup();
             },
             // 初始化获取所有文档库分组
             async initLibraryGroups() {
@@ -101,6 +102,21 @@
 
                 this.libraryGroups = libraryGroups;
             },
+            // 初始化默认选中文档库分组id
+            initDefaultLibraryGroup() {
+                // 获取历史选择的分组
+                const userSessionConfig = DataStore.getItem(STORE_KEYS.USER_SESSION_CONFIG, {});
+                this.libraryGroupId = userSessionConfig.home_library_list_group_id || 'all';
+
+                this.$nextTick(() => {
+                    if (this.libraryGroupId) {
+                        if (this.libraryGroupId >> 0 > 0 && this.libraryGroups.map(item => item.id).indexOf(this.libraryGroupId) < 0) {
+                            this.libraryGroupId = 'all';
+                        }
+                        this.emitSearch();
+                    }
+                });
+            },
             // 事件：文档库分组管理
             onLibraryGroupManager() {
                 this.$link.libraryGroupManager();
@@ -110,6 +126,12 @@
             // 事件：文档库分组变更
             onLibraryGroupChange() {
                 this.emitSearch();
+
+                DataStore.setItem(STORE_KEYS.USER_SESSION_CONFIG, (data) => {
+                    data = data || {};
+                    data.home_library_list_group_id = this.libraryGroupId;
+                    return data;
+                });
             },
             // 事件：切换视图风格
             onSwitchViewStyle() {
