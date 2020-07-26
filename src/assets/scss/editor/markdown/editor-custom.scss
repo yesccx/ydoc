@@ -1,38 +1,113 @@
 .vditor {
     border: none;
-    height: inherit;
-
-    code {
-        transition: opacity 0.3s;
-        opacity: 0;
-    }
-
-    code.hljs {
-        opacity: 1;
-    }
 
     &--fullscreen {
         .vditor-toolbar {
             position: initial;
             width: 100%;
         }
+
+        .vditor-wysiwyg {
+            .vditor-reset {
+                overflow: auto !important;
+            }
+        }
+    }
+
+    &-content {
+        z-index: 0;
     }
 
     &-toolbar {
+        padding: 2px 10px !important;
         border-bottom: 0;
-        padding: 0 10px !important;
+        box-shadow: 0 4px 7px -3px rgba(0,0,0,.25);
 
         &__item {
-            padding: 0 3px;
+            padding: 0 4px;
+            zoom: 1.15;
 
             svg {
                 height: 17px;
                 width: 12px;
             }
+
+            button[data-type="strike"] svg {
+                width: 14px;
+            }
+
+            button[data-type="link"] svg {
+                width: 13px;
+            }
+
+            button[data-type="list"] svg {
+                width: 13px;
+            }
+
+            button[data-type="ordered-list"] svg {
+                width: 13px;
+            }
+
+            button[data-type="check"] svg {
+                width: 14px;
+                height: 15px;
+            }
+
+            button[data-type="outdent"] svg {
+                width: 14px;
+            }
+
+            button[data-type="indent"] svg {
+                width: 14px;
+            }
+
+            button[data-type="quote"] svg {
+                width: 14px;
+            }
+
+            button[data-type="line"] svg {
+                width: 14px;
+            }
+
+            button[data-type="inline-code"] svg {
+                width: 14px;
+            }
+
+            button[data-type="code"] svg {
+                width: 14px;
+            }
+
+            button[data-type="insert-before"] svg {
+                width: 12px;
+            }
+
+            button[data-type="insert-after"] svg {
+                width: 12px;
+            }
+
+            div[data-type="upload"] svg {
+                width: 14px;
+            }
+
+            button[data-type="table"] svg {
+                width: 14px;
+            }
+
+            button[data-type="undo"] svg {
+                width: 14px;
+            }
+
+            button[data-type="redo"] svg {
+                width: 14px;
+            }
         }
     }
 
     &-wysiwyg {
+        .vditor-reset {
+            min-height: calc(100vh - 170px);
+            overflow: initial;
+        }
 
         &__block[data-type="code-block"] .vditor-wysiwyg__pre code {
             white-space: pre;
@@ -77,6 +152,15 @@
 
         &__action {
             display: none;
+        }
+
+        code {
+            transition: opacity 0.3s;
+            opacity: 0;
+
+            &.hljs {
+                opacity: 1;
+            }
         }
     }
 
@@ -124,4 +208,5 @@
             }
         }
     }
+
 }

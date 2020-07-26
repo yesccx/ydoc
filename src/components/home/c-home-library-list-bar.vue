@@ -147,6 +147,7 @@
                 font-size: 14px;
                 line-height: 12px;
                 color: $--color-primary-light-5;
+                font-weight: normal;
                 &:hover {
                     color: $--color-primary-light-2;
                 }

@@ -96,6 +96,7 @@
                         url: this.$utils.ApiUrlBuilder('v1/tools/image/upload')
                     }
                 });
+                this.$emit('inited');
             },
             // 事件：input
             onInput(value) {
@@ -130,6 +131,6 @@
     @import "~vditor/src/assets/scss/index";
 
     .c-md-vditor {
-        height: inherit;
+        @import "~@/assets/scss/editor/markdown/editor-custom";
     }
 </style>

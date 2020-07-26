@@ -1,6 +1,6 @@
 <template>
     <div class="c-library-editor-markdown">
-        <c-md-vditor ref="editor" :init-content.sync="initContent" :handler-input="onInput" />
+        <c-md-vditor ref="editor" :init-content.sync="initContent" :handler-input="onInput" @inited="onInited" />
     </div>
 </template>
 
@@ -48,14 +48,15 @@
                     setValue() { },
                     getValue() { }
                 };
+            },
+            // 事件：初始化完毕
+            onInited() {
+                this.$emit('inited');
             }
         }
     };
 </script>
 
 <style lang="scss">
-    .c-library-editor-markdown {
-        @import "~@/assets/scss/vditor/editor-custom";
-    }
-    @import "~@/assets/scss/vditor/editor-layout";
+    @import "~@/assets/scss/editor/markdown/editor-layout";
 </style>

@@ -12,7 +12,7 @@
                         <el-input v-model="library.name" placeholder="请输入文档库名称，3~32个字符" clearable></el-input>
                     </el-form-item>
                     <el-form-item label="库分组" prop="group">
-                        <el-select v-model="library.group_id" placeholder="请选择文档库分组" clearable>
+                        <el-select v-model="library.group_id" placeholder="请选择文档库分组" no-data-text="暂无分组" clearable>
                             <el-option v-for="libraryGroup in libraryGroups" :key="libraryGroup.id" :label="libraryGroup.name"
                                 :value="libraryGroup.id">
                             </el-option>
@@ -33,7 +33,7 @@
 
                 <!-- 文档库封面 -->
                 <div class="library-cover">
-                    <el-upload class="library-cover__upload" action="https://jsonplaceholder.typicode.com/posts/"
+                    <el-upload class="library-cover__upload" action=""
                         :show-file-list="false" :http-request="handlerLibraryCoverUpload">
                         <img v-if="library.cover" :src="library.cover" class="avatar">
                         <i v-else class="el-icon-plus library-cover__upload-icon"></i>

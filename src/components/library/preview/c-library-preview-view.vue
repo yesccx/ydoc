@@ -1,7 +1,7 @@
 <template>
-    <div class="c-library-preview-view" v-loading="viewLoading" element-loading-text="Loading...">
+    <div class="c-library-preview-view" v-loading="viewLoading" element-loading-text="内容加载中...">
         <el-scrollbar v-if="isView" class="scrollbar">
-            <div ref="view" class="layout-editor" :is="layout" :doc-info="docInfo"></div>
+            <div ref="view" class="layout-editor" :is="layout" :doc-info="docInfo" @inited="onInited"></div>
 
             <div class="view-operation">
                 <el-button title="刷新" :loading="viewLoading" class="refresh-btn" type="text" icon="el-icon-refresh"
@@ -17,20 +17,31 @@
 
 <script>
     import LibraryPreviewBase from '@/extends/mixins/library-preview-base';
+    import EditorCode from '@/common/constants/editor-code';
 
     export default {
         name: 'c-library-preview-view',
         components: {
             'c-library-editor-markdown-view': () => import('@/components/library/editor/view/c-library-editor-markdown-view'),
+            'c-library-editor-html-view': () => import('@/components/library/editor/view/c-library-editor-html-view'),
+            'c-library-editor-text-view': () => import('@/components/library/editor/view/c-library-editor-text-view'),
             'c-library-preview-welcome': () => import('@/components/library/preview/c-library-preview-welcome')
         },
         mixins: [LibraryPreviewBase],
+        watch: {
+            layout() {
+                this.viewLoading = true;
+            }
+        },
         computed: {
             docId() {
                 return this.docInfo.id || 0;
             },
             isView() {
                 return this.docId > 0;
+            },
+            layout() {
+                return 'c-library-editor-' + (this.docInfo.editor || EditorCode.EDITOR_DEFAULT) + '-view';
             }
         },
         data() {
@@ -38,10 +49,10 @@
                 docInfo: {
                     id: 0,
                     title: '',
-                    content: ''
+                    content: '',
+                    editor: ''
                 },
-                viewLoading: false,
-                layout: 'c-library-editor-markdown-view'
+                viewLoading: false
             };
         },
         created() {
@@ -67,7 +78,7 @@
             async fetchDocInfo(docId) {
                 const reqData = { ...this.shareAccessToken, doc_id: docId };
                 await this.$api.v1.LibraryShareDocInfo(reqData, {
-                    loading: status => { this.viewLoading = status; }
+                    loading: (status) => { this.viewLoading = status; }
                 }).then(({ resData }) => {
                     this.docInfo = resData;
                 });
@@ -75,6 +86,10 @@
             // 事件：刷新视图
             onRefresh() {
                 this.libraryPreviewEventBus.$emit('doc-view', this.docInfo.id);
+            },
+            // 事件：内容初始化成功
+            onInited() {
+                this.viewLoading = false;
             }
         }
     };
@@ -83,7 +98,7 @@
 <style lang="scss">
     .c-library-preview-view {
         .refresh-btn {
-            font-size: 40px;
+            font-size: 35px;
             color: $--color-primary-light-4;
             i {
                 font-weight: normal !important;

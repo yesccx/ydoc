@@ -45,6 +45,7 @@
                     id: 0,
                     name: '',
                     content: '',
+                    editor: '',
                     introduction: ''
                 },
                 templateInfoBackup: {},

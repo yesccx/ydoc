@@ -19,6 +19,23 @@
                             clearable>
                         </el-cascader>
                     </el-form-item>
+                    <el-divider></el-divider>
+                    <el-form-item>
+                        <span slot="label">
+                            文档编辑器 <span class="doc-editor-tip">更换编辑器后会清空原编辑内容，但不保存实际不影响！</span>
+                        </span>
+                        <div class="doc-editor">
+                            <el-select class="doc-editor__select" v-model="docUseEditor" placeholder="请选择编辑器">
+                                <el-option v-for="editor in editorCollection" :key="editor.value" :label="editor.name"
+                                    :value="editor.value">
+                                </el-option>
+                            </el-select>
+                            <el-popconfirm @onConfirm="onDocEditorModify" icon="el-icon-warning" title="是否确认更换该文档的编辑器？！">
+                                <el-button slot="reference" icon="el-icon-c-scale-to-original" type="primary" plain>
+                                    更换编辑器</el-button>
+                            </el-popconfirm>
+                        </div>
+                    </el-form-item>
                 </el-form>
             </div>
 
@@ -36,6 +53,7 @@
 <script>
     import BaseDrawer from '@/common/mixins/base-drawer';
     import LibraryContent from '@/extends/mixins/library-content';
+    import EditorCode from '@/common/constants/editor-code';
 
     export default {
         name: 'c-library-drawer-doc',
@@ -52,12 +70,19 @@
                     id: 0,
                     title: '',
                     groupId: 0,
+                    editor: '',
                     libraryId: 0
                 },
+                editorCollection: [
+                    { name: 'Markdown', value: EditorCode.EDITOR_MARKDOWN },
+                    { name: '富文本', value: EditorCode.EDITOR_HTML },
+                    { name: '纯文本', value: EditorCode.EDITOR_TEXT }
+                ],
                 docInfoBackup: {},
                 groupTree: [],
                 saveLoading: false,
-                groupTreeLoading: false
+                groupTreeLoading: false,
+                docUseEditor: ''
             };
         },
         methods: {
@@ -69,6 +94,7 @@
 
                     // 准备文档信息
                     this.docInfo = isSaveAsMode ? this.$utils.CloneDeep(docInfo) : docInfo;
+                    this.docUseEditor = this.docInfo.editor;
                     this.docInfoBackup = this.$utils.CloneDeep(docInfo);
 
                     // 初始化
@@ -127,6 +153,14 @@
                 const docInfoBackup = this.$utils.CloneDeep(this.docInfoBackup);
                 this.docInfo.groupId = docInfoBackup.groupId;
                 this.docInfo.title = docInfoBackup.title;
+            },
+            // 事件：文档使用的编辑器切换
+            onDocEditorModify() {
+                if (this.docInfo.editor !== this.docUseEditor) {
+                    this.docInfo.editor = this.docUseEditor;
+                    this.docInfo.content = '';
+                }
+                this.visibleDrawer = false;
             }
         }
     };
@@ -185,6 +219,23 @@
         .doc-group-tree {
             width: 100%;
             display: inline-block;
+            margin-right: 5px;
+        }
+
+        .doc-editor {
+            display: flex;
+            justify-content: space-between;
+
+            &__select {
+                width: 100%;
+                margin-right: 5px;
+            }
+
+            &-tip {
+                font-size: 10px;
+                font-weight: normal;
+                color: $--color-warning;
+            }
         }
 
         .doc-group-operation {

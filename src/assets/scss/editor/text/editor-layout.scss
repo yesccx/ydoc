@@ -1,0 +1,12 @@
+.library-view-style--medium {
+    .c-library-editor-text {
+        background-color: #fcfcfc !important;
+        padding: 20px;
+        display: flex;
+
+        .el-textarea {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    }
+}

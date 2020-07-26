@@ -15,9 +15,10 @@
             <ul>
                 <li class="user-preference__item">
                     <div class="user-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="启用后，当您在文档库中未开启自定义偏好设置时，将使用该预设偏好设置" placement="top-start">
-                            <span class="field">是否启用偏好设置 <i class="el-icon-info"></i></span>
-                        </el-tooltip>
+                        <span class="field">
+                            <i class="el-icon-set-up"></i> <span>是否启用偏好设置</span>
+                            <span class="field-tip">启用后，当您在文档库中未开启自定义偏好设置时，将使用该预设偏好设置</span>
+                        </span>
                     </div>
                     <span class="user-preference__item-operate">
                         <el-switch v-show="!usePreferenceLoading" v-model="usePreferenceStatus"
@@ -38,13 +39,24 @@
                 </li> -->
                 <li class="user-preference__item">
                     <div class="user-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="影响所有文档默认内容（内容取自模板）" placement="top-start">
-                            <span class="field">文档默认模板 <i class="el-icon-info"></i></span>
-                        </el-tooltip>
-                        <span class="value">{{ userConfigParse['library_doc_default_template'] || '暂无' }}</span>
+                        <span class="field">
+                            <i class="el-icon-document"></i> <span>文档默认模板</span>
+                            <span class="field-tip">影响所有文档默认内容（内容取自模板）</span>
+                        </span>
                     </div>
                     <span class="user-preference__item-operate" @click="onWillDocDefaultTemplateModify">
-                        从模板列表选择 <i class="el-icon-arrow-right"></i>
+                        {{ userConfigParse['library_doc_default_template'] || '无' }} <i class="el-icon-arrow-right"></i>
+                    </span>
+                </li>
+                <li class="user-preference__item">
+                    <div class="user-preference__item-content">
+                        <span class="field">
+                            <i class="el-icon-edit-outline"></i> <span>文档默认编辑器</span>
+                            <span class="field-tip">新建文档时默认使用的编辑器（当未使用模板时才有效，否则依据模板的编辑器）</span>
+                        </span>
+                    </div>
+                    <span class="user-preference__item-operate" @click="onWillDocDefaultEditorModify">
+                        {{ userConfigParse['library_doc_default_editor'] || '无' }} <i class="el-icon-arrow-right"></i>
                     </span>
                 </li>
             </ul>
@@ -57,6 +69,10 @@
         <!-- 文档默认模板设置Modal -->
         <c-config-doc-template-modal :default-template="docDefaultTemplateModal.default"
             :visible.sync="docDefaultTemplateModal.visible" @template-modify="onDocDefaultTemplateModify" />
+
+        <!-- 文档默认编辑器设置Modal -->
+        <c-config-doc-editor-modal :default-editor="docDefaultEditorModal.default" :visible.sync="docDefaultEditorModal.visible"
+            @editor-modify="onDocDefaultEditorModify" />
     </div>
 </template>
 
@@ -79,13 +95,15 @@
                     this.usePreferenceStatus = data.use_preference_settings >> 0 === 1;
                     this.docDefaultStyleModal.default = data.library_default_style || '';
                     this.docDefaultTemplateModal.default = (data.library_doc_default_template || 0) >> 0;
+                    this.docDefaultEditorModal.default = data.library_doc_default_editor || '';
                 },
                 immediate: true
             }
         },
         components: {
             'c-config-library-style-modal': () => import('@/components/config/c-config-library-style-modal'),
-            'c-config-doc-template-modal': () => import('@/components/config/c-config-doc-template-modal')
+            'c-config-doc-template-modal': () => import('@/components/config/c-config-doc-template-modal'),
+            'c-config-doc-editor-modal': () => import('@/components/config/c-config-doc-editor-modal')
         },
         data() {
             return {
@@ -99,6 +117,10 @@
                 docDefaultTemplateModal: {
                     visible: false,
                     default: 0
+                },
+                docDefaultEditorModal: {
+                    visible: false,
+                    default: ''
                 }
             };
         },
@@ -146,9 +168,24 @@
             onWillDocDefaultTemplateModify() {
                 this.docDefaultTemplateModal.visible = true;
             },
+            // 事件：将要文档默认编辑器修改
+            onWillDocDefaultEditorModify() {
+                this.docDefaultEditorModal.visible = true;
+            },
             // 事件：确认文档默认模板修改
             onDocDefaultTemplateModify({ selectTemplate, handleLoading, done }) {
                 const reqData = { field: 'library_doc_default_template', value: selectTemplate };
+                this.$api.v1.UserConfigFieldModify(reqData, {
+                    loading: (status) => { handleLoading(status); }
+                }).then(() => {
+                    this.$tip.success('修改成功');
+                    this.$emit('preference-modifyed');
+                    done();
+                });
+            },
+            // 事件：确认文档默认编辑器修改
+            onDocDefaultEditorModify({ selectEditor, handleLoading, done }) {
+                const reqData = { field: 'library_doc_default_editor', value: selectEditor };
                 this.$api.v1.UserConfigFieldModify(reqData, {
                     loading: (status) => { handleLoading(status); }
                 }).then(() => {
@@ -188,8 +225,8 @@
         .user-preference__item {
             display: flex;
             justify-content: space-between;
-            align-content: center;
-            padding: 18px 5px;
+            align-items: center;
+            padding: 15px 0;
             line-height: 22px;
 
             &:not(:last-of-type) {
@@ -198,20 +235,18 @@
 
             &-content {
                 display: flex;
+
                 .field {
-                    font-size: 13px;
+                    font-size: 15px;
                     line-height: 24px;
-                    width: 160px;
-                    color: $--color-primary-light-6;
+                    color: $--color-primary-light-3;
                 }
-                .value {
-                    max-width: 500px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+
+                .field-tip {
+                    font-size: 11px;
+                    line-height: 24px;
+                    color: $--color-primary-light-6;
                     display: block;
-                    font-size: 16px;
-                    color: $--color-primary-light-1;
                 }
             }
 

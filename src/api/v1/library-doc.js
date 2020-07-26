@@ -2,17 +2,17 @@ import axios from '@/kernel/axios';
 
 // 创建文档
 export const axiosLibraryDocCreate = (param = {
-    library_id: 0, group_id: 0, title: '', content: ''
+    library_id: 0, group_id: 0, title: '', content: '', 'editor': ''
 }, conf = {}) => axios.post('/v1/library/doc/create', param, conf);
 
 // 编辑文档
 export const axiosLibraryDocModify = (param = {
-    library_id: 0, id: 0, group_id: 0, title: '', content: ''
+    library_id: 0, id: 0, group_id: 0, title: '', content: '', 'editor': ''
 }, conf = {}) => axios.post('/v1/library/doc/modify', param, conf);
 
 // 编辑文档基础信息
 export const axiosLibraryDocBaseModify = (param = {
-    library_id: 0, id: 0, group_id: 0, title: ''
+    library_id: 0, id: 0, group_id: 0, title: '', 'editor': ''
 }, conf = {}) => axios.post('/v1/library/doc/base-modify', param, conf);
 
 // 删除文档

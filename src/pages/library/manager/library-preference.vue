@@ -6,8 +6,11 @@
             <ul>
                 <li class="library-preference__item">
                     <div class="library-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="启用后，文档库的所有成员将使用该偏好设置" placement="top-start">
-                            <span class="field">启用文档库偏好设置 <i class="el-icon-info"></i></span>
+                        <el-tooltip effect="dark" :open-delay="500" content="" placement="top-start">
+                            <span class="field">
+                                <i class="el-icon-set-up"></i> <span>启用文档库偏好设置</span>
+                                <span class="field-tip">启用后，文档库的所有成员将使用该偏好设置</span>
+                            </span>
                         </el-tooltip>
                     </div>
                     <span class="library-preference__item-operate">
@@ -18,13 +21,13 @@
                 </li>
                 <li class="library-preference__item">
                     <div class="library-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="影响文档库中的文档视图风格" placement="top-start">
-                            <span class="field">文档视图风格 <i class="el-icon-info"></i></span>
-                        </el-tooltip>
-                        <span class="value">{{ libraryConfigParse['library_default_style'] || '默认超宽风格' }}</span>
+                        <span class="field">
+                            <i class="el-icon-monitor"></i> <span>文档视图风格</span>
+                            <span class="field-tip">影响文档库中的文档视图风格（已分享的也会被影响）</span>
+                        </span>
                     </div>
                     <span class="library-preference__item-operate" @click="onWillDocDefaultStyleModify">
-                        修改 <i class="el-icon-arrow-right"></i>
+                        {{ libraryConfigParse['library_default_style'] || '默认超宽风格' }} <i class="el-icon-arrow-right"></i>
                     </span>
                 </li>
                 <!-- <li class="library-preference__item">
@@ -43,9 +46,10 @@
             <ul>
                 <li class="library-preference__item">
                     <div class="library-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="启用后，会覆盖文档库的偏好设置（仅覆盖有相同配置项）" placement="top-start">
-                            <span class="field">启用自定义偏好设置 <i class="el-icon-info"></i></span>
-                        </el-tooltip>
+                        <span class="field">
+                            <i class="el-icon-set-up"></i> <span>启用自定义偏好设置</span>
+                            <span class="field-tip">启用后，会覆盖文档库的偏好设置（仅覆盖有相同配置项）</span>
+                        </span>
                     </div>
                     <span class="library-preference__item-operate">
                         <el-switch v-show="!memberUsePreferenceLoading" v-model="memberUsePreferenceStatus"
@@ -55,13 +59,13 @@
                 </li>
                 <li class="library-preference__item">
                     <div class="library-preference__item-content">
-                        <el-tooltip effect="dark" :open-delay="500" content="影响之后新创建的文档默认内容（内容取自模板）" placement="top-start">
-                            <span class="field">文档默认模板 <i class="el-icon-info"></i></span>
-                        </el-tooltip>
-                        <span class="value">{{ memberLibraryConfigParse['library_doc_default_template'] || '暂无' }}</span>
+                        <span class="field">
+                            <i class="el-icon-document"></i> <span>文档默认模板</span>
+                            <span class="field-tip">影响之后新创建的文档默认内容（内容取自模板）</span>
+                        </span>
                     </div>
                     <span class="library-preference__item-operate" @click="onWillMemberDocDefaultTemplateModify">
-                        从模板列表选择<i class="el-icon-arrow-right"></i>
+                        {{ memberLibraryConfigParse['library_doc_default_template'] || '暂无' }} <i class="el-icon-arrow-right"></i>
                     </span>
                 </li>
             </ul>
@@ -234,8 +238,8 @@
         .library-preference__item {
             display: flex;
             justify-content: space-between;
-            align-content: center;
-            padding: 22px 5px;
+            align-items: center;
+            padding: 15px 5px;
             line-height: 22px;
 
             &:not(:last-of-type) {
@@ -244,20 +248,18 @@
 
             &-content {
                 display: flex;
+
                 .field {
-                    font-size: 13px;
+                    font-size: 15px;
                     line-height: 24px;
-                    width: 200px;
-                    color: $--color-primary-light-5;
+                    color: $--color-primary-light-3;
                 }
-                .value {
-                    max-width: 500px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
+
+                .field-tip {
+                    font-size: 11px;
+                    line-height: 24px;
+                    color: $--color-primary-light-6;
                     display: block;
-                    font-size: 16px;
-                    color: $--color-primary-light-1;
                 }
             }
 

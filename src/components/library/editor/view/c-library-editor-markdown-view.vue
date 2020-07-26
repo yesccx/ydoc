@@ -30,12 +30,17 @@
             this.render(this.docInfo.content);
         },
         methods: {
-            render(value) {
-                VditorMethod.preview(this.$refs.markdown, value, {
+            async render(value) {
+                await VditorMethod.preview(this.$refs.markdown, value, {
                     hljs: {
                         lineNumber: true
                     }
                 });
+                this.onInited();
+            },
+            // 事件：初始化成功
+            onInited() {
+                this.$emit('inited');
             }
         }
     };
@@ -45,11 +50,8 @@
     @import "~vditor/src/assets/scss/index";
 
     .c-library-editor-markdown-view {
-        @import "~@/assets/scss/vditor/preview-custom";
-        .doc-title {
-            text-align: center;
-            margin-bottom: 50px;
-        }
+        @import "~@/assets/scss/editor/markdown/preview-custom";
     }
-    @import "~@/assets/scss/vditor/preview-layout";
+
+    @import "~@/assets/scss/editor/markdown/preview-layout";
 </style>

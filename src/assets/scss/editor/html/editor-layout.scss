@@ -1,0 +1,33 @@
+.library-view-style--full {}
+
+.library-view-style--medium {
+    .c-library-editor-html {
+        .tox {
+            &-tinymce {
+                background-color: #fcfcfc !important;
+            }
+
+            &-sidebar-wrap {
+                background-color: #fff;
+                width: 950px;
+                margin: 20px auto;
+                padding: 10px 25px !important;
+                box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+            }
+
+            &-toolbar__primary,
+            &-toolbar__overflow {
+                margin: 0 auto;
+                justify-content: center;
+            }
+
+            &-fullscreen {
+                background-color: #fcfcfc !important;
+            }
+
+            &-edit-area {
+                background: white;
+            }
+        }
+    }
+}

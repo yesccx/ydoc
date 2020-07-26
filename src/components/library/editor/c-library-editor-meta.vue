@@ -12,14 +12,14 @@
                 </span>
             </span>
             <el-button-group class="fr">
-                <el-button size="mini" @click="onDocHistory">历史记录</el-button>
+                <el-button :disabled="meta.id >> 0 === 0" size="mini" @click="onDocHistory">历史记录</el-button>
                 <el-dropdown trigger="click" type="primary" size="mini" icon="el-icon-circle-check" @command="onHandleCommand"
                     @click="onSaveDoc" split-button>
                     保存文档
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="doc-info">文档信息</el-dropdown-item>
                         <el-dropdown-item command="doc-remove">删除文档</el-dropdown-item>
-                        <el-dropdown-item command="doc-switch-style">切换风格</el-dropdown-item>
+                        <el-dropdown-item command="doc-switch-style">切换编辑器</el-dropdown-item>
                         <el-dropdown-item command="doc-save-as" divided>另存为文档</el-dropdown-item>
                         <el-dropdown-item command="doc-save-to-template" divided>另存为模板</el-dropdown-item>
                         <el-dropdown-item command="doc-use-template">使用模板</el-dropdown-item>
@@ -53,6 +53,9 @@
             },
             'meta.groupId'(val) {
                 this.$emit('input');
+            },
+            'meta.editor'(val) {
+                this.$emit('input');
             }
         },
         methods: {
@@ -66,6 +69,7 @@
                 const docInfo = this.meta;
                 switch (command) {
                     case 'doc-info':
+                    case 'doc-switch-style':
                         this.libraryContentEventBus.$emit('editor-doc-info', { docInfo });
                         break;
                     case 'doc-use-template':
@@ -78,6 +82,7 @@
                         this.libraryContentEventBus.$emit('editor-doc-template-info', {
                             id: 0,
                             introduction: '',
+                            editor: docInfo.editor,
                             name: '模板' + this.$utils.DateFormat(Date.now() / 1000),
                             content: docInfo.content
                         });
@@ -109,6 +114,9 @@
 <style lang="scss" scoped>
     .c-library-editor-meta {
         margin: 10px 2px;
+        border-bottom: 1px solid $--color-primary-light-8;
+        padding-bottom: 10px;
+        margin-bottom: 0;
     }
     .meta-operation {
         &__title {

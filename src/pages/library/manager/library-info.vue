@@ -20,8 +20,8 @@
                 <!-- 封面 -->
                 <div class="library-cover">
                     <span class="library-cover__lable">文档库封面</span>
-                    <el-upload class="library-cover__upload" action="https://jsonplaceholder.typicode.com/posts/"
-                        :show-file-list="false" :http-request="handlerLibraryCoverUpload">
+                    <el-upload class="library-cover__upload" action="" :show-file-list="false"
+                        :http-request="handlerLibraryCoverUpload">
                         <el-image :src="library.cover" class="avatar">
                             <div slot="error" class="image-slot__error">
                                 ydoc

@@ -24,6 +24,9 @@
                                     <el-form-item label="模板名">
                                         <span>{{ template.name }}</span>
                                     </el-form-item>
+                                    <el-form-item label="模板编辑器">
+                                        <el-tag>{{ template.editor || EditorCode.EDITOR_DEFAULT }}</el-tag>
+                                    </el-form-item>
                                     <el-form-item label="模板简介">
                                         <span>{{ template.introduction }}</span>
                                     </el-form-item>
@@ -60,6 +63,7 @@
 <script>
     import BaseDrawer from '@/common/mixins/base-drawer';
     import LibraryContent from '@/extends/mixins/library-content';
+    import EditorCode from '@/common/constants/editor-code';
 
     export default {
         name: 'c-library-drawer-doc-templates',
@@ -83,6 +87,7 @@
         },
         data() {
             return {
+                EditorCode,
                 searchKey: '',
                 templateLoading: true,
                 templateCollection: []

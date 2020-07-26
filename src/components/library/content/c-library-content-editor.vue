@@ -12,7 +12,7 @@
 
                 <!-- 编辑区 -->
                 <el-scrollbar style="height: calc(100vh - 125px);">
-                    <c-library-editor class="little-view" ref="docEditor" :init-content="docEditor.content"
+                    <c-library-editor ref="docEditor" :init-content="docEditor.content" :editor="docEditor.editor"
                         @input="onEditorInput(docEditor)" />
                 </el-scrollbar>
             </el-tab-pane>
@@ -25,6 +25,7 @@
 
 <script>
     import LibraryContent from '@/extends/mixins/library-content';
+    import EditorCode from '@/common/constants/editor-code';
 
     export default {
         name: 'c-library-content-editor',
@@ -85,6 +86,15 @@
                     this.useModifyDocEditor(docId);
                 });
 
+                // 事件：活动文档保存
+                bus.$on('active-doc-save', async ({ done }) => {
+                    const docId = this.activeDocEditor;
+                    if (docId && docId !== '0') {
+                        await this.docSaveById(docId);
+                        typeof done === 'function' && done();
+                    }
+                });
+
                 // 事件：文档保存
                 bus.$on('doc-save', async ({ docId, done }) => {
                     await this.docSaveById(docId);
@@ -102,6 +112,7 @@
                         library_id: docInfo.libraryId,
                         title: docInfo.title,
                         content: sourceDocInfo.content,
+                        editor: docInfo.editor,
                         group_id: docInfo.groupId
                     }, done);
                 });
@@ -117,10 +128,12 @@
                     const editorIndex = this.docEditorMap[this.activeDoc.id];
                     if (!(activeDocContent.trim())) {
                         this.activeDoc.content = template.content;
+                        this.activeDoc.editor = template.editor;
                         this.$refs.docEditor[editorIndex].setContent(template.content);
                     } else {
                         this.$utils.Confirm('是否使用该模板，该操作将会替换正在编辑的内容！').then(() => {
                             this.activeDoc.content = template.content;
+                            this.activeDoc.editor = template.editor;
                             this.tagDocNotSave(this.activeDoc.id);
                             this.$refs.docEditor[editorIndex].setContent(template.content);
                         });
@@ -154,10 +167,13 @@
                 bus.$on('doc-history-recovery', (docHistory) => {
                     const editorIndex = this.docEditorMap[docHistory.doc_id];
                     const docInfo = this.docEditorCollection[editorIndex];
+
                     docInfo.groupId = docHistory.group_id;
                     docInfo.title = docHistory.title;
                     docInfo.content = docHistory.content;
-                    this.$refs.docEditor[editorIndex].setContent(docInfo.content);
+                    docInfo.editor = docHistory.editor;
+
+                    this.$refs.docEditor[editorIndex].setContent && this.$refs.docEditor[editorIndex].setContent(docInfo.content);
 
                     this.tagDocNotSave(docHistory.doc_id);
                 });
@@ -194,7 +210,9 @@
                     library_id: initialDocInfo.libraryId,
                     title: initialDocInfo.title,
                     content: initialDocInfo.content,
-                    group_id: initialDocInfo.groupId
+                    editor: initialDocInfo.editor,
+                    group_id: initialDocInfo.groupId,
+                    real_doc_id: docId
                 };
 
                 await this.docSave(docInfo, ({ resData, $resError }) => {
@@ -225,7 +243,7 @@
                     this.$tip.error(res.resMsg);
                 });
 
-                this.untagDocNotSave(docInfo.library_doc_id);
+                this.untagDocNotSave(docInfo.real_doc_id || 0);
 
                 typeof done === 'function' && done(resData);
 
@@ -239,7 +257,7 @@
             // 取消标记某个选项卡未保存
             untagDocNotSave(realDocId) {
                 this.docEditorSaveStatusCollection = this.docEditorSaveStatusCollection.filter((docId) => {
-                    return docId >> 0 !== realDocId >> 0;
+                    return String(docId) !== String(realDocId);
                 });
             },
             // 使用创建文档型的编辑器选择卡
@@ -256,6 +274,9 @@
                     libraryId: this.libraryId,
                     title: docTitle,
                     content: docDefaultTempalte.content || '',
+                    editor: docDefaultTempalte.editor || (
+                        this.libraryMemberPreference.config.library_doc_default_editor || EditorCode.EDITOR_DEFAULT
+                    ),
                     groupId: groupId || docDefaultTempalte.groupId,
                     updateTime: 0
                 });
@@ -269,6 +290,7 @@
                     libraryId: docInfo.library_id,
                     title: docInfo.title,
                     content: docInfo.content,
+                    editor: docInfo.editor || EditorCode.EDITOR_DEFAULT,
                     groupId: docInfo.group_id,
                     updateTime: docInfo.update_time
                 });

@@ -7,12 +7,12 @@ export const axiosLibraryDocTemplateCollection = (param = {
 
 // 创建文档模板
 export const axiosLibraryDocTemplateCreate = (param = {
-    name: 0, content: '', introduction: ''
+    name: 0, content: '', introduction: '', editor: ''
 }, conf = {}) => axios.post('/v1/library/doc-template/create', param, conf);
 
 // 编辑文档模板
 export const axiosLibraryDocTemplateModify = (param = {
-    library_doc_template_id: 0, name: 0, content: '', introduction: ''
+    library_doc_template_id: 0, name: 0, content: '', introduction: '', editor: ''
 }, conf = {}) => axios.post('/v1/library/doc-template/modify', param, conf);
 
 // 删除文档模板

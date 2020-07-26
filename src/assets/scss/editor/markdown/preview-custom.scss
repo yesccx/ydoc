@@ -11,9 +11,10 @@
     code {
         transition: opacity 0.3s;
         opacity: 0;
+
+        &.hljs {
+            opacity: 1;
+        }
     }
 
-    code.hljs {
-        opacity: 1;
-    }
 }
