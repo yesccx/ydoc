@@ -8,7 +8,8 @@
 export const keys = {
     USER_SESSION: 'user_session',
     SHARE_ACCESS_PASSWORD: 'share_access_password',
-    USER_SESSION_CONFIG: 'user_session_config'
+    USER_SESSION_CONFIG: 'user_session_config',
+    LIBRARY_CONTENT_SIDE_STATUS: 'library_content_side_status'
 };
 
 const DataStore = {

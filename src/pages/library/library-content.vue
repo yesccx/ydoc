@@ -46,6 +46,7 @@
     import BasePage from '@/common/mixins/base-page';
     import LibraryManager from '@/extends/mixins/library-manager';
     import libraryContentEventBus from '@/extends/utils/library-content-event-bus';
+    import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 
     export default {
         name: 'page-library-content',
@@ -77,6 +78,9 @@
             };
         },
         async created() {
+            // 还原侧边栏收缩状态
+            this.sideStatus = DataStore.getItem(STORE_KEYS.LIBRARY_CONTENT_SIDE_STATUS, true);
+
             const libraryId = this.$utils.Input('library_id/d', 0);
             if (libraryId <= 0) {
                 await this.$utils.Error('参数错误，缺少必需参数');
@@ -114,6 +118,7 @@
             // 事件：改变侧边栏状态
             onChangeSide() {
                 this.sideStatus = !this.sideStatus;
+                DataStore.setItem(STORE_KEYS.LIBRARY_CONTENT_SIDE_STATUS, this.sideStatus);
             }
         }
     };
