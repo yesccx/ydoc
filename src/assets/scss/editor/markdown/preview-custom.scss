@@ -21,9 +21,16 @@
 .doc-body__toc {
     border-left: 1px solid $--color-primary-light-9;
     width: 200px;
+    margin-right: 20px;
+
+    .el-scrollbar {
+        position: sticky;
+        height: calc(100vh - 50px);
+        top: 0;
+    }
+
 
     &-content {
-        position: sticky;
         top: 0;
         padding: 10px 0;
         font-size: 13px;
@@ -32,7 +39,6 @@
         .vditor-outline__item {
             padding: 0 15px;
             margin: 10px 0;
-            margin-left: -1px;
             border-left: 2px solid #00000000;
 
             &:hover {

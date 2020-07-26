@@ -4,7 +4,9 @@
         <div class="doc-body">
             <div class="doc-body__content vditor-reset" ref="markdown"></div>
             <div class="doc-body__toc">
-                <div ref="toc" class="doc-body__toc-content"></div>
+                <el-scrollbar>
+                    <div ref="toc" class="doc-body__toc-content"></div>
+                </el-scrollbar>
             </div>
         </div>
     </div>
@@ -38,6 +40,11 @@
             this.initAnchorClickEvent(false);
             this.initAnchorScrollEvent(false);
         },
+        data() {
+            return {
+                lastScroll: 0
+            };
+        },
         methods: {
             async render(value) {
                 await VditorMethod.preview(this.$refs.markdown, value, {
@@ -63,7 +70,17 @@
             goAnchor(key, scroll = true) {
                 this.$router.replace({ ...this.$route, hash: '#' + key }).catch(error => error);
                 if (scroll) {
-                    this.$el.parentNode.parentNode.scrollTop = this.$el.querySelector(`#${key}`).offsetTop;
+                    this.$el.parentNode.parentNode.scrollTop = this.$el.querySelector(`[id="${key}"]`).offsetTop;
+                } else {
+                    // 内容滚动的同时，大纲列表也要跟着滚动（防抖）
+                    const lastScroll = this.lastScroll;
+                    setTimeout(() => {
+                        if (lastScroll !== this.lastScroll) {
+                            return false;
+                        }
+                        const scrollTop = this.$el.querySelector(`[data-id="${key}"]`).getBoundingClientRect().top;
+                        this.$refs.toc.parentNode.parentNode.scrollTop = scrollTop - 200;
+                    }, 50);
                 }
 
                 const currentItem = this.$el.querySelector('.vditor-outline__item--current');
@@ -96,11 +113,13 @@
             },
             // 处理锚点滚动事件
             handleAnchorScroll(event) {
+                this.lastScroll = Date.now();
+
                 // 遍历找出最近的一个anchor
                 let anchorCollection = this.$el.querySelectorAll('[data-id]');
                 let lately = null;
                 anchorCollection.forEach((anchor) => {
-                    const anchorTarget = this.$el.querySelector(`#${anchor.dataset.id}`);
+                    const anchorTarget = this.$el.querySelector(`[id="${anchor.dataset.id}"]`);
                     if (anchorTarget && anchorTarget.getBoundingClientRect().top < 50 &&
                         (!lately || anchorTarget.getBoundingClientRect().top > lately.getBoundingClientRect().top)) {
                         lately = anchorTarget;
