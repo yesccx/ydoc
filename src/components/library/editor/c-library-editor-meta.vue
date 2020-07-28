@@ -12,18 +12,18 @@
                 </span>
             </span>
             <el-button-group class="fr">
-                <el-button :disabled="meta.id >> 0 === 0" size="mini" @click="onDocHistory">历史记录</el-button>
+                <el-button :disabled="isAddMode" size="mini" @click="onDocHistory">历史记录</el-button>
                 <el-dropdown trigger="click" type="primary" size="mini" icon="el-icon-circle-check" @command="onHandleCommand"
                     @click="onSaveDoc" split-button>
                     保存文档
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item command="doc-info">文档信息</el-dropdown-item>
-                        <el-dropdown-item command="doc-remove">删除文档</el-dropdown-item>
+                        <el-dropdown-item command="doc-remove" :disabled="isAddMode">删除文档</el-dropdown-item>
                         <el-dropdown-item command="doc-switch-style">切换编辑器</el-dropdown-item>
                         <el-dropdown-item command="doc-save-as" divided>另存为文档</el-dropdown-item>
                         <el-dropdown-item command="doc-save-to-template" divided>另存为模板</el-dropdown-item>
                         <el-dropdown-item command="doc-use-template">使用模板</el-dropdown-item>
-                        <el-dropdown-item command="doc-share" divided>分享</el-dropdown-item>
+                        <el-dropdown-item command="doc-share" :disabled="isAddMode" divided>分享</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-button-group>
@@ -45,6 +45,11 @@
             loading: {
                 type: Boolean,
                 default: false
+            }
+        },
+        computed: {
+            isAddMode() {
+                return this.meta.id >> 0 === 0;
             }
         },
         watch: {

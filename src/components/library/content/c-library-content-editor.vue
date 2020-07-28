@@ -140,20 +140,9 @@
                     }
                 });
 
-                // 事件：文档被删除
-                bus.$on('doc-removed', ({ docId, groupId = -1 }) => {
-                    docId = String(docId);
-                    const docInfo = this.fetchEditorDocInfo(docId);
-                    if (docInfo) {
-                        docInfo.id = 't' + this.creatorCounter++;
-                        if (groupId >= 0) {
-                            docInfo.groupId = groupId;
-                        }
-                        if (this.activeDocEditor === docId) {
-                            this.handleActiveDocEditor(docInfo.id);
-                        }
-                        this.tagDocNotSave(docInfo.id);
-                    }
+                // 事件：文档编辑器被删除
+                bus.$on('doc-removed', ({ docId }) => {
+                    this.onRemoveDocEditor(docId);
                 });
 
                 // 事件：文档被修改
@@ -347,7 +336,7 @@
                 }
 
                 this.docEditorCollection = docEditorCollection.filter(docEditor => docEditor.id !== removeDocEditor);
-                this.untagDocNotSave(activeDocEditor);
+                this.untagDocNotSave(removeDocEditor);
             },
             // 事件：编辑器输入
             onEditorInput(docEditor) {

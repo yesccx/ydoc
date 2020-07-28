@@ -212,7 +212,7 @@
                     this.$tip.success('删除成功');
                     removeRes = true;
                     resData.forEach((docId) => {
-                        this.libraryContentEventBus.$emit('doc-removed', { docId, groupId: 0 });
+                        this.libraryContentEventBus.$emit('doc-removed', { docId });
                     });
                 }).catch(({ resMsg }) => {
                     this.$tip.error(resMsg);
@@ -354,7 +354,7 @@
                     group.nodeType = group.nodeType ? group.nodeType : 'group';
                     group.key = group.nodeType + group.id;
                     group.children = this.deepBuildDataTree(group.children, docGroup) || [];
-                    if (docGroup[group.id]) {
+                    if (docGroup[group.id] && group.nodeType === 'group') {
                         group.children = group.children.concat(docGroup[group.id]);
                     }
 

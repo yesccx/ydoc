@@ -104,7 +104,7 @@ const buildResposne = function (res) {
     if (!response.$resSuccess) {
         // 发生错误时是否上报
         if (!res.config.report) {
-            Tip.error(response.resMsg);
+            Tip.error(response.resMsg || '未知错误');
             return new Promise(() => { });
         } else {
             return Promise.reject(response);

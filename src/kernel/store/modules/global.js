@@ -10,9 +10,7 @@ import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 const state = {
     pageError: false, // 页面错误状态
     userMessageUnreadCount: 0, // 用户消息未读数
-    userSessionConfig: {
-        home_view_style: ''
-    } // 用户会话期间的配置参数
+    userSessionConfig: {} // 用户会话期间的配置参数
 };
 
 const getters = {
