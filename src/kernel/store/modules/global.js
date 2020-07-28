@@ -8,6 +8,7 @@
 import DataStore, { keys as STORE_KEYS } from '@/common/utils/datastore-utils';
 
 const state = {
+    pageLoading: false, // 根级页面loading
     pageError: false, // 页面错误状态
     userMessageUnreadCount: 0, // 用户消息未读数
     userSessionConfig: {} // 用户会话期间的配置参数
@@ -42,6 +43,10 @@ const mutations = {
     // 设置用户会话期间的配置参数
     setUserSessionConfig(state, config) {
         state.userSessionConfig = config;
+    },
+    // 设置根级页面loading
+    setPageLoading(state, status) {
+        state.pageLoading = status;
     }
 };
 

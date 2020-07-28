@@ -20,6 +20,7 @@ const RouterInstance = new Router({ mode: APP_ENV_IS_DEV ? '' : 'history', route
 RouterInstance.beforeEach(async (to, from, next) => {
     if (to && from && to.name !== from.name) {
         NProgress.start();
+        Store.commit('global/setPageLoading', true);
     }
 
     // 自动设置页面标题
@@ -31,9 +32,11 @@ RouterInstance.beforeEach(async (to, from, next) => {
     let userInfo = await Store.dispatch('userSession/init');
     if (to.meta.auth === PAGE_AUTH_IS_USER.auth && (!userInfo || userInfo.uid <= 0)) {
         NProgress.done();
+        Store.commit('global/setPageLoading', false);
         next({ name: 'user-login', query: { r: to.fullPath } });
     } else if (to.meta.auth === PAGE_AUTH_IS_GUEST.auth && userInfo.uid > 0) {
         NProgress.done();
+        Store.commit('global/setPageLoading', false);
         next('/');
     } else {
         next();
@@ -44,6 +47,7 @@ RouterInstance.beforeEach(async (to, from, next) => {
 RouterInstance.afterEach(() => {
     Store.commit('global/setPageError', false);
     NProgress.done();
+    Store.commit('global/setPageLoading', false);
 });
 
 export default RouterInstance;
