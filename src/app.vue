@@ -40,6 +40,10 @@
         filter: blur(1.5px);
     }
 
+    #app {
+        transition: filter 0.3s;
+    }
+
     .page-loading-mask {
         position: fixed;
         top: 0;
