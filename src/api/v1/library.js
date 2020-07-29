@@ -33,3 +33,8 @@ export const axiosLibraryCollection = (param = {}, conf = {}) => axios.post('/v1
 
 // 归档文档库
 export const axiosLibraryPermanent = (param = {}, conf = {}) => axios.post('/v1/library/permanent', param, conf);
+
+// 文档库内容全文检索
+export const axiosLibraryFulltextSearch = (param = {
+    library_id: 0, search_key: ''
+}, conf = {}) => axios.post('/v1/library/center/fulltext-search', param, conf);

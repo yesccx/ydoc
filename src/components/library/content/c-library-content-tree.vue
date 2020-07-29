@@ -1,7 +1,7 @@
 <template>
     <div class="c-library-content-tree" v-loading="groupTreeLoading">
         <!-- TODO: 目前只支持搜索项名称，后期做成搜索项内容（需要后端支持） -->
-        <el-input v-model="searchKey" size="small" class="directory-tree-search" placeholder="输入关键字，检索目录与文档" clearable>
+        <el-input v-model="searchKey" size="small" class="directory-tree-search" placeholder="输入关键字，检索目录与文档（仅标题）" clearable>
         </el-input>
 
         <!-- 目录树 -->
@@ -50,6 +50,9 @@
                                 </el-dropdown-item> -->
                                 <el-dropdown-item :command="'removeDoc|' + data.id">
                                     <i class="el-icon-delete"></i>删除
+                                </el-dropdown-item>
+                                <el-dropdown-item :command="'shareDoc|' + data.id">
+                                    <i class="el-icon-share"></i>分享
                                 </el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
@@ -255,6 +258,9 @@
                     case 'removeDoc':
                         this.onDocRemove(param);
                         break;
+                    case 'shareDoc':
+                        this.onDocShare(param);
+                        break;
 
                     default:
                         break;
@@ -292,7 +298,10 @@
                     }
                 });
             },
-
+            // 事件：文档分享
+            onDocShare(docId) {
+                this.libraryContentEventBus.$emit('doc-will-share', { docId });
+            },
             // 事件：文档删除
             onDocRemove(docId) {
                 this.$msgbox({

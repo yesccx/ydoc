@@ -1,7 +1,7 @@
 <template>
     <div class="c-library-preview-tree" v-loading="treeLoading">
         <!-- TODO: 目前只支持搜索项名称，后期做成搜索项内容（需要后端支持） -->
-        <el-input v-model="searchKey" size="small" class="directory-tree-search" placeholder="输入关键字，检索目录与文档" clearable>
+        <el-input v-model="searchKey" size="small" class="directory-tree-search" placeholder="输入关键字，检索目录与文档（仅标题）" clearable>
         </el-input>
 
         <!-- 目录树 -->
@@ -108,7 +108,6 @@
             },
             onNodeClick(node) {
                 if (node.nodeType === 'doc') {
-                    this.$router.replace({ query: { ...this.$route.query, ...{ doc_id: node.id } } }).catch(error => error);
                     this.libraryPreviewEventBus.$emit('doc-view', node.id);
                 }
             },

@@ -3,14 +3,17 @@
         <el-tooltip class="item" effect="dark" content="文档库中心" placement="top-start">
             <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
         </el-tooltip>
-        <el-tooltip v-show="!isShareSimplify" class="item" effect="dark" content="刷新数据" placement="top-start">
-            <i class="item el-icon-refresh" @click="onDocTreeFlush"></i>
+        <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
+            <i v-show="!isShareSimplify" class="item el-icon-refresh" @click="onDocTreeFlush"></i>
         </el-tooltip>
         <!-- <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
             <i class="item el-icon-share" @click="onLibraryShare"></i>
         </el-tooltip> -->
         <el-tooltip class="item" effect="dark" content="当前分享源信息" placement="top-start">
             <i class="item el-icon-info" @click="onLibraryShareInfo"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="文档全文搜索" placement="top-start" :open-delay="300">
+            <i v-show="!isShareSimplify" class="item item-right el-icon-search" @click="onDocFulltextSearch"></i>
         </el-tooltip>
     </div>
 </template>
@@ -37,6 +40,10 @@
             // 事件：查看当前分享源信息
             onLibraryShareInfo() {
                 this.libraryPreviewEventBus.$emit('share-info-view');
+            },
+            // 事件：文档库的文档全文检索
+            onDocFulltextSearch() {
+                this.libraryPreviewEventBus.$emit('doc-fulltext-search');
             }
         }
     };
@@ -60,6 +67,10 @@
             &:hover {
                 color: $--color-primary-light-1;
             }
+        }
+
+        i.item-right {
+            margin-left: auto;
         }
     }
 </style>

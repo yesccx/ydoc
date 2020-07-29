@@ -3,18 +3,11 @@ import LibraryManager from '@/extends/mixins/library-manager';
 export default {
     mixins: [LibraryManager],
     inject: ['libraryContentEventBus'],
-    watch: {
-        libraryId: {
-            async handler(id) {
-                if (id > 0) {
-                    this.initComponent && await this.initComponent();
-                }
-            },
-            immediate: true
-        }
-    },
     async created() {
         this.initEventBus && this.initEventBus(this.libraryContentEventBus);
+        this.libraryContentEventBus.$on('library-content-init', async () => {
+            this.initComponent && await this.initComponent();
+        });
     },
     methods: {
         // 初始化eventbus事件监听

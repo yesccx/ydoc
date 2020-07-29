@@ -88,6 +88,13 @@
 
             // 初始化文档库管理信息
             await this.initLibraryManagerInfo(libraryId);
+
+            // 通知子组件初始化
+            libraryContentEventBus.$emit('library-content-init');
+
+            // 重新打开历史编辑的文档（仅最后一个）
+            const hashDocId = this.$route.query.doc_id || 0;
+            hashDocId && libraryContentEventBus.$emit('doc-will-modify', hashDocId);
         },
         beforeDestroy() {
             libraryContentEventBus.destroy();
@@ -96,7 +103,10 @@
             // 初始化文档库管理信息
             async initLibraryManagerInfo(libraryId) {
                 let libraryManagerInfo = false;
-                await this.$api.v1.LibraryManagerInfo({ library_id: libraryId }, { report: true }).then(({ resData }) => {
+                await this.$api.v1.LibraryManagerInfo({ library_id: libraryId }, {
+                    loading: (status) => { this.$fullLoading.status = status; },
+                    report: true
+                }).then(({ resData }) => {
                     libraryManagerInfo = resData;
                 }).catch(async ({ resMsg = '未知错误' }) => {
                     await this.$utils.Error(resMsg);

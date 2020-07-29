@@ -81,7 +81,11 @@
             },
             // 响应结果处理
             responseHandler(res) {
-                if (!(res.data.code === ResponseCode.RESPONSE_SUCCESS && res.data.data)) {
+                if (res === false) {
+                    this.page.total = 0;
+                    this.pageFinal = true;
+                    return false;
+                } else if (!(res.data.code === ResponseCode.RESPONSE_SUCCESS && res.data.data)) {
                     return false;
                 }
 

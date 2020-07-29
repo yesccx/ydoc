@@ -34,3 +34,8 @@ export const axiosLibraryDocList = (param = {
 export const axiosLibraryDocSort = (param = {
     library_id: 0, library_doc_id: 0, parent_group_id: 0
 }, conf = {}) => axios.post('/v1/library/doc/sort', param, conf);
+
+// 文档内容全文检索
+export const axiosLibraryDocFulltextSearch = (param = {
+    library_id: 0, search_key: ''
+}, conf = {}) => axios.post('/v1/library/doc/fulltext-search', param, conf);

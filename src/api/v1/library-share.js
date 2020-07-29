@@ -5,6 +5,11 @@ export const axiosLibraryShareInfo = (param = {
     share_code: '', share_access_password: ''
 }, conf = {}) => axios.post('/v1/library/share/info', param, conf);
 
+// 获取文档库内容全文检索
+export const axiosLibraryShareFulltextSearch = (param = {
+    share_code: '', share_access_password: '', search_key: ''
+}, conf = {}) => axios.post('/v1/library/share/fulltext-search', param, conf);
+
 // 获取文档库分享的文档集合
 export const axiosLibraryShareDocCollection = (param = {
     share_code: '', share_access_password: ''

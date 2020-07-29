@@ -283,6 +283,8 @@
                     groupId: docInfo.group_id,
                     updateTime: docInfo.update_time
                 });
+
+                this.$router.replace({ query: { ...this.$route.query, ...{ doc_id: docId } } }).catch(error => error);
             },
             // 使用编辑器选项卡（如果已存在将不重复创建）
             useDocEditor(docInfo) {

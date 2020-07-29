@@ -1,19 +1,22 @@
 <template>
     <div class="c-library-content-tree-tools">
-        <el-tooltip class="item" effect="dark" content="文档库中心" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="文档库中心" placement="top-start" :open-delay="300">
             <i class="item el-icon-menu" @click="onGoLibraryCenter"></i>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="刷新数据" placement="top-start" :open-delay="300">
             <i class="item el-icon-refresh" @click="onLibraryContentTreeFlush"></i>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="分享" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="分享" placement="top-start" :open-delay="300">
             <i class="item el-icon-share" @click="onLibraryShare"></i>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="新建文档" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="新建文档" placement="top-start" :open-delay="300">
             <i class="item el-icon-document-add" @click="onDocWillCreate"></i>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="新建分组" placement="top-start">
+        <el-tooltip class="item" effect="dark" content="新建分组" placement="top-start" :open-delay="300">
             <i class="item el-icon-folder-add" @click="onDocGroupWillCreate"></i>
+        </el-tooltip>
+        <el-tooltip class="item" effect="dark" content="文档全文搜索" placement="top-start" :open-delay="300">
+            <i class="item item-right el-icon-search" @click="onDocFulltextSearch"></i>
         </el-tooltip>
     </div>
 </template>
@@ -44,6 +47,10 @@
             // 事件：文档库分享
             onLibraryShare() {
                 this.libraryContentEventBus.$emit('library-share');
+            },
+            // 事件：文档库的文档全文检索
+            onDocFulltextSearch() {
+                this.libraryContentEventBus.$emit('doc-fulltext-search');
             }
         }
     };
@@ -67,6 +74,10 @@
             &:hover {
                 color: $--color-primary-light-1;
             }
+        }
+
+        i.item-right {
+            margin-left: auto;
         }
     }
 </style>

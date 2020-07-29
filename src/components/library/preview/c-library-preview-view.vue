@@ -68,6 +68,7 @@
             initEventBus(bus) {
                 // 事件：文档树刷新
                 bus.$on('doc-view', (docId) => {
+                    this.$router.replace({ query: { ...this.$route.query, ...{ doc_id: docId } } }).catch(error => error);
                     this.fetchDocInfo(docId);
                 });
             },

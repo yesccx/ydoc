@@ -14,9 +14,12 @@
                 <el-col :span="6">
                     <div class="header-tools">
                         <div class="operate">
+                            <i class="el-icon-search operate__fulltext" title="全文搜索" @click="onFulltextSearch"></i>
+
                             <el-badge :is-dot="userMessageUnreadCount > 0">
                                 <i class="el-icon-message operate__user-message" title="消息通知" @click="onUserMessage"></i>
                             </el-badge>
+
                             <el-dropdown @command="onCreateCommand" trigger="click">
                                 <span class="el-dropdown-link">
                                     <i class="el-icon-circle-plus operate__create-library" title="创建文档库"></i>
@@ -50,6 +53,9 @@
                 </el-col>
             </el-row>
         </div>
+
+        <!-- 全文检索 drawer -->
+        <div :is="uselibraryFulltext" :visible.sync="libraryFulltextDrawer.visible"></div>
     </div>
 </template>
 
@@ -74,7 +80,11 @@
         data() {
             return {
                 defaultActive: '',
-                logoutLoading: false
+                logoutLoading: false,
+                uselibraryFulltext: '',
+                libraryFulltextDrawer: {
+                    visible: false
+                }
             };
         },
         methods: {
@@ -157,7 +167,17 @@
             // 事件：消息中心
             onUserMessage() {
                 this.$link.userMessage();
+            },
+            // 事件：全文搜索
+            onFulltextSearch() {
+                this.uselibraryFulltext = 'c-library-drawer-fulltext';
+                this.$nextTick(() => {
+                    this.libraryFulltextDrawer.visible = true;
+                });
             }
+        },
+        components: {
+            'c-library-drawer-fulltext': () => import('@/components/library/c-library-drawer-fulltext')
         }
     };
 </script>
@@ -210,9 +230,19 @@
         align-items: center;
         margin-bottom: 2px;
 
+        &__fulltext {
+            cursor: pointer;
+            font-size: 19px;
+            color: $--color-primary-light-3;
+            &:hover {
+                color: $--color-primary-light-1;
+            }
+        }
+
         &__user-message {
             cursor: pointer;
             font-size: 19px;
+            margin-left: 20px;
             color: $--color-primary-light-3;
             &:hover {
                 color: $--color-primary-light-1;
