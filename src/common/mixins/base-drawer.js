@@ -7,16 +7,22 @@ export default {
         }
     },
     watch: {
-        visible(val) {
-            this.visibleDrawer = val;
+        visible: {
+            handler(val) {
+                this.visibleDrawer = val;
+            },
+            immediate: true
         },
-        visibleDrawer(val) {
-            this.$emit('update:visible', val);
-            if (!val) {
-                this.$emit('close', this.$data);
-            } else {
-                this.onDrawerOpen && this.onDrawerOpen();
-            }
+        visibleDrawer: {
+            handler(val) {
+                this.$emit('update:visible', val);
+                if (!val) {
+                    this.$emit('close', this.$data);
+                } else {
+                    this.onDrawerOpen && this.onDrawerOpen();
+                }
+            },
+            immediate: true
         }
     },
     data() {

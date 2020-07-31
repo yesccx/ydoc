@@ -188,7 +188,4 @@
         padding-left: 20px;
         color: rgb(92, 98, 105);
     }
-    .search-select {
-        width: 150px;
-    }
 </style>

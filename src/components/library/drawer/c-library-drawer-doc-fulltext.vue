@@ -2,7 +2,7 @@
     <div class="c-library-drawer-doc-fulltext">
         <el-drawer title="文档全文检索" :visible.sync="visibleDrawer" size="450px" :modal-append-to-body="false">
             <!-- search -->
-            <el-input v-model="searchKey" placeholder="请输入检索关键字" prefix-icon="el-icon-search" size="mini" clearable>
+            <el-input v-model="searchKey" placeholder="请输入检索关键字，不能为空" prefix-icon="el-icon-search" size="mini" clearable>
                 <el-button :loading="listLoading" @click="onSearch" slot="append" icon="el-icon-search"></el-button>
             </el-input>
 
@@ -144,6 +144,7 @@
 
             &.active {
                 background: whitesmoke;
+                border-bottom-color: $--color-warning;
             }
 
             &:hover {
