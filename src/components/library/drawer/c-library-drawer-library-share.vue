@@ -85,7 +85,6 @@
 
 <script>
     import BaseDrawer from '@/common/mixins/base-drawer';
-    import LibraryContent from '@/extends/mixins/library-content';
     import { mapGetters } from 'vuex';
     import { buildLibraryShareLink } from '@/extends/utils/library-share-utils';
 
@@ -102,7 +101,13 @@
 
     export default {
         name: 'c-library-drawer-library-share',
-        mixins: [BaseDrawer, LibraryContent],
+        mixins: [BaseDrawer],
+        props: {
+            libraryId: {
+                type: Number,
+                require: true
+            }
+        },
         computed: {
             ...mapGetters('userSession', ['userInfo']),
             title() {
@@ -160,14 +165,6 @@
             };
         },
         methods: {
-            // 初始化eventbus事件监听
-            initEventBus(bus) {
-                // 事件：文档库分享
-                bus.$on('library-share', () => {
-                    this.moreOptionsOpen = false;
-                    this.visibleDrawer = true;
-                });
-            },
             // 初始化文档库分享信息
             async initShareInfo() {
                 shareInfoInitial.share_name = this.generateShareName();
@@ -193,6 +190,7 @@
             },
             // 事件：drawer被展开
             onDrawerOpen() {
+                this.moreOptionsOpen = false;
                 this.initShareInfo();
             },
             // 事件：展开/收缩更多配置项

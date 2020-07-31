@@ -47,6 +47,9 @@
                 </div>
             </c-infinite-list>
         </el-scrollbar>
+
+        <!-- 文档库分享 -->
+        <c-library-drawer-library-share :visible.sync="libraryShare.visible" :library-id="libraryShare.libraryId" />
     </div>
 </template>
 
@@ -55,11 +58,13 @@
         name: 'c-home-library-list',
         components: {
             'c-infinite-list': () => import('@/components/c-infinite-list'),
-            'c-home-library-list-bar': () => import('@/components/home/c-home-library-list-bar')
+            'c-home-library-list-bar': () => import('@/components/home/c-home-library-list-bar'),
+            'c-library-drawer-library-share': () => import('@/components/library/drawer/c-library-drawer-library-share')
         },
         data() {
             return {
-                libraryList: []
+                libraryList: [],
+                libraryShare: { visible: false, libraryId: 0 }
             };
         },
         methods: {
@@ -87,7 +92,8 @@
             },
             // 事件：文档库相关分享
             onLibraryShare(library) {
-                this.$utils.Abuilding();
+                this.libraryShare.libraryId = library.library_id;
+                this.libraryShare.visible = true;
             },
             // 事件：文档库将要创建
             onLibraryWillCreate() {
