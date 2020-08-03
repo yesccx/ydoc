@@ -70,6 +70,8 @@
         margin: 5px 0 8px 0;
         align-items: center;
         word-break: keep-all;
+        flex-wrap: wrap;
+        line-height: 22px;
 
         &__user {
             display: flex;
