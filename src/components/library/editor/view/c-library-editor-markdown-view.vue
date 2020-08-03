@@ -48,9 +48,7 @@
         methods: {
             async render(value) {
                 await VditorMethod.preview(this.$refs.markdown, value, {
-                    hljs: {
-                        lineNumber: true
-                    }
+                    hljs: { lineNumber: true }
                 });
                 await VditorMethod.outlineRender(this.$refs.markdown, this.$refs.toc);
                 this.onInited();

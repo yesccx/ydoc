@@ -203,7 +203,7 @@
                     this.isCustomContent = Array.isArray(resData.custom_content) && resData.custom_content.length > 0;
 
                     // 存在'更多参数'时，默认展开显示
-                    if (resData.share_desc || resData.expire_time || resData.access_password) {
+                    if (resData.share_desc || resData.expire_time || resData.access_password || resData.custom_content.length > 0) {
                         this.moreOptionsOpen = true;
                     }
                 }).catch(() => { });
@@ -214,7 +214,7 @@
             },
             // 事件：drawer被展开
             onDrawerOpen() {
-                this.moreOptionsOpen = true;
+                this.moreOptionsOpen = false;
                 this.initShareInfo();
             },
             // 事件：展开/收缩更多配置项
