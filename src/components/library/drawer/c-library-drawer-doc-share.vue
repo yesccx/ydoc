@@ -266,7 +266,9 @@
             }
         }
     }
+</style>
 
+<style lang="scss" scoped>
     .more-options-btn {
         span {
             font-weight: normal;

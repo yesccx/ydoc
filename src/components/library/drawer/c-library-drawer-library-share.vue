@@ -56,6 +56,23 @@
                                         <el-input v-model="shareInfo.share_desc" maxlength="255" placeholder="分享简介，1～255个字符之间"
                                             type="textarea" rows="3" resize="none" show-word-limit></el-input>
                                     </el-form-item>
+                                    <el-form-item>
+                                        <span slot="label">
+                                            <div class="custom-content-label">
+                                                <el-tooltip class="item" effect="dark" content="开启后，可自定义分享内容"
+                                                    placement="top-start">
+                                                    <span>自定义内容 <i class="el-icon-warning"></i></span>
+                                                </el-tooltip>
+                                                <el-switch class="custom-content-switch" v-model="isCustomContent"> </el-switch>
+                                            </div>
+                                        </span>
+
+                                        <!-- 自定义分享内容 select -->
+                                        <el-scrollbar v-show="isCustomContent" class="content-select-tree-scrollbar">
+                                            <c-library-content-select-tree ref="contentTree" :library-id="libraryId"
+                                                :init-checked-data="shareInfo.custom_content" />
+                                        </el-scrollbar>
+                                    </el-form-item>
                                 </div>
                             </el-collapse-transition>
                         </el-form>
@@ -96,7 +113,8 @@
         share_desc: '',
         access_password: '',
         access_count: 0,
-        expire_time: ''
+        expire_time: '',
+        custom_content: []
     };
 
     export default {
@@ -161,7 +179,8 @@
                             picker.$emit('pick', date);
                         }
                     }]
-                }
+                },
+                isCustomContent: false
             };
         },
         methods: {
@@ -169,6 +188,7 @@
             async initShareInfo() {
                 shareInfoInitial.share_name = this.generateShareName();
                 this.shareInfo = { ...shareInfoInitial };
+                this.isCustomContent = false;
 
                 const reqData = { library_id: this.libraryId };
                 await this.$api.v1.LibraryMemberLibraryShareInfo(reqData, {
@@ -176,7 +196,11 @@
                     report: true
                 }).then(({ resData }) => {
                     resData.expire_time = resData.expire_time ? resData.expire_time * 1000 : '';
+                    resData.custom_content = resData.custom_content || [];
                     this.shareInfo = resData;
+
+                    // 标识是否自定义了分享内容
+                    this.isCustomContent = Array.isArray(resData.custom_content) && resData.custom_content.length > 0;
 
                     // 存在'更多参数'时，默认展开显示
                     if (resData.share_desc || resData.expire_time || resData.access_password) {
@@ -190,7 +214,7 @@
             },
             // 事件：drawer被展开
             onDrawerOpen() {
-                this.moreOptionsOpen = false;
+                this.moreOptionsOpen = true;
                 this.initShareInfo();
             },
             // 事件：展开/收缩更多配置项
@@ -199,8 +223,10 @@
             },
             // 事件：生成分享
             async onShare() {
+                const customContent = this.isCustomContent ? this.$refs.contentTree.getCheckedData() : [];
                 const shareInfo = this.$utils.CloneDeep(this.shareInfo);
                 shareInfo.library_id = this.libraryId;
+                shareInfo.custom_content = customContent;
                 shareInfo.expire_time = shareInfo.expire_time ? (shareInfo.expire_time / 1000) >> 0 : 0;
 
                 await this.$api.v1.LibraryMemberLibraryShare(shareInfo, {
@@ -221,12 +247,18 @@
                     this.visibleDrawer = false;
                 });
             }
+        },
+        components: {
+            'c-library-content-select-tree': () => import('@/components/library/content/c-library-content-select-tree')
         }
     };
 </script>
 
 <style lang="scss">
     .c-library-drawer-library-share {
+        .el-form-item__label {
+            width: 100%;
+        }
         .el-drawer {
             &__header {
                 font-weight: bold;
@@ -260,8 +292,31 @@
                 }
             }
         }
-    }
 
+        .custom-content-label {
+            display: inline-flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+
+        .custom-content-switch {
+            margin-top: -1px;
+            .el-switch__core {
+                height: 16px;
+                &::after {
+                    height: 12px;
+                    width: 12px;
+                }
+            }
+            &.is-checked .el-switch__core::after {
+                margin-left: -14px;
+            }
+        }
+    }
+</style>
+
+<style lang="scss" scoped>
     .more-options-btn {
         span {
             font-weight: normal;
@@ -274,5 +329,10 @@
 
     .scrollbar {
         height: calc(100vh - 230px);
+    }
+
+    .content-select-tree-scrollbar {
+        height: 500px;
+        margin-right: 20px;
     }
 </style>

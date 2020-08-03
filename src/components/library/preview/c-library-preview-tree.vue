@@ -6,8 +6,9 @@
 
         <!-- 目录树 -->
         <el-scrollbar class="tree">
-            <el-tree element-loading-spinner="el-icon-loading" :data="dataTree" :props="{ children: 'children', label: 'name' }"
-                node-key="key" @node-click="onNodeClick" :empty-text="treeEmptyText" default-expand-all>
+            <el-tree ref="tree" element-loading-spinner="el-icon-loading" :data="dataTree"
+                :props="{ children: 'children', label: 'name' }" node-key="key" @node-click="onNodeClick"
+                :filter-node-method="handleFilterTree" :empty-text="treeEmptyText" default-expand-all>
                 <div slot-scope="{ node,data }" class="directory-tree-item">
 
                     <!-- 项图标 -->
@@ -41,9 +42,7 @@
                 const docCollection = this.$utils.CloneDeep(this.docCollection);
 
                 // 文档划分
-                docCollection.filter((doc) => {
-                    return doc.title.indexOf(this.searchKey) >= 0;
-                }).forEach(doc => {
+                docCollection.forEach(doc => {
                     doc.nodeType = 'doc';
                     doc.name = doc.title;
                     doc.key = 'doc-' + doc.id;
@@ -63,6 +62,11 @@
             },
             treeEmptyText() {
                 return this.treeLoading ? '' : '暂无数据';
+            }
+        },
+        watch: {
+            searchKey(val) {
+                this.$refs.tree.filter(val);
             }
         },
         data() {
@@ -110,6 +114,11 @@
                 if (node.nodeType === 'doc') {
                     this.libraryPreviewEventBus.$emit('doc-view', node.id);
                 }
+            },
+            // 处理过滤内容树
+            handleFilterTree(value, data) {
+                if (!value) return true;
+                return data.name.indexOf(value) !== -1;
             },
             // 深度结合文档与文档分组
             deepBuildDataTree(docDocGroupTree, docGroup) {
@@ -171,11 +180,6 @@
                     line-height: 14px;
                     position: relative;
                     top: 2px;
-                }
-                @for $i from 1 through 10 {
-                    .tree-node-label[level="#{$i}"] {
-                        width: (195px - ($i - 1) * 17);
-                    }
                 }
                 > .el-tree-node__expand-icon {
                     margin-left: -12px;
@@ -248,7 +252,11 @@
     }
 
     .directory-tree-item {
-        width: 100%;
         border: 2px solid #40a0ff00;
+        text-overflow: ellipsis;
+        width: 100%;
+        display: inline-flex;
+        overflow: hidden;
+        align-items: center;
     }
 </style>
