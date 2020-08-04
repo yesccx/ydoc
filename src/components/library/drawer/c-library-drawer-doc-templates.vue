@@ -46,11 +46,16 @@
                         </el-table-column>
                         <el-table-column prop="user_info.nickname" label="创建者" width="100">
                         </el-table-column>
-                        <el-table-column label="操作" width="70">
+                        <el-table-column label="操作" width="130">
                             <template v-slot="{ $index: index, row: template }">
                                 <el-button icon="el-icon-thumb" class="use-template-btn" type="text" size="small"
                                     @click="onDocTemplateUse(template)">使用
                                 </el-button>
+                                <el-popconfirm @onConfirm="onDocTemplateRemove(template)" icon="el-icon-warning" title="是否确认删除？">
+                                    <el-button slot="reference" icon="el-icon-delete" class="delete-template-btn" type="text"
+                                        size="small">删除
+                                    </el-button>
+                                </el-popconfirm>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -83,6 +88,14 @@
             },
             tmeplateCount() {
                 return this.templateCollectionProcessed.length;
+            },
+            templateCollectionMap() {
+                const map = {};
+                this.$utils.ForEach(this.templateCollection, (template, key) => {
+                    map[template.id] = key;
+                });
+
+                return map;
             }
         },
         data() {
@@ -124,6 +137,15 @@
             async onDocTemplateUse(template) {
                 this.visibleDrawer = false;
                 this.libraryContentEventBus.$emit('doc-template-use', template);
+            },
+            // 事件：文档模板删除
+            async onDocTemplateRemove(template) {
+                await this.$api.v1.LibraryDocTemplateRemove({ library_doc_template_id: template.id }, {
+                    loading: (status) => { this.templateLoading = status; }
+                }).then(() => {
+                    this.templateCollection.splice(this.templateCollectionMap[template.id], 1);
+                    this.$tip.success('删除成功');
+                });
             }
         }
     };
@@ -167,6 +189,7 @@
     .template-collection-container {
         height: calc(100vh - 225px);
     }
+
     .operate-container {
         margin-bottom: 10px;
         &__item {
@@ -181,11 +204,13 @@
             margin-top: 8px;
         }
     }
+
     .edit-template-btn {
         margin-right: 10px;
     }
+
     .delete-template-btn {
-        margin-right: 10px;
+        margin-left: 10px;
         color: $--color-danger;
     }
 </style>

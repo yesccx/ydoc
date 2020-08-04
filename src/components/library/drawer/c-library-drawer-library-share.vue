@@ -59,7 +59,7 @@
                                     <el-form-item>
                                         <span slot="label">
                                             <div class="custom-content-label">
-                                                <el-tooltip class="item" effect="dark" content="开启后，可自定义分享内容"
+                                                <el-tooltip class="item" effect="dark" content="开启后，可自定义分享内容（开启后如果未选择任意项，则代表全部有效）"
                                                     placement="top-start">
                                                     <span>自定义内容 <i class="el-icon-warning"></i></span>
                                                 </el-tooltip>
