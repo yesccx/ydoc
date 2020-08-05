@@ -221,7 +221,7 @@
             position: absolute;
             left: 0;
             bottom: 0;
-            width: 290px;
+            width: 270px;
         }
 
         .layout-main {
