@@ -1,7 +1,11 @@
 <template>
     <div class="c-library-editor-text-view">
         <h1 class="doc-title">{{ docInfo.title }}</h1>
-        <div v-html="docInfo.content"></div>
+        <div class="doc-content">{{ docInfo.content }}</div>
+
+        <el-backtop :bottom="90" :right="45" target=".c-library-preview-view .el-scrollbar__wrap">
+            <i class="el-icon-arrow-up"></i>
+        </el-backtop>
     </div>
 </template>
 

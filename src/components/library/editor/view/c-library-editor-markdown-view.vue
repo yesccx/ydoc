@@ -9,6 +9,10 @@
                 </el-scrollbar>
             </div>
         </div>
+
+        <el-backtop :bottom="90" :right="45" target=".c-library-preview-view .el-scrollbar__wrap">
+            <i class="el-icon-arrow-up"></i>
+        </el-backtop>
     </div>
 </template>
 
@@ -66,6 +70,10 @@
             },
             // 跳转至锚点
             goAnchor(key, scroll = true) {
+                if (!this.$el.querySelector(`[id="${key}"]`)) {
+                    return false;
+                }
+
                 this.$router.replace({ ...this.$route, hash: '#' + key }).catch(error => error);
                 if (scroll) {
                     this.$el.parentNode.parentNode.scrollTop = this.$el.querySelector(`[id="${key}"]`).offsetTop;

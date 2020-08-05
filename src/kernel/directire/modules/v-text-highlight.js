@@ -7,21 +7,21 @@
 
 import TextHighlight from '@/common/utils/text-highlight';
 
-const bindHooK = function (el, params) {
+const bindHook = function (el, params) {
     const content = el.innerHTML;
     const value = params.value;
 
     el.innerHTML = TextHighlight(content, value.trim());
 };
 
-const unBindHooK = function (el) {
+const unBindHook = function (el) {
 };
 
 const updateHook = function (el, params) {
 };
 
 export default {
-    bind: bindHooK,
+    bind: bindHook,
     update: updateHook,
-    unbind: unBindHooK
+    unbind: unBindHook
 };

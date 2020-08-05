@@ -5,13 +5,13 @@
  * @Author: yesc (yes.ccx@gmail.com)
  */
 
-const bindHooK = function (el, params) {
+const bindHook = function (el, params) {
     updateHook(el, params);
     el.classList.add('pointer');
     el.addEventListener('click', clickHandler);
 };
 
-const unBindHooK = function (el) {
+const unBindHook = function (el) {
     el.removeEventListener('click', clickHandler);
     el.classList.remove('pointer');
 };
@@ -36,7 +36,7 @@ const clickHandler = function ({ target }) {
 };
 
 export default {
-    bind: bindHooK,
+    bind: bindHook,
     update: updateHook,
-    unbind: unBindHooK
+    unbind: unBindHook
 };
