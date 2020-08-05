@@ -116,6 +116,14 @@
     };
 </script>
 
+<style lang="scss">
+    .page-library-content {
+        .el-button-group {
+            display: inline-flex !important;
+        }
+    }
+</style>
+
 <style lang="scss" scoped>
     .c-library-editor-meta {
         margin: 10px 2px;
