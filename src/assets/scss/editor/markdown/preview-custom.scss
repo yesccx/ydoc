@@ -16,6 +16,11 @@
             opacity: 1;
         }
     }
+
+    code:not(.hljs):not(.highlight-chroma) {
+        font-size: 90% !important;
+        padding: 0.2em 0.4em!important
+    }
 }
 
 .doc-body__toc {

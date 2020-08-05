@@ -146,6 +146,11 @@
         div[data-type="link-ref-defs-block"]:before {
             margin-top: 3px;
         }
+
+        code:not(.hljs):not(.highlight-chroma) {
+            font-size: 90% !important;
+            padding: 0.2em 0.4em!important
+        }
     }
 
     &-preview {
@@ -162,6 +167,10 @@
             &.hljs {
                 opacity: 1;
             }
+        }
+
+        code:not(.hljs):not(.highlight-chroma) {
+            font-size: 90% !important;
         }
     }
 
