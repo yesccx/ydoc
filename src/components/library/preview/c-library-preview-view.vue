@@ -106,6 +106,10 @@
 </style>
 
 <style lang="scss" scoped>
+    .layout-editor {
+        padding: 20px 80px;
+    }
+
     .view-operation {
         position: absolute;
         right: 10px;

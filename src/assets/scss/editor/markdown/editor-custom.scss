@@ -151,6 +151,10 @@
             font-size: 90% !important;
             padding: 0.2em 0.4em!important
         }
+
+        a {
+            color: #3f51b5
+        }
     }
 
     &-preview {
@@ -171,6 +175,10 @@
 
         code:not(.hljs):not(.highlight-chroma) {
             font-size: 90% !important;
+        }
+
+        a {
+            color: #3f51b5
         }
     }
 
