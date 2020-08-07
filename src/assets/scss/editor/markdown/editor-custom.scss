@@ -1,6 +1,10 @@
 .vditor {
     border: none;
 
+    .vditor-reset {
+        font-size: inherit;
+    }
+
     &--fullscreen {
         .vditor-toolbar {
             position: initial;

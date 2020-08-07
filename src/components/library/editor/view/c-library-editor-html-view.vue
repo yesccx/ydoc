@@ -36,4 +36,8 @@
 
 <style lang="scss">
     @import "~@/assets/scss/editor/html/preview-layout";
+
+    .c-library-editor-html-view {
+        @import "~@/assets/scss/editor/html/preview-custom";
+    }
 </style>

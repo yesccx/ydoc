@@ -106,8 +106,24 @@
 </style>
 
 <style lang="scss" scoped>
+    @media screen and (max-width: 1500px) {
+        .library-view-style--medium {
+            .layout-editor {
+                width: 800px !important;
+                padding: 20px !important;
+            }
+        }
+
+        .library-view-style--full {
+            .layout-editor {
+                padding: 20px !important;
+            }
+        }
+    }
+
     .layout-editor {
         padding: 20px 80px;
+        font-size: 15px;
     }
 
     .view-operation {

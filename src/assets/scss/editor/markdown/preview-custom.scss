@@ -1,4 +1,6 @@
 .vditor-reset {
+    font-size: inherit;
+
     table {
         font-size: 14px;
         display: block;
@@ -34,7 +36,7 @@
 
     .el-scrollbar {
         position: sticky;
-        height: calc(100vh - 50px);
+        height: calc(100vh - 150px);
         top: 0;
     }
 

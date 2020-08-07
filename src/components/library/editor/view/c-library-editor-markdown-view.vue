@@ -3,7 +3,7 @@
         <h1 class="doc-title">{{ docInfo.title }}</h1>
         <div class="doc-body">
             <div class="doc-body__content vditor-reset" ref="markdown"></div>
-            <div class="doc-body__toc">
+            <div class="doc-body__toc" v-show="!isEmptyToc">
                 <el-scrollbar>
                     <div ref="toc" class="doc-body__toc-content"></div>
                 </el-scrollbar>
@@ -40,13 +40,15 @@
         mounted() {
             this.render(this.docInfo.content);
         },
-        destroy() {
+        beforeDestroy() {
             this.initAnchorClickEvent(false);
             this.initAnchorScrollEvent(false);
         },
         data() {
             return {
-                lastScroll: 0
+                lastScroll: 0,
+                parentNode: null,
+                isEmptyToc: false
             };
         },
         methods: {
@@ -56,9 +58,13 @@
                 });
                 await VditorMethod.outlineRender(this.$refs.markdown, this.$refs.toc);
                 this.onInited();
+
+                this.isEmptyToc = !this.$refs.toc.innerHTML;
             },
             // 事件：初始化成功
             onInited() {
+                this.parentNode = this.$el.parentNode.parentNode;
+
                 this.initAnchorClickEvent(true);
                 this.initAnchorScrollEvent(true);
                 this.$nextTick(() => {
@@ -76,7 +82,7 @@
 
                 this.$router.replace({ ...this.$route, hash: '#' + key }).catch(error => error);
                 if (scroll) {
-                    this.$el.parentNode.parentNode.scrollTop = this.$el.querySelector(`[id="${key}"]`).offsetTop;
+                    this.parentNode.scrollTop = this.$el.querySelector(`[id="${key}"]`).offsetTop;
                 } else {
                     // 内容滚动的同时，大纲列表也要跟着滚动（防抖）
                     const lastScroll = this.lastScroll;
@@ -110,7 +116,7 @@
             },
             // 初始化锚点滚动事件
             initAnchorScrollEvent(listen = true) {
-                const target = this.$el.parentNode.parentNode;
+                const target = this.parentNode;
                 if (listen) {
                     target.addEventListener('scroll', this.handleAnchorScroll);
                 } else {
