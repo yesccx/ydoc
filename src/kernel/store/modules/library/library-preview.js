@@ -22,6 +22,10 @@ const state = {
             nick_name: ''
         }
     },
+    libraryInfo: {
+        name: '',
+        desc: ''
+    },
     isAccessed: false,
     accessPassword: '',
     isShareSimplify: false
@@ -37,8 +41,9 @@ const getters = {
 
 const mutations = {
     // 设置文档库分享信息
-    setLibraryShareInfo(state, { libraryShareInfo, isAccessed = false, accessPassword = '' }) {
+    setLibraryShareInfo(state, { libraryShareInfo, isAccessed = false, accessPassword = '', libraryInfo = {} }) {
         state.libraryShareInfo = libraryShareInfo;
+        state.libraryInfo = libraryInfo;
         state.isAccessed = isAccessed;
         state.accessPassword = accessPassword;
         state.isShareSimplify = libraryShareInfo.doc_id >> 0 !== 0;

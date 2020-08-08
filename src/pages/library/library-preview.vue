@@ -7,7 +7,9 @@
                     <!-- left-header：文档库信息、目录搜索区 -->
                     <div class="layout-side__header">
                         <div class="library-info">
-                            <span class="library-info__name" :title="libraryInfoTip" @click="onShareInfoView"> 123 </span>
+                            <span class="library-info__name" :title="libraryInfoTip" @click="onShareInfoView">
+                                {{ libraryInfo.name }}
+                            </span>
                         </div>
                     </div>
 
@@ -65,7 +67,7 @@
             return { libraryPreviewEventBus: this.libraryPreviewEventBus };
         },
         computed: {
-            ...mapState('libraryPreview', ['libraryShareInfo', 'isAccessed', 'isShareSimplify']),
+            ...mapState('libraryPreview', ['libraryInfo', 'libraryShareInfo', 'isAccessed', 'isShareSimplify']),
             libraryInfoTip() {
                 return '';
             },
@@ -135,7 +137,12 @@
                 const reqData = { share_code: shareCode, share_access_password: accessPassword };
 
                 await this.$api.v1.LibraryShareInfo(reqData, { report: true }).then(({ resData }) => {
-                    this.$store.commit('libraryPreview/setLibraryShareInfo', { libraryShareInfo: resData, isAccessed: true, accessPassword });
+                    this.$store.commit('libraryPreview/setLibraryShareInfo', {
+                        libraryShareInfo: resData,
+                        isAccessed: true,
+                        libraryInfo: resData.library_info,
+                        accessPassword
+                    });
                 }).catch(async ({ resMsg = '未知错误', resCode, resData }) => {
                     // 密码错误时，询问输入密码
                     if (resCode === ResponseCode.LIRARY_SHARE_PROTECTED) {
