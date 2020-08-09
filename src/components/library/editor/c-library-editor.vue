@@ -73,5 +73,9 @@
 <style lang="scss">
     .c-library-edtior {
         min-height: 30vh;
+
+        .layout-editor {
+            font-size: 15px;
+        }
     }
 </style>
