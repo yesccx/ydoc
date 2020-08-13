@@ -68,9 +68,7 @@
                     loading: status => { this.confirmLoading = status; }
                 }).then(({ resData }) => {
                     this.storeAccessPassword(reqData.share_code, reqData.share_access_password);
-                    this.$store.commit('libraryPreview/setLibraryShareInfo', {
-                        libraryShareInfo: resData, isAccessed: true, accessPassword: this.accessPassword
-                    });
+                    this.$router.go();
                 });
             },
             // 本地缓存本次的分享访问密码
